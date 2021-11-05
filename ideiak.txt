@@ -1,0 +1,27 @@
+#############################
+# GRADU AMAIERAKO PROIEKTUA #
+#############################
+
+1. Estazio meteorologikoa
+    
+    Hainbat sentsore desberdin erabilta, datu desberdinak jasoko dira eta irrati seinale edo bluetooth bidez datuak zerbitzari batera bidaliko dira. Ideia da, datu guztiak denbora
+    errealean eskuragarri egotea web orrialde edo aplikazio baten bitartez.
+
+    Sentsoreak:
+    
+    - tenperatura
+    - hezetasuna
+    - anemometroa?? (haizearen abiadura eta norantza neurtzeko)
+    - argitasuna, eguzkiaren intentsitatea neurtzeko
+    - euria neurtu l/m² 
+
+    * indice UV
+    * AQI
+    * Polen
+
+    cada sensor un led de estado para ver si esta recogiendo adecuadamente los datos
+
+2. RC car
+
+
+
