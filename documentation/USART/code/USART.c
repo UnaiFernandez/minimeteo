@@ -2,7 +2,8 @@
  *
  *  Filename: USART.c
  *
- *  Description: this file is for adfjadkfljaslkjdfas
+ *  Description: Fitxategi honen bidez Atmega328p mikroaren UART modulua 
+ *               konfiguratu eta bere funtzio negusiak definitzen dira.
  *
  *  Version: 1.0
  *  Created: 2021-10-28
@@ -41,7 +42,8 @@ void init_USART(){
 
     /*---- BAUD rate zehaztu ----*/
     UCSR0A |= (1 << U2X0);
-    UBRR0 = 207;
+    //UBRR0 = 207;
+    UBRR0 = 16;
 
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
