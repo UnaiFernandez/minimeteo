@@ -48,8 +48,6 @@ void init_USART(){
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
     UCSR0B |= (1 << RXCIE0); 
-
-    sei();
 }
 
 
@@ -59,11 +57,8 @@ void USART_tx(char d){
 }
 
 char USART_rx(){
-    if(UCSR0A & (1 << RXC0)){
-	return UDR0;
-    }else{
-	return 0;
-    }
+    while(!(UCSR0A & (1 << RXC0)));
+    return UDR0;
 }
 
 void USART_string(char * string){

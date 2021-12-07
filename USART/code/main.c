@@ -25,6 +25,7 @@
 */
 char nirebuff = '\0';
 
+
 void init_port(){
     //LED-a hasieratu;
     DDRB |= (1 << PORTB5); 
@@ -35,6 +36,7 @@ int main(){
     int i;
 
     init_USART();
+    sei();
     init_port();
     _delay_ms(2000);
     USART_string("AT\r\n");
@@ -55,6 +57,7 @@ int main(){
 }
 
 ISR(USART_RX_vect){
+    cli();
     nirebuff = UDR0;
     USART_tx(nirebuff);
 }
