@@ -2,7 +2,7 @@
  *
  *  Filename: main.c
  *
- *  Description: this file is for adfjadkfljaslkjdfas
+ *  Description: Main file for USART
  *
  *  Version: 1.0
  *  Created: 2021-11-02
@@ -24,7 +24,7 @@
 
 */
 char nirebuff = '\0';
-
+int transmit = 0;
 
 void init_port(){
     //LED-a hasieratu;
@@ -33,49 +33,31 @@ void init_port(){
 }
 
 int main(){
-    int i;
-
     init_USART();
     sei();
     init_port();
-    _delay_ms(2000);
-    USART_string("AT\r\n");
     while(1){
-	//char c = USART_rx();
-//	if(nirebuff == 'h'){
-//	    USART_string("bidalitako karakterea: ");
-//	    USART_tx(nirebuff);
-//	    USART_string("\n\r");
-//	}
+	if(transmit == 1){
+	    nirebuff = rd_buffer();
+	    USART_string("tekla: ");
+	    USART_tx(nirebuff);
+	    USART_string(" ---> ");
+
+	    if(nirebuff == '1'){
+		PORTB |= (1 << PORTB5);
+		USART_string("LED on!\n\r");
+	    }
+
+	    if(nirebuff == '2'){
+		PORTB &=~ (1 << PORTB5);
+		USART_string("LED off!\n\r");
+	    }
+	}
     }
-
-   /* int a = 234;
-    int ehun = '0' + (a/100);
-    int hamar = '0' + ((a/10)%10);
-    int bateko = '0' + (a%10);
-    printf("%c%c%c\n", ehun, hamar, bateko);*/
 }
 
+//Eten zerbitzu errutina
 ISR(USART_RX_vect){
-    cli();
-    nirebuff = UDR0;
-    USART_tx(nirebuff);
+    //nirebuff = UDR0;
+    wr_buffer(UDR0);
 }
-
-// ISR(USART_RX_vect){
-//     nirebuff = UDR0;
-
-//     USART_string("tekla: ");
-//     USART_tx(nirebuff);
-//     USART_string(" ---> ");
-    
-//     if(nirebuff == '1'){
-// 	PORTB |= (1 << PORTB5);
-// 	USART_string("LED on!\n\r");
-//     }
-
-//     if(nirebuff == '2'){
-// 	PORTB &=~ (1 << PORTB5);
-// 	USART_string("LED off!\n\r");
-//     }
-// }

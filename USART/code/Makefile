@@ -1,7 +1,7 @@
 FILENAME   = main
 FILENAME2  = USART
 PORT       = /dev/ttyACM0
-DEVICE     = atmega328p
+DEVICE     = atmega328
 PROGRAMMER = arduino
 BAUD       = 115200
 COMPILE    = avr-gcc -Wall -Os -mmcu=$(DEVICE)

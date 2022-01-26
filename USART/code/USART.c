@@ -19,8 +19,8 @@
 #include "USART.h"
 
 void init_USART(){
-  
-    //cli();
+    init_buffer();
+    
     //UCRS0C
     /*---- USART asinkrono moduan konfiguratu ----*/
     UCSR0C &=~ (1 << UMSEL00); 
@@ -43,8 +43,8 @@ void init_USART(){
     /*---- BAUD rate zehaztu ----*/
     UCSR0A |= (1 << U2X0);
     //UBRR0 = 207;
-    UBRR0 = 16;
-
+    //UBRR0 = 16;
+    UBRR0 = (F_CPU/BAUD/8)-1;
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
     UCSR0B |= (1 << RXCIE0); 
@@ -67,3 +67,39 @@ void USART_string(char * string){
 	string++;
     }
 }
+
+
+/*#############################################*/
+
+void init_buffer(){
+    wr = 0;
+    rd = 0;
+    length = 0;
+}
+
+void wr_buffer(char data){
+    if(wr == BUFF_SIZE)
+	wr = 0;
+
+    buff[wr] = data;
+
+    wr++;
+    length++;
+}
+
+
+char rd_buffer(){
+    char rd_data;
+
+    if(rd == BUFF_SIZE)
+	rd = 0;
+
+    rd_data = buff[rd];
+
+    rd++;
+    length--;
+
+    return rd_data;
+}
+
+
