@@ -15,7 +15,7 @@
 #define BAUD 115200
 #define BUFF_SIZE 100
 
-int buff[BUFF_SIZE];
+char buff[BUFF_SIZE];
 int wr;
 int rd;
 int length;

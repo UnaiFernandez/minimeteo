@@ -71,6 +71,7 @@ void USART_string(char * string){
 
 /*#############################################*/
 
+
 void init_buffer(){
     wr = 0;
     rd = 0;
@@ -78,7 +79,7 @@ void init_buffer(){
 }
 
 void wr_buffer(char data){
-    if(wr == BUFF_SIZE)
+    if(wr == BUFF_SIZE) //Change position of the wr pointer when it reaches BUFF_SIZE
 	wr = 0;
 
     buff[wr] = data;
@@ -91,7 +92,7 @@ void wr_buffer(char data){
 char rd_buffer(){
     char rd_data;
 
-    if(rd == BUFF_SIZE)
+    if(rd == BUFF_SIZE) //Change position of the wr pointer when it reaches BUFF_SIZE
 	rd = 0;
 
     rd_data = buff[rd];
