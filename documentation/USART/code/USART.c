@@ -11,6 +11,7 @@
  ====================================================================*/
 
 #define F_CPU 16000000
+#define BAUD 9600
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -18,7 +19,7 @@
 #include "USART.h"
 
 void init_USART(){
-  
+    
     //cli();
     //UCRS0C
     /*---- USART asinkrono moduan konfiguratu ----*/
@@ -41,7 +42,7 @@ void init_USART(){
 
     /*---- BAUD rate zehaztu ----*/
     UCSR0A |= (1 << U2X0);
-    UBRR0 = 207;
+    UBRR0 = (F_CPU/16/BAUD)-1;
 
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
