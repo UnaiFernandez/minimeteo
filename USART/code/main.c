@@ -17,7 +17,14 @@
 
 #include "USART.h"
 
+
+/*
+
+   Aldagai globalak
+
+*/
 char nirebuff = '\0';
+
 
 void init_port(){
     //LED-a hasieratu;
@@ -26,9 +33,13 @@ void init_port(){
 }
 
 int main(){
-    
+    int i;
+
     init_USART();
+    sei();
     init_port();
+    _delay_ms(2000);
+    USART_string("AT\r\n");
     while(1){
 	//char c = USART_rx();
 //	if(nirebuff == 'h'){
@@ -46,19 +57,25 @@ int main(){
 }
 
 ISR(USART_RX_vect){
+    cli();
     nirebuff = UDR0;
-
-    USART_string("tekla: ");
     USART_tx(nirebuff);
-    USART_string(" ---> ");
-    
-    if(nirebuff == '1'){
-	PORTB |= (1 << PORTB5);
-	USART_string("LED on!\n\r");
-    }
-
-    if(nirebuff == '2'){
-	PORTB &=~ (1 << PORTB5);
-	USART_string("LED off!\n\r");
-    }
 }
+
+// ISR(USART_RX_vect){
+//     nirebuff = UDR0;
+
+//     USART_string("tekla: ");
+//     USART_tx(nirebuff);
+//     USART_string(" ---> ");
+    
+//     if(nirebuff == '1'){
+// 	PORTB |= (1 << PORTB5);
+// 	USART_string("LED on!\n\r");
+//     }
+
+//     if(nirebuff == '2'){
+// 	PORTB &=~ (1 << PORTB5);
+// 	USART_string("LED off!\n\r");
+//     }
+// }
