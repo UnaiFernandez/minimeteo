@@ -16,7 +16,7 @@
 
 
 /*---- USART hasieratu ----*/
-void init_USART();
+void init_USART(long int baud);
 
 /*---- USART transmititu ----*/
 void USART_tx(char d);

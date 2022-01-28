@@ -19,7 +19,7 @@
 
 #include "USART.h"
 
-void init_USART(){
+void init_USART(long int baud){
     
     //cli();
     //UCRS0C
@@ -44,7 +44,7 @@ void init_USART(){
     /*---- BAUD rate zehaztu ----*/
     UCSR0A |= (1 << U2X0);
     //UBRR0 = 207;
-    UBRR0 = 16;
+    UBRR0 = (F_CPU/8/baud)-1; 
 
 
     /*---- Etenak gaitu datuak jasotzeko ----*/

@@ -35,47 +35,33 @@ void init_port(){
 int main(){
     int i;
 
-    init_USART();
+    init_USART(115200);
     sei();
     init_port();
-    _delay_ms(2000);
-    USART_string("AT\r\n");
-    while(1){
-	//char c = USART_rx();
-//	if(nirebuff == 'h'){
-//	    USART_string("bidalitako karakterea: ");
-//	    USART_tx(nirebuff);
-//	    USART_string("\n\r");
-//	}
-    }
+    while(1){}
 
-   /* int a = 234;
-    int ehun = '0' + (a/100);
-    int hamar = '0' + ((a/10)%10);
-    int bateko = '0' + (a%10);
-    printf("%c%c%c\n", ehun, hamar, bateko);*/
-}
-
-ISR(USART_RX_vect){
-    cli();
-    nirebuff = UDR0;
-    USART_tx(nirebuff);
 }
 
 // ISR(USART_RX_vect){
+//     cli();
 //     nirebuff = UDR0;
-
-//     USART_string("tekla: ");
 //     USART_tx(nirebuff);
-//     USART_string(" ---> ");
-    
-//     if(nirebuff == '1'){
-// 	PORTB |= (1 << PORTB5);
-// 	USART_string("LED on!\n\r");
-//     }
-
-//     if(nirebuff == '2'){
-// 	PORTB &=~ (1 << PORTB5);
-// 	USART_string("LED off!\n\r");
-//     }
 // }
+
+ ISR(USART_RX_vect){
+     nirebuff = UDR0;
+
+     USART_string("tekla: ");
+     USART_tx(nirebuff);
+     USART_string(" ---> ");
+  
+     if(nirebuff == '1'){
+ 	PORTB |= (1 << PORTB5);
+ 	USART_string("LED on!\n\r");
+     }
+
+     if(nirebuff == '2'){
+ 	PORTB &=~ (1 << PORTB5);
+ 	USART_string("LED off!\n\r");
+     }
+ }
