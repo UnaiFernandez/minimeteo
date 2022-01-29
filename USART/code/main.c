@@ -33,21 +33,34 @@ void init_port(){
     //LED-a hasieratu;
     DDRB |= (1 << PORTB5); 
     PORTB &=~ (1 << PORTB5);
+
+    DDRB |= (1 << PORTB4);
+    PORTB &=~ (1 << PORTB4);
 }
 
 int main(){
     int i;
     
-    init_USART();
+    init_USART(115200);
     sei();
     init_port();
     
     while(1){
 	_delay_ms(500);
 	if(transmit == 1){
+	    char response[comm_length+1];
 	    for(i = 0; i <= comm_length; i++){
-		USART_tx(rd_buffer());
+		response[i] = rd_buffer();
+		//USART_tx(rd_buffer());
 	    }
+	    if(!strcmp(response, "ok")){
+		PORTB |= (1 << PORTB4); //LED berdea piztu
+		PORTB &=~ (1 << PORTB5); //LED gorria itzali
+	    }else{
+		PORTB |= (1 << PORTB5); //LED gorria piztu
+		PORTB &=~ (1 << PORTB4); //LED berdea itzali
+	    }
+	    USART_string(response);
 	    USART_string("\n\r");
 	    comm_length = 0;
 	    transmit = 0;

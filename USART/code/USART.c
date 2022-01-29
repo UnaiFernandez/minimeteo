@@ -18,7 +18,7 @@
 
 #include "USART.h"
 
-void init_USART(){
+void init_USART(long int baud){
     init_buffer();
     
     //UCRS0C
@@ -44,7 +44,7 @@ void init_USART(){
     UCSR0A |= (1 << U2X0);
     //UBRR0 = 207;
     //UBRR0 = 16;
-    UBRR0 = (F_CPU/BAUD/8)-1;
+    UBRR0 = (F_CPU/baud/8)-1;
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
     UCSR0B |= (1 << RXCIE0); 
