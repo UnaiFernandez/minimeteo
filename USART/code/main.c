@@ -28,6 +28,7 @@ char nirebuff = '\0';
 char urx = '\0';
 int transmit = 0;
 int comm_length = 0;
+int kont = 0;
 
 void init_port(){
     //LED-a hasieratu;
@@ -56,14 +57,15 @@ int main(){
 		//USART_tx(rd_buffer());
 	    }
 	    
-	    if(!strcmp(response, "")){
-	    //if(strstr("eoeoeOKaaa", "OK") != NULL){
+	    //if(!strcmp(response, "O")){
+	    //if(strstr("eoeoeOKaaa", "") != NULL){
+	    if(strstr(response, "OK") != NULL){
 		PORTB |= (1 << PORTB4); //LED berdea piztu
 		PORTB &=~ (1 << PORTB5); //LED gorria itzali
 	    }else{
 		PORTB |= (1 << PORTB5); //LED gorria piztu
 		PORTB &=~ (1 << PORTB4); //LED berdea itzali
-		USART_string(response);
+		USART_string("\n\r");
 	    }
 	    //USART_string(response);
 	    //USART_string("\n\r");
@@ -77,10 +79,14 @@ int main(){
 //Eten zerbitzu errutina
 ISR(USART_RX_vect){
     urx = UDR0;
-    
+     
     if(urx == '\r'){ //End of a command
-	transmit = 1;
-	comm_length = length + 1;
+	//if(kont >= 1){
+	    transmit = 1;
+	    comm_length = length + 1;
+	//}else{
+	  //  kont++;
+	//}
     }
     
     wr_buffer(UDR0);
