@@ -44,6 +44,8 @@ int main(){
     init_USART(115200);
     sei();
     init_port();
+    _delay_ms(3000);
+    USART_string("AT\r");
     
     while(1){
 	_delay_ms(500);
@@ -53,15 +55,19 @@ int main(){
 		response[i] = rd_buffer();
 		//USART_tx(rd_buffer());
 	    }
-	    if(!strcmp(response, "ok")){
+	    
+	    if(!strcmp(response, "")){
+	    //if(strstr("eoeoeOKaaa", "OK") != NULL){
 		PORTB |= (1 << PORTB4); //LED berdea piztu
 		PORTB &=~ (1 << PORTB5); //LED gorria itzali
 	    }else{
 		PORTB |= (1 << PORTB5); //LED gorria piztu
 		PORTB &=~ (1 << PORTB4); //LED berdea itzali
+		USART_string(response);
 	    }
-	    USART_string(response);
-	    USART_string("\n\r");
+	    //USART_string(response);
+	    //USART_string("\n\r");
+	    
 	    comm_length = 0;
 	    transmit = 0;
 	}
