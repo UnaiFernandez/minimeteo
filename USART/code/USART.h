@@ -32,15 +32,3 @@ char USART_rx();
 
 /*---- USART bidali string ----*/
 void USART_string(char * string);
-
-
-/*##################################*/
-
-/*------ Init buffer ------*/
-void init_buffer();
-
-/*------ write buffer ------*/
-void wr_buffer(char data);
-
-/*------ read buffer ------*/
-char rd_buffer();

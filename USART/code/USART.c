@@ -19,8 +19,7 @@
 #include "USART.h"
 
 void init_USART(long int baud){
-    init_buffer();
-    
+ 
     //UCRS0C
     /*---- USART asinkrono moduan konfiguratu ----*/
     UCSR0C &=~ (1 << UMSEL00); 
@@ -67,40 +66,3 @@ void USART_string(char * string){
 	string++;
     }
 }
-
-
-/*#############################################*/
-
-
-void init_buffer(){
-    wr = 0;
-    rd = 0;
-    length = 0;
-}
-
-void wr_buffer(char data){
-    if(wr == BUFF_SIZE) //Change position of the wr pointer when it reaches BUFF_SIZE
-	wr = 0;
-
-    buff[wr] = data;
-
-    wr++;
-    length++;
-}
-
-
-char rd_buffer(){
-    char rd_data;
-
-    if(rd == BUFF_SIZE) //Change position of the wr pointer when it reaches BUFF_SIZE
-	rd = 0;
-
-    rd_data = buff[rd];
-
-    rd++;
-    length--;
-
-    return rd_data;
-}
-
-
