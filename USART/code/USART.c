@@ -12,6 +12,7 @@
  ====================================================================*/
 
 #define F_CPU 16000000
+#define BAUD 9600
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -19,7 +20,7 @@
 #include "USART.h"
 
 void init_USART(long int baud){
- 
+  
     //UCRS0C
     /*---- USART asinkrono moduan konfiguratu ----*/
     UCSR0C &=~ (1 << UMSEL00); 
@@ -44,6 +45,7 @@ void init_USART(long int baud){
     //UBRR0 = 207;
     //UBRR0 = 16;
     UBRR0 = (F_CPU/baud/8)-1;
+
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
     UCSR0B |= (1 << RXCIE0); 
