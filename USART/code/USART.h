@@ -12,7 +12,13 @@
 
 
 
-#define BAUD 9600
+#define BAUD 115200
+#define BUFF_SIZE 100
+
+char buff[BUFF_SIZE];
+int wr;
+int rd;
+int length;
 
 
 /*---- USART hasieratu ----*/

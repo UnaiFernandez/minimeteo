@@ -33,7 +33,7 @@ function build()
 end
 
 function upload()
-    lmake_exec("avrdude -v -p atmega328p -c arduino -P " .. PORT .. " -b " .. BAUD .. " -U flash:w:".. FILENAME ..".hex:i")
+    lmake_exec("avrdude -F -v -p atmega328p -c arduino -P " .. PORT .. " -b " .. BAUD .. " -U flash:w:".. FILENAME ..".hex:i")
 end
 
 function clean()

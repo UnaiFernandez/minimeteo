@@ -20,8 +20,7 @@
 #include "USART.h"
 
 void init_USART(long int baud){
-    
-    //cli();
+  
     //UCRS0C
     /*---- USART asinkrono moduan konfiguratu ----*/
     UCSR0C &=~ (1 << UMSEL00); 
@@ -44,7 +43,8 @@ void init_USART(long int baud){
     /*---- BAUD rate zehaztu ----*/
     UCSR0A |= (1 << U2X0);
     //UBRR0 = 207;
-    UBRR0 = (F_CPU/8/baud)-1; 
+    //UBRR0 = 16;
+    UBRR0 = (F_CPU/baud/8)-1;
 
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
