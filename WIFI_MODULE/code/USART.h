@@ -10,13 +10,17 @@
  *
  ====================================================================*/
 
+#ifndef USART_H
+#define USART_H
 
-
-#define BAUD 115200
+#define BUFF_SIZE 5
+extern char tmp_buff;
+extern char response [BUFF_SIZE];
+extern int resp_index;
 
 
 /*---- USART hasieratu ----*/
-void init_USART();
+void init_USART(long int baud);
 
 /*---- USART transmititu ----*/
 void USART_tx(char d);
@@ -26,3 +30,5 @@ char USART_rx();
 
 /*---- USART bidali string ----*/
 void USART_string(char * string);
+
+#endif //USART_H

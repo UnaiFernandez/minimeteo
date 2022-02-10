@@ -24,11 +24,7 @@
    Aldagai globalak
 
 */
-char nirebuff = '\0';
 char tmp_buff = '\0';
-int transmit = 0;
-int comm_length = 0;
-int kont = 0;
 int response_ok = 0;
 char response [5];
 int resp_index = 0;

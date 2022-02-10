@@ -17,10 +17,14 @@
 #include <util/delay.h>
 
 #include "USART.h"
+#include "wifi.h"
 
-void init_USART(){
+int resp_index = 0;
+char tmp_buff = '\0';
+char response[BUFF_SIZE];
+
+void init_USART(long int baud){
   
-    //cli();
     //UCRS0C
     /*---- USART asinkrono moduan konfiguratu ----*/
     UCSR0C &=~ (1 << UMSEL00); 
@@ -44,7 +48,7 @@ void init_USART(){
     UCSR0A |= (1 << U2X0);
     //UBRR0 = 207;
     //UBRR0 = 16;
-    UBRR0 = (F_CPU/8/BAUD)-1;
+    UBRR0 = (F_CPU/baud/8)-1;
 
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
@@ -67,4 +71,20 @@ void USART_string(char * string){
 	USART_tx(*string);
 	string++;
     }
+}
+
+
+//Eten zerbitzu errutina
+ISR(USART_RX_vect){
+    tmp_buff = UDR0;
+    
+    //ESP-01 moduluak bidaltzen dituen karaktereak response bufferrean jaso
+    response[resp_index] = tmp_buff;
+    resp_index++;
+    
+    if(resp_index == BUFF_SIZE){
+	resp_index = 0;
+	//response_status=1;
+    }
+    
 }

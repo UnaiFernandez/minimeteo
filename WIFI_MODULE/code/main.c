@@ -2,7 +2,7 @@
  *
  *  Filename: main.c
  *
- *  Description: this file is for adfjadkfljaslkjdfas
+ *  Description: Main file for USART
  *
  *  Version: 1.0
  *  Created: 2021-11-02
@@ -14,36 +14,40 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+
 #include "USART.h"
+#include "wifi.h"
 
-/*
 
-   Aldagai globalak
 
-*/
-char nirebuff = '\0';
+void init_port(){
+    //LED-a hasieratu;
+    DDRB |= (1 << PORTB5); 
+    PORTB &=~ (1 << PORTB5);
 
-/*
-Funtzio honen bidez, parametro moduan zehaztutako komandoak bidali egingo dira UART bidez
-*/
-void send_command(char * com){
-    USART_string(com);
-    //response ok bada led-a piztu
+    DDRB |= (1 << PORTB4);
+    PORTB &=~ (1 << PORTB4);
 }
+
+
+
 
 
 int main(){
-    init_USART();
+    init_USART(115200);
     sei();
-    while(1){
+    init_port();
+    _delay_ms(100);
+    int start = send_command("AT", "OK");
+    if(start == RESPONSE_OK){
+        PORTB |= (1 << PORTB4); //LED berdea piztu
+        PORTB &=~ (1 << PORTB5); //LED gorria itzali
+    }else{
+        PORTB |= (1 << PORTB5); //LED gorria piztu
+        PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
+
+    while(1){}
 }
 
-/*
-Etenen bidez datuen jasoketa egiteko.
-*/
-ISR(USART_RX_vect){
-    cli();
-    nirebuff = UDR0;
-    USART_tx(nirebuff);
-}
+
