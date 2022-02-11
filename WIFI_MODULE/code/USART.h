@@ -2,7 +2,8 @@
  *
  *  Filename: USART.h
  *
- *  Description: this file is for adfjadkfljaslkjdfas
+ *  Description: USART.c-rako beharrezkoak diren aldagai eta funtzioen
+ *		 definizioak.
  *
  *  Version: 1.0
  *  Created: 2021-11-02
