@@ -131,10 +131,46 @@ Debian-en oinarritutako banaketak (Debian, Ubuntu):
 
 Gure kasuan, komando bakarra erebiliko dugu egindako programako komunikazio serialean trukatzen diren mezuak bistaratzeko.
 
-    screen /dev/ttyACM0 9600
+    screen /dev/ttyACM0 115200
 
 Komandoak honako parametroak dauzka:
 
 1. portua
 2. baud-rate
 
+
+## UART moduluko Funtzioak
+
+UART moduluan 4 funtzio nagusi egongo dira definituta, UART-a hasieratzeko, datuak bidaltzeko eta hasieratzeko.
+
+### Hasieratu UART
+
+UART modulua hasieratzeko ***Init_USART*** funtzioa sortu da. Parametro moduan freskatze maiztasuna pasako zaio. Defektuzko konfigurazioan *Start* bit bat eta *Stop* bit bat egongo dira mezuaren hasiera eta bukaeran. Mezuak 8 bitekoak izango dira.
+
+Adibidea:
+
+    Init_USART(115200); //USART initialization with 115200 baudrate
+
+### Transmititu karakterea
+
+Funtzio honen bidez UART moduluak karaktere bat transmitituko du Tx pinetik. Argumentu moduan bidali nahi den karakterea jasoko du.
+
+Adibidea:
+
+    USART_tx('u'); // Send 'u' character
+
+### String bat transmititu
+
+Funtzio honen bidez string bat transmitituko da. Argumentu moduan *string* bat jasoko du eta aurretik sortutako ***USART_tx*** funtzioa erabilita karaktereak banan-banan transmititzen ditu.
+
+Adibidea:
+
+    USART_string("hello world!"); // Sends the entire sting to the receiver.
+
+### Karakterea jaso
+
+Funtzio honen bidez mikrokontrolagailuak karaktere bat jasoko du funtzioa exekutatzen den momentuan. Momentuz funtzioa ez da erabiliko, datu jasoketa etenen bidez egingo delako.
+
+Adibidez:
+
+    char data = USART_rx(); //receive information in data variable
