@@ -115,3 +115,20 @@ int ESP_mode(int mode){
 	return 1;
     return 0;
 }
+
+/*
+ * Funtzio hau konexio bat baino gehiago egotea gaitzeko edo desgaitzeko balio du.
+ *
+ * Parametroak:
+ *  - conn: Balioa 0 bada konexio bakarra egongo da eta 1 bada konexio bat baino gehiago 
+ *	    egotea ahalbidetuko du funtzioak
+ */
+int ESP_multiple_conn(int conn){
+    char command[12];
+    char c = conn + '0';
+
+    sprintf(command, "AT+CIPMUX=%c", c);
+    if(send_command(command, "OK") == RESPONSE_OK)
+	return 1;
+    return 0;
+}

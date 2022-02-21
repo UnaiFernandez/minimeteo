@@ -38,5 +38,6 @@ int hello_ESP();
 int AP_setup(char * ssid, char * pwd, char channel, char enc);
 //ESP-aren operazio modua aukeratu
 int ESP_mode(int mode);
-
+//ESP-ak konexio bat edo gehiago gaitzeko Funtzioa
+int ESP_multiple_conn(int conn);
 #endif //WIFI_H
