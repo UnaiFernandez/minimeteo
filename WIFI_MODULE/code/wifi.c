@@ -120,15 +120,76 @@ int ESP_mode(int mode){
  * Funtzio hau konexio bat baino gehiago egotea gaitzeko edo desgaitzeko balio du.
  *
  * Parametroak:
- *  - conn: Balioa 0 bada konexio bakarra egongo da eta 1 bada konexio bat baino gehiago 
+ *  - en: Balioa 0 bada konexio bakarra egongo da eta 1 bada konexio bat baino gehiago 
  *	    egotea ahalbidetuko du funtzioak
  */
-int ESP_multiple_conn(int conn){
+int ESP_multiple_conn(int en){
     char command[12];
-    char c = conn + '0';
+    char c = en + '0';
 
     sprintf(command, "AT+CIPMUX=%c", c);
     if(send_command(command, "OK") == RESPONSE_OK)
 	return 1;
     return 0;
+}
+
+/*
+ * Funtzio hau ESP modulua zerbitzari moduan programatzeko balioko du.
+ *
+ * Parametroak:
+ *  - en: Balioa 1 bada zerbitzari modua ahalbidetzen da eta 0 bada desaktibatu egiten da.
+ *  - port: Portu zenbakia zehazteko.
+ */
+int ESP_server(int en, char* port){
+    char command[22];
+    char s = en + '0';
+
+    //ESP moduluak zerbitzari moduan lan egin dezan, konexio bat baino 
+    //gehiago egotea ahalbidetua egon behar du.
+    ESP_multiple_conn(1);
+    sprintf(command, "AT+CIPSERVER=%c,%s", s, port);
+    if(send_command(command, "OK") == RESPONSE_OK)
+	return 1;
+    return 0;
+}
+
+/*
+ * Funtzio hau TCP bidez mezuak bidaltzeko balio du.
+ *
+ * Parametroak:
+ *  - id: Konexioaren identifikadorea
+ *  - msg: Bidali nahi den mezua. Kontuan eduki behar da mezua, '\r' 
+ *	   karakterearekin bukatu behar duela.
+ */
+int TCP_send(char id, char* msg){
+    int kont = 1;
+    int i = 0;
+    int size;
+    
+    //mezuaren tamaina kalkulatu
+    while(msg[i] != '\r'){
+	kont++;
+    }
+
+    size = 12+kont;
+    char command[size];
+
+    sprintf(command, "AT+CIPSEND=%c,%s", id, msg);
+    if(send_command(command, "OK") == RESPONSE_OK)
+	return 1;
+    return 0;
+}
+/*
+ * Funtzio honen bidez TCP konexio bat itxi egingo da.
+ *
+ * Parametroak:
+ *  - id: Konexioare identifikadorea
+ */
+int TCP_close(char id){
+    char command[14];
+    
+    sprintf(command, "AT+CIPCLOSE=%c", id);
+    if(send_command(command, "OK") == RESPONSE_OK)
+	return 1;
+    return 2;
 }

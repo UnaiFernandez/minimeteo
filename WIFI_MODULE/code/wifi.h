@@ -40,4 +40,10 @@ int AP_setup(char * ssid, char * pwd, char channel, char enc);
 int ESP_mode(int mode);
 //ESP-ak konexio bat edo gehiago gaitzeko Funtzioa
 int ESP_multiple_conn(int conn);
+//ESP-a zerbitzari moduan konfiguratu
+int ESP_server(int en, char * port);
+//TCP bidez mezu bat bidaltzeko
+int TCP_send(char id, char* msg);
+//TCP konexio bat itxi
+int TCP_close(char id);
 #endif //WIFI_H

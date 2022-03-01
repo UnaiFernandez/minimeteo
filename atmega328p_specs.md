@@ -1,4 +1,17 @@
-# ATMEGA328P SPECS
+---
+title: ATMEGA328P SPECS
+author: "Unai Fernandez"
+numbersections: false
+geometry: 
+- top=30mm
+- left=20mm
+- right=20mm
+- bottom=30mm
+mainfont: DejaVuSerif.ttf
+sansfont: DejaVuSans.ttf
+monofont: DejaVuSansMono.ttf 
+mathfont: texgyredejavu-math.otf
+---
 
 ## Atmega328p mikrokontroladorearen bloke diagrama
 

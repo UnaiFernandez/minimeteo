@@ -1,8 +1,24 @@
-# KOMUNIKAZIO SERIALA AVR-n (USART)
+---
+title: KOMUNIKAZIO SERIALA AVR-n (USART)
+author: "Unai Fernandez"
+numbersections: false
+geometry: 
+- top=30mm
+- left=20mm
+- right=20mm
+- bottom=30mm
+mainfont: DejaVuSerif.ttf
+header-includes:
+ - \usepackage{fvextra}
+ - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+lof: true
+toc: true
+logo: ~/Templates/txostena/images/upvlogo.png
+---
 
 USART, ingelesezko *Universal Syncronous Asynchronous Receiver-Transmitter* sigletatik dator. Mikrokontrolagailua, ordenagailuarekin komunikatzeko balioko du. 
 
-##### Komunikazioaren azalpena
+### Komunikazioaren azalpena
 
 USART bidezko komunikazioa simplea da azaltzen, komunikazioa hasteko start bita erabiliko da, hau da beheranzko aldaketa bat detektatzen denean seinalean, UART-ek interpretatu egingo du, hurrengo bitak datuak direla. Azkenik stop bitaren bidez, mezua bukatu dela adieraziko da. Stop bita, 1-eko konstantea izango da. Ondorengo irudian ikusi daiteke aurretik azaldutakoa.
 
@@ -20,39 +36,47 @@ AVR mikrokontrolagailu batekin komunikazio seriala gauzatzeko erabiliko diren ko
 
 Konfigurazioarekin hasteko, erregistroak behar diren bezala hasieratu beharko ditugu, mikrokontrolagailuak izatea nahi dugun portaera lortzeko.
 
-##### DATU TRANSMISIOA ETA DATU JASOKETA GAITU
+### DATU TRANSMISIOA ETA DATU JASOKETA GAITU
 Bit hauek UCSR0B erregistroaren barruan daude, eta datu transmisioa(TX) edo jasoketa(RX) gaitzeko ahalmena daukate, bitak 1 balioa daukatenean.
 Biten balioa 1-era jartzeko honako hau izango da kodea:
-
+```c
     UCSR0B |= (1 << TXEN0);
     UCSR0B |= (1 << RXEN0);
-
-
-##### USART OPERAZIO MODUA AUKERATU
+```
+### USART OPERAZIO MODUA AUKERATU
 Atmega328p mikrokontrolagailuak hainbat	operazio modu desberdinetan funtzionatzeko konfigura daiteke, ondoko taulan ikus daitekeen bezala
+
 ![USART poerazio moduak](images/sinc_asinc.png)
 
 Irudian antzematen den moduan, *UCSR0C* erregistroko *UMSEL0[1:0]* bitei balio desberdinak emanda aukeratuko dugu operazio modua. Gure kasuan asinkronoa erabiliko dugu, beraz *UMSEL01* = 0 eta *UMSEL00* = 0 izan beharko dute.
 
+```c
     UCSR0C &=~ (1 << UMSEL00); 
     UCSR0C &=~ (1 << UMSEL01);
    
-##### PARITATEA
+```
+### PARITATEA
 Datuak elkartrukatzerakoan erroreak detektatzeko, paritate bitak erabiltzen dira.
+
 ![USART paritatea](images/parity.png)
+
 Ikus daitekeen bezala, bi paritate mota daude, bakoitia eta bikoitia. Gure kasuan ez dugu erabiliko, beraz *UPM01* = 0 eta *UPM00* = 0 izan beharko dute.
 
+```c
     UCSR0C &=~ (1 << UPM00);
     UCSR0C &=~ (1 << UPM01);
    
-##### STOP BITA KONFIGURATU
+```
+### STOP BITA KONFIGURATU
 Hasieran aipatu den bezala, transmisio bakoitza noiz hasten den eta bukatzen den jakiteko *start* eta *stop* bitak erabiltzen dira. *Stop* bitaren kasuan bita bat edo bi izan daitezke. Luzeera hori *USBS0* bitean balioak aldatuz zehaztuko da. Gure kasuan bateko luzeera jarriko diogu, beraz *USBS0* = 0 izan beharko da. 
 
 ![USART stop bita](images/stop.png)
 
+```c
     UCSR0C &=~ (1 << USBS0);
 
-##### DATUAK IZANGO DUEN BIT KOPURUA ZEHAZTU
+```
+### DATUAK IZANGO DUEN BIT KOPURUA ZEHAZTU
 
 Datuak izango duen bit kopurua zehazteko *UCSR0C* eta *UCSR0B* erregistroetako *UCSZ0[2:0]* bitei balio desberdinak emango zaizkie, nahi den luzeeraz lortzeko. Ondorengo taulan bit hauen balioak eta bakoitzari dagokion bit kopurua agertzen dira.
 
@@ -60,14 +84,16 @@ Datuak izango duen bit kopurua zehazteko *UCSR0C* eta *UCSR0B* erregistroetako *
 
 Gure kasuan datuak 8 bit izango ditu, horretarako *UCSZ0[2:0]* biten balioak 011 izan behar dute hurrenez hurren 
 
+```c
     UCSR0C |= (1 << UCSZ00);
     UCSR0C |= (1 << UCSZ01);
     UCSR0B &=~ (1 << UCSZ02);	//kasu honetan behar den azkeneko 
 				//bita UCSR0B erregistroan dago kokatuta.
 
+```
 
 
-##### BAUDRATE
+### BAUDRATE
 
 Baud rate, komunikazio kanal batetik transmititzen diren datuen maiztasuna zehazten du. Atmega328p mikrokontrolagailuan *UBRR0* erregistroan balio bat zehaztu behar da nahi den *baud rate*-aren arabera. Balio hori kalkulatzeko ondorengo formula erabiliko da.
 
@@ -84,54 +110,66 @@ Gure formulan ikusten den bezala *baud rate*-a gordetzeko erabiltzen diren 16 bi
 
 Honako hau izango litzateke beharrezko kodea, 207 balioa zuzenean jarriz: 
     
+```c
     UCSR0A |= (1 << U2X0);
     UBRR0 = 207;
+```
 
 Zenbakia zuzenean jarri nahi bada, formula jarri dezakegu:
 
 ==KONTUZ: formulako biderketa jartzen badugu overflow gertetuko da, biderketako emaitza adierazteko ez dago bit nahikoa. Hori ekiditeko, zatiketak erabiliz egingo da kalkulua.==
 
+```c
     #define F_CPU 16000000
     #define BAUD 9600
 
     UCSR0A |= (1 << U2X0);
     UBRR0 = (F_CPU/16/BAUD)-1;
+```
 
 
 
-##### ASCII balioak C-n
+### ASCII balioak C-n
 
 **C** lengoaian karaktere baten ascii kodea lortzea nahiko erraza da, honako hau izango litzateke zenbaki baten ascii kodea lortzeko kodea:
 
+```c
     zenb = '0' + 3;
     printf("%d\n", zenb);   //honek ascii kodearen zenbakia 
 			    //pantailaratuko du
     printf("%c\n", zenb);   //honek ascii kodeari dagokion 
 			    //karakterea pantailaratuko du
+```
 
 
 ## Screen serie terminalaren instalazioa eta oinarrizko erabilera
 
 *Screen*, terminal multiplexore bat da. Window manager baten antzekoa, baina sesio desberdinak terminalean irekitzen utziko digu. Gure kasuan Komunikazio serialean trukatzen diren mezuak pantailaratzeko erabiliko dugu.
 
-#### Instalazioa banaketa desberdinetan
+### Instalazioa banaketa desberdinetan
 
 Programa honen instalazioa oso simplean da, programa linuxeko banaketa gehienetako errepositorioetan baitago.
 
 Arch-en oinarritutako banaketetan:
     
+```bash
     pacman -S screen
+```
 
 Debian-en oinarritutako banaketak (Debian, Ubuntu):
 
+```bash
     sudo apt update
     sudo apt install screen
+```
 
-#### Erabilera
+### Erabilera
 
 Gure kasuan, komando bakarra erebiliko dugu egindako programako komunikazio serialean trukatzen diren mezuak bistaratzeko.
 
+```bash
     screen /dev/ttyACM0 115200
+```
 
 Komandoak honako parametroak dauzka:
 
@@ -149,7 +187,9 @@ UART modulua hasieratzeko ***Init_USART*** funtzioa sortu da. Parametro moduan f
 
 Adibidea:
 
+```c
     Init_USART(115200); //USART initialization with 115200 baudrate
+```
 
 ### Transmititu karakterea
 
@@ -157,7 +197,9 @@ Funtzio honen bidez UART moduluak karaktere bat transmitituko du Tx pinetik. Arg
 
 Adibidea:
 
+```c
     USART_tx('u'); // Send 'u' character
+```
 
 ### String bat transmititu
 
@@ -165,7 +207,9 @@ Funtzio honen bidez string bat transmitituko da. Argumentu moduan *string* bat j
 
 Adibidea:
 
+```c
     USART_string("hello world!"); // Sends the entire sting to the receiver.
+```
 
 ### Karakterea jaso
 
@@ -173,4 +217,6 @@ Funtzio honen bidez mikrokontrolagailuak karaktere bat jasoko du funtzioa exekut
 
 Adibidez:
 
+```c
     char data = USART_rx(); //receive information in data variable
+```
