@@ -153,6 +153,23 @@ int ESP_server(int en, char* port){
     return 0;
 }
 
+
+/*
+ * Funtzio hau ESP modulua zerbitzari moduan dagoenean, bezeroarekin timeout 
+ * bat konfiguratzeko balio du.
+ *
+ * Parametroak:
+ *  - time: Konexioa isteko denbora.
+ */
+int ESP_server_timeout(char * time){
+    char command[15];
+
+    sprintf(command, "AT+CIPSTO=%s", time);
+    if(send_command(command, "OK") == RESPONSE_OK)
+	return 1;
+    return 0;
+}
+
 /*
  * Funtzio hau TCP bidez mezuak bidaltzeko balio du.
  *
@@ -191,5 +208,5 @@ int TCP_close(char id){
     sprintf(command, "AT+CIPCLOSE=%c", id);
     if(send_command(command, "OK") == RESPONSE_OK)
 	return 1;
-    return 2;
+    return 0;
 }

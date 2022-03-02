@@ -42,6 +42,8 @@ int ESP_mode(int mode);
 int ESP_multiple_conn(int conn);
 //ESP-a zerbitzari moduan konfiguratu
 int ESP_server(int en, char * port);
+//Zerbitzariaren timeouta konfiguratu
+int ESP_server_timeout(char * time);
 //TCP bidez mezu bat bidaltzeko
 int TCP_send(char id, char* msg);
 //TCP konexio bat itxi

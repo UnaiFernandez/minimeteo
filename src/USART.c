@@ -20,6 +20,7 @@
 #include "wifi.h"
 
 int resp_index = 0;
+int resp_first = 0;
 char tmp_buff = '\0';
 char response[BUFF_SIZE];
 
@@ -77,14 +78,22 @@ void USART_string(char * string){
 //Eten zerbitzu errutina
 ISR(USART_RX_vect){
     tmp_buff = UDR0;
-    
-    //ESP-01 moduluak bidaltzen dituen karaktereak response bufferrean jaso
-    response[resp_index] = tmp_buff;
-    resp_index++;
-    
-    if(resp_index == BUFF_SIZE){
-	resp_index = 0;
-	//response_status=1;
+
+    //Jasotako mezuaren lehen letra 'O' edo 'E' bada, komando baten 
+    //responsea dela esan nahi du. 
+    if(tmp_buff == 'O' || tmp_buff == 'E' || resp_first == 1){
+
+	//ESP-01 moduluak bidaltzen dituen karaktereak response bufferrean jaso
+    	response[resp_index] = tmp_buff;
+    	resp_index++;
+	resp_first = 1;
+    	
+    	if(resp_index == BUFF_SIZE || tmp_buff == '\r'){
+    	    resp_index = 0;
+    	    resp_first = 0;
+    	    //response_status=1;
+    	}
+
     }
     
 }

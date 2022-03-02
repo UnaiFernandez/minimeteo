@@ -44,12 +44,20 @@ int main(){
 
     _delay_ms(100);
     
+    int start = 0;
     //Wifi modulua hasieratu
-    int start = hello_ESP();
+    start = hello_ESP();
     //Operazio modua aukeratu
-    ESP_mode(AP);
+    start = ESP_mode(AP);
     //AP-aren konfigurazioa
-    AP_setup("MINIMETEO_v.1", "12345678", '1', '4');
+    start = AP_setup("MINIMETEO_v.2", "12345678", '1', '4');
+    //Konexio anitzak gaitu
+    start = ESP_multiple_conn(1);
+    //Zerbitzaria hasieratu 4567 portuan
+    start = ESP_server(1,"4567");
+    //Zerbitzariaren timeouta ezarri
+    start = ESP_server_timeout("5");
+
     if(start == 1){
         PORTB |= (1 << PORTB4); //LED berdea piztu
         PORTB &=~ (1 << PORTB5); //LED gorria itzali
