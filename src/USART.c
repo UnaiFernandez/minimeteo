@@ -20,9 +20,12 @@
 #include "wifi.h"
 
 int resp_index = 0;
+int comm_index = 0;
 int resp_first = 0;
+int comm_first = 0;
 char tmp_buff = '\0';
 char response[BUFF_SIZE];
+char get_command[5];
 
 void init_USART(long int baud){
   
@@ -88,11 +91,24 @@ ISR(USART_RX_vect){
     	resp_index++;
 	resp_first = 1;
     	
-    	if(resp_index == BUFF_SIZE || tmp_buff == '\r'){
+    	if(resp_index == BUFF_SIZE || tmp_buff == '\r' || tmp_buff == '\n'){
     	    resp_index = 0;
     	    resp_first = 0;
     	    //response_status=1;
     	}
+
+    }else if((tmp_buff == '+' && comm_index == 0) || comm_first == 1){
+	
+	get_command[comm_index] = tmp_buff;
+	comm_index++;
+	comm_first = 1;
+        PORTB &=~ (1 << PORTB4); //LED berdea itzali
+
+	if(comm_index == BUFF_SIZE || tmp_buff == '\r' || tmp_buff == '\n'){
+	    comm_index = 0;
+	    comm_first = 0;
+	    TCP_send('0', "25", get_command); 
+	}
 
     }
     

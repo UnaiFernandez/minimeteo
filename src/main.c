@@ -14,6 +14,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <stdlib.h>
 
 #include "USART.h"
 #include "wifi.h"
@@ -56,7 +57,7 @@ int main(){
     //Zerbitzaria hasieratu 4567 portuan
     start = ESP_server(1,"4567");
     //Zerbitzariaren timeouta ezarri
-    start = ESP_server_timeout("5");
+    start = ESP_server_timeout("60");
 
     if(start == 1){
         PORTB |= (1 << PORTB4); //LED berdea piztu
@@ -65,6 +66,15 @@ int main(){
         PORTB |= (1 << PORTB5); //LED gorria piztu
         PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
+
+    _delay_ms(3000);
+
+    //char a [7] = "hola\n\r";
+    char *a;
+    a = malloc(sizeof(char)*7);
+    a = "hola\n\r";
+    TCP_send('0', "7", a); 
+    free(a);
 
     while(1){}
 }

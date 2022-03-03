@@ -16,6 +16,7 @@
 #include <util/delay.h>
 #include <string.h>
 #include <stdio.h>
+#include <avr/io.h>
 
 #include "wifi.h"
 #include "USART.h"
@@ -178,22 +179,18 @@ int ESP_server_timeout(char * time){
  *  - msg: Bidali nahi den mezua. Kontuan eduki behar da mezua, '\r' 
  *	   karakterearekin bukatu behar duela.
  */
-int TCP_send(char id, char* msg){
-    int kont = 1;
-    int i = 0;
-    int size;
-    
-    //mezuaren tamaina kalkulatu
-    while(msg[i] != '\r'){
-	kont++;
-    }
+int TCP_send(char id, char * size, char* msg){
+    char command [20];
 
-    size = 12+kont;
-    char command[size];
-
-    sprintf(command, "AT+CIPSEND=%c,%s", id, msg);
-    if(send_command(command, "OK") == RESPONSE_OK)
+    sprintf(command, "AT+CIPSEND=%c,%s", id, size);
+    if(send_command(command, "OK") == RESPONSE_OK){
+	PORTB |= (1 << PORTB4); //LED berdea piztu
+	USART_string(msg);
 	return 1;
+    }
+    if(send_command(command, "OK") == RESPONSE_ERROR)
+	PORTB |= (1 << PORTB5); //LED gorria piztu
+
     return 0;
 }
 /*
