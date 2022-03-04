@@ -35,7 +35,7 @@ int send_command(char * command, char * resp);
 //Funtzionamendua egiaztatu
 int hello_ESP();
 //AP konfiguratu
-int AP_setup(char * ssid, char * pwd, char channel, char enc);
+int AP_setup(char * ssid, char * pwd, int channel, int enc);
 //ESP-aren operazio modua aukeratu
 int ESP_mode(int mode);
 //ESP-ak konexio bat edo gehiago gaitzeko Funtzioa
@@ -45,7 +45,8 @@ int ESP_server(int en, char * port);
 //Zerbitzariaren timeouta konfiguratu
 int ESP_server_timeout(char * time);
 //TCP bidez mezu bat bidaltzeko
-int TCP_send(char id, char * size, char* msg);
+int TCP_send(int id, char * size, char* msg);
+int TCP_response(char * msg);
 //TCP konexio bat itxi
 int TCP_close(char id);
 #endif //WIFI_H

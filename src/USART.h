@@ -14,12 +14,13 @@
 #ifndef USART_H
 #define USART_H
 
-#define BUFF_SIZE 5
+#define BUFF_SIZE 15
 extern char tmp_buff;
 extern char response [BUFF_SIZE];
 extern int resp_index;
 extern int comm_index;
-extern char get_command [5];
+extern char get_command [BUFF_SIZE];
+extern int send_msg;
 
 
 /*---- USART hasieratu ----*/

@@ -45,19 +45,26 @@ int main(){
 
     _delay_ms(100);
     
-    int start = 0;
+    int start = 1;
     //Wifi modulua hasieratu
-    start = hello_ESP();
+    if(!hello_ESP())
+	start = 0;
     //Operazio modua aukeratu
     start = ESP_mode(AP);
+    if(!ESP_mode(AP))
+	start = 0;
     //AP-aren konfigurazioa
-    start = AP_setup("MINIMETEO_v.2", "12345678", '1', '4');
+    if(!AP_setup("MINIMETEO_v.2", "12345678", 1, 4))
+	start = 0;
     //Konexio anitzak gaitu
-    start = ESP_multiple_conn(1);
+    if(!ESP_multiple_conn(1))
+	start = 0;
     //Zerbitzaria hasieratu 4567 portuan
-    start = ESP_server(1,"4567");
+    if(!ESP_server(1,"4567"))
+	start = 0;
     //Zerbitzariaren timeouta ezarri
-    start = ESP_server_timeout("60");
+    if(!ESP_server_timeout("120"))
+	start = 0;
 
     if(start == 1){
         PORTB |= (1 << PORTB4); //LED berdea piztu
@@ -67,16 +74,22 @@ int main(){
         PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
 
-    _delay_ms(3000);
+     
 
-    //char a [7] = "hola\n\r";
-    char *a;
-    a = malloc(sizeof(char)*7);
-    a = "hola\n\r";
-    TCP_send('0', "7", a); 
-    free(a);
+    while(1){
+	_delay_ms(100);
+	if(send_msg == 1){
+	    TCP_response(get_command);
+	    //char a [] = "que tal";
+	    ////////char *a = "hola\n\r";
+	    ////////TCP_send('0', "7", a); 
+	    //TCP_send(0, "6", "que lal");
+	    send_msg = 0;
+	}
 
-    while(1){}
+	
+    }
+
 }
 
 

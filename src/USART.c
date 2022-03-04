@@ -15,6 +15,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <string.h>
 
 #include "USART.h"
 #include "wifi.h"
@@ -25,7 +26,8 @@ int resp_first = 0;
 int comm_first = 0;
 char tmp_buff = '\0';
 char response[BUFF_SIZE];
-char get_command[5];
+char get_command[BUFF_SIZE];
+int send_msg = 0;
 
 void init_USART(long int baud){
   
@@ -84,7 +86,7 @@ ISR(USART_RX_vect){
 
     //Jasotako mezuaren lehen letra 'O' edo 'E' bada, komando baten 
     //responsea dela esan nahi du. 
-    if(tmp_buff == 'O' || tmp_buff == 'E' || resp_first == 1){
+    if(tmp_buff == 'O' || tmp_buff == 'E' || tmp_buff == '+' || resp_first == 1){
 
 	//ESP-01 moduluak bidaltzen dituen karaktereak response bufferrean jaso
     	response[resp_index] = tmp_buff;
@@ -95,21 +97,12 @@ ISR(USART_RX_vect){
     	    resp_index = 0;
     	    resp_first = 0;
     	    //response_status=1;
+	    if(strstr(response, "+IPD") != NULL){
+	        PORTB &=~ (1 << PORTB4); //LED berdea itzali
+		send_msg = 1;
+		strcpy(get_command, response);
+	    }
     	}
 
-    }else if((tmp_buff == '+' && comm_index == 0) || comm_first == 1){
-	
-	get_command[comm_index] = tmp_buff;
-	comm_index++;
-	comm_first = 1;
-        PORTB &=~ (1 << PORTB4); //LED berdea itzali
-
-	if(comm_index == BUFF_SIZE || tmp_buff == '\r' || tmp_buff == '\n'){
-	    comm_index = 0;
-	    comm_first = 0;
-	    TCP_send('0', "25", get_command); 
-	}
-
     }
-    
 }

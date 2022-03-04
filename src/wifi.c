@@ -36,7 +36,7 @@ int send_command(char * command, char * resp){
     USART_string(command);
     USART_string("\r\n");
     response_status = RESPONSE_WAITING;
-    _delay_ms(1);  //mezua jasotzeko 1ms itxaron
+    _delay_ms(10);  //mezua jasotzeko 1ms itxaron
 
     //LED berdea pizteko komandoa bidali
     if(strstr(response, resp) != NULL)
@@ -88,10 +88,10 @@ int hello_ESP(){
  *
  * Dena ondo badoa, 1 bueltatuko du. Bestela 0.
  */
-int AP_setup(char * ssid, char * pwd, char channel, char enc){
-    char command[70];
+int AP_setup(char * ssid, char * pwd, int channel, int enc){
+    char command[70] = "\0";
 
-    sprintf(command, "AT+CWSAP=\"%s\",\"%s\",%c,%c", ssid, pwd, channel, enc);
+    sprintf(command, "AT+CWSAP=\"%s\",\"%s\",%d,%d", ssid, pwd, channel, enc);
     if(send_command(command, "OK") == RESPONSE_OK)
 	return 1;
     return 0;
@@ -108,10 +108,9 @@ int AP_setup(char * ssid, char * pwd, char channel, char enc){
  *	-> 3 = BOTH (bi moduak batera)
  */
 int ESP_mode(int mode){
-    char m = mode + '0';
-    char command[12];
+    char command[12] = "\0";
 
-    sprintf(command, "AT+CWMODE=%c", m);
+    sprintf(command, "AT+CWMODE=%d", mode);
     if(send_command(command, "OK") == RESPONSE_OK)
 	return 1;
     return 0;
@@ -125,10 +124,9 @@ int ESP_mode(int mode){
  *	    egotea ahalbidetuko du funtzioak
  */
 int ESP_multiple_conn(int en){
-    char command[12];
-    char c = en + '0';
+    char command[12] = "\0";
 
-    sprintf(command, "AT+CIPMUX=%c", c);
+    sprintf(command, "AT+CIPMUX=%d", en);
     if(send_command(command, "OK") == RESPONSE_OK)
 	return 1;
     return 0;
@@ -142,13 +140,12 @@ int ESP_multiple_conn(int en){
  *  - port: Portu zenbakia zehazteko.
  */
 int ESP_server(int en, char* port){
-    char command[22];
-    char s = en + '0';
+    char command[22] = "\0";
 
     //ESP moduluak zerbitzari moduan lan egin dezan, konexio bat baino 
     //gehiago egotea ahalbidetua egon behar du.
     ESP_multiple_conn(1);
-    sprintf(command, "AT+CIPSERVER=%c,%s", s, port);
+    sprintf(command, "AT+CIPSERVER=%d,%s", en, port);
     if(send_command(command, "OK") == RESPONSE_OK)
 	return 1;
     return 0;
@@ -163,7 +160,7 @@ int ESP_server(int en, char* port){
  *  - time: Konexioa isteko denbora.
  */
 int ESP_server_timeout(char * time){
-    char command[15];
+    char command[15] = "\0";
 
     sprintf(command, "AT+CIPSTO=%s", time);
     if(send_command(command, "OK") == RESPONSE_OK)
@@ -179,20 +176,36 @@ int ESP_server_timeout(char * time){
  *  - msg: Bidali nahi den mezua. Kontuan eduki behar da mezua, '\r' 
  *	   karakterearekin bukatu behar duela.
  */
-int TCP_send(char id, char * size, char* msg){
-    char command [20];
+int TCP_send(int id, char * size, char* msg){
+    char command [15] = "\0";
+    int s = strlen(msg)+2;
 
-    sprintf(command, "AT+CIPSEND=%c,%s", id, size);
+
+    sprintf(command, "AT+CIPSEND=%d,%d", id, s);
+    _delay_ms(100);
     if(send_command(command, "OK") == RESPONSE_OK){
 	PORTB |= (1 << PORTB4); //LED berdea piztu
+	//_delay_ms(100);
 	USART_string(msg);
+	USART_string("\n\r");
 	return 1;
-    }
-    if(send_command(command, "OK") == RESPONSE_ERROR)
+    }else
 	PORTB |= (1 << PORTB5); //LED gorria piztu
+    //if(send_command(command, "OK") == RESPONSE_ERROR)
+	//PORTB |= (1 << PORTB5); //LED gorria piztu
 
     return 0;
 }
+
+int TCP_response(char * msg){
+    //Get hitza badauka mezuak
+    if(strstr(msg, "GET") != NULL){
+	TCP_send(0, "2", "que tal");
+	return 1;
+    }
+    return 0;
+}
+
 /*
  * Funtzio honen bidez TCP konexio bat itxi egingo da.
  *
@@ -200,7 +213,7 @@ int TCP_send(char id, char * size, char* msg){
  *  - id: Konexioare identifikadorea
  */
 int TCP_close(char id){
-    char command[14];
+    char command[14] = "\0";
     
     sprintf(command, "AT+CIPCLOSE=%c", id);
     if(send_command(command, "OK") == RESPONSE_OK)
