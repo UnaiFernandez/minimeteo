@@ -45,7 +45,8 @@ int ESP_server(int en, char * port);
 //Zerbitzariaren timeouta konfiguratu
 int ESP_server_timeout(char * time);
 //TCP bidez mezu bat bidaltzeko
-int TCP_send(int id, char * size, char* msg);
+int TCP_send(int id, char* msg);
+//TCP mezuari erantzun
 int TCP_response(char * msg);
 //TCP konexio bat itxi
 int TCP_close(char id);

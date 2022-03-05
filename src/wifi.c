@@ -176,12 +176,12 @@ int ESP_server_timeout(char * time){
  *  - msg: Bidali nahi den mezua. Kontuan eduki behar da mezua, '\r' 
  *	   karakterearekin bukatu behar duela.
  */
-int TCP_send(int id, char * size, char* msg){
+int TCP_send(int id, char* msg){
     char command [15] = "\0";
-    int s = strlen(msg)+2;
+    int size = strlen(msg)+2;
 
 
-    sprintf(command, "AT+CIPSEND=%d,%d", id, s);
+    sprintf(command, "AT+CIPSEND=%d,%d", id, size);
     _delay_ms(100);
     if(send_command(command, "OK") == RESPONSE_OK){
 	PORTB |= (1 << PORTB4); //LED berdea piztu
@@ -197,10 +197,16 @@ int TCP_send(int id, char * size, char* msg){
     return 0;
 }
 
+/*
+ * Funtzio honek bezeroari erantzun bat bidaliko dio jasotako mezuaren arabera
+ *
+ * Parametroak:
+ *  - msg: Bezeroak bidalitako mezua.
+ */
 int TCP_response(char * msg){
     //Get hitza badauka mezuak
     if(strstr(msg, "GET") != NULL){
-	TCP_send(0, "2", "que tal");
+	TCP_send(0, "que tal");
 	return 1;
     }
     return 0;

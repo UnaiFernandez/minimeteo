@@ -21,9 +21,7 @@
 #include "wifi.h"
 
 int resp_index = 0;
-int comm_index = 0;
 int resp_first = 0;
-int comm_first = 0;
 char tmp_buff = '\0';
 char response[BUFF_SIZE];
 char get_command[BUFF_SIZE];
@@ -92,14 +90,18 @@ ISR(USART_RX_vect){
     	response[resp_index] = tmp_buff;
     	resp_index++;
 	resp_first = 1;
-    	
+    
+	//Iritsitako mezuaren bukaera detektatu
     	if(resp_index == BUFF_SIZE || tmp_buff == '\r' || tmp_buff == '\n'){
     	    resp_index = 0;
     	    resp_first = 0;
-    	    //response_status=1;
+
+	    //Jasotako mezua "+IPD" karaktereekin hasten bada, TCP mezu bat dela esan nahi du.
 	    if(strstr(response, "+IPD") != NULL){
 	        PORTB &=~ (1 << PORTB4); //LED berdea itzali
 		send_msg = 1;
+		
+		//Jasotako mezua array batean gorde
 		strcpy(get_command, response);
 	    }
     	}

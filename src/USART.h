@@ -17,9 +17,8 @@
 #define BUFF_SIZE 15
 extern char tmp_buff;
 extern char response [BUFF_SIZE];
-extern int resp_index;
-extern int comm_index;
 extern char get_command [BUFF_SIZE];
+extern int resp_index;
 extern int send_msg;
 
 

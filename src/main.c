@@ -77,13 +77,9 @@ int main(){
      
 
     while(1){
-	_delay_ms(100);
+	_delay_ms(1);
 	if(send_msg == 1){
 	    TCP_response(get_command);
-	    //char a [] = "que tal";
-	    ////////char *a = "hola\n\r";
-	    ////////TCP_send('0', "7", a); 
-	    //TCP_send(0, "6", "que lal");
 	    send_msg = 0;
 	}
 
