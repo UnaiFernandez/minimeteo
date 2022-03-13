@@ -206,7 +206,7 @@ int TCP_send(int id, char* msg){
 int TCP_response(char * msg){
     //Get hitza badauka mezuak
     if(strstr(msg, "GET") != NULL){
-	TCP_send(0, "que tal");
+	TCP_send(0, "OK:1.2:3.1");
 	return 1;
     }
     return 0;

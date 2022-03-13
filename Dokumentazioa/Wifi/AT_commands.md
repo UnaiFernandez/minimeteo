@@ -16,3 +16,12 @@
 |*Konexio bat baino gehiago ahalbidetu*|
 |AT+CIPMUX= mode | Set | OK | Enable / disable multiplex mode (up to 4 conenctions)
 |AT+CIPMUX?| Query | +CIPMUX:mode OK | Print current multiplex mode.|
+|*TCP Zerbitzari bat sorut*|
+|AT+CIPSERVER=enable,port | Set | OK | Configure ESP8266 as TCP server |
+|*TCP Zerbitzariaren timeouta zehazteko*|
+|AT+CIPSTO?| Query | +CIPSTO: time | Query server timeout |
+|AT+CIPSTO=time | Set | OK | Set server timeout |
+|*TCP bidez mezu bat bidaltzeko*|
+|AT+CIPSEND=id,lenght| Set | SEND OK | Set length of the data that will be sent. For normal send (multiple connection) |
+|*TCP konexio bat isteko*|
+|AT+CIPCLOSE=id| Set | OK | Close TCP or UDP connection.For multiply connection mode |
