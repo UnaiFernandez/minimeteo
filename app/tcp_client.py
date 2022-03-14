@@ -25,6 +25,7 @@ while True:
         exit()
 
     mezua += "\r"
+    mezua = "GET\r"
     s.send(mezua.encode('utf-8'))
     mezua = ""
     while True:
