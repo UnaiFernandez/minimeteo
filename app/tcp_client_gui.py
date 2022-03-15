@@ -49,7 +49,6 @@ def tcp_close(s):
     debug.configure(text = "Deskonektatuta!")
 
 def close():
-    tcp_close(sock)
     print("Agur!")
     debug.configure(text = "Agur!")
     exit()
