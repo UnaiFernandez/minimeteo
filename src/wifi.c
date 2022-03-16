@@ -226,3 +226,12 @@ int TCP_close(char id){
 	return 1;
     return 0;
 }
+
+
+
+
+//Timer para el timeout
+//
+//Estara parado durante 10ms. Si no ha habido respuesta del ESP mandara la señal para volver a mandar el mensaje otra vez
+//Si el mensaje se manda 5 veces sin tener una respuesta termina el programa, entra en un bucle infinito indicando que no va bien
+//por los tanto se tendra que reiniciar 
