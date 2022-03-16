@@ -1,0 +1,111 @@
+\documentclass[11pt, twoside, a4paper, openright]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[basque]{babel}
+\usepackage[margin=2cm, top=2cm, includefoot]{geometry}
+\usepackage{graphicx}%, wrapfig, subcaption, setspace, booktabs} %para insertar imagenes
+\usepackage[table,xcdraw]{xcolor} %para deteccion de colores
+\usepackage{fancyhdr} %para el estilo de la pagina
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{float}
+\usepackage{parskip}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{dkgreen},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[scaled=.90]{helvet}
+
+%colores
+\definecolor{frostblue}{HTML}{5E81AC}
+
+
+%variables
+\newcommand{\logoupv}{images/upvlogo.png}
+\newcommand{\logoinfo}{images/FacultadInformatica-Gipuzkoa-bilingue-positivo-alta.jpg}
+\newcommand{\doctitle}{Minimeteo: Atmega328p mikrokontrolagailuan oinarritutako estazio meteorologikoa}
+\newcommand{\minititle}{Minimeteo}
+\newcommand{\subjectname}{Gradu Amaierako Lana}
+\newcommand{\authornames}{Unai Fernandez Urroz}
+\newcommand{\abstract}{Laburpena}
+
+%Adicionales
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{ \markboth{#1}{} }
+\newcommand{\headertitle}{, \leftmark}
+\fancyhf{}
+\lhead{\includegraphics[width=3cm]{\logoupv}}\rhead{\leftmark}
+\cfoot{\thepage}
+
+\usepackage[sf,outermarks]{titlesec}
+%formato de capitulo
+\titleformat{\chapter}[display]
+  {\bfseries\huge}
+  {\vspace{3cm}\filleft\Huge\textcolor{frostblue}{\thechapter. \Huge\MakeUppercase{\chaptertitlename}}}
+  {1ex}
+  {\textcolor{frostblue}{\noindent\rule{\textwidth}{0.4pt}}\newline\filright}
+
+%Comienzo del documento
+\begin{document}
+\frontmatter
+    \begin{titlepage}
+    \centering
+    \includegraphics[width=0.5\textwidth]{\logoinfo}\par\vspace{1cm}
+    {\Large \textbf{\subjectname}}\par\vspace{0.2cm} Konputagailuen Ingeniaritza \par\vspace{4cm}
+    \Huge\bfseries\textcolor{frostblue}{\doctitle}
+    \textcolor{frostblue}{\noindent\rule{\textwidth}{0.4pt}\vspace{1cm}}
+    \normalsize 2022 \par \vspace{0.5cm}
+    \Large \authornames \par \vspace{2cm}
+    \normalsize Zuzendariak \par \vspace{0.5cm}
+    \normalsize Jose Ignacio Martin eta Izaskun Etxeberria
+    \end{titlepage}
+    
+    %------------------------------------------------------------------------------
+     \input{0-abstract}
+    %------------------------------------------------------------------------------
+    %Index
+    \clearpage
+    \pagestyle{plain}
+    \tableofcontents
+    \listoffigures
+    \listoftables
+    \pagestyle{fancy}
+    %------------------------------------------------------------------------------
+   \mainmatter
+    \newpage
+    \input{1-sarrera}
+    \input{2-plangintza}
+    \input{3-mikroa}
+    \input{4-sentsoreak}
+    
+    
+    \bibliographystyle{IEEEtranS}  
+    \bibliography{references.bib}
+
+\end{document}
+
