@@ -1,8 +1,8 @@
+#define F_CPU 16000000
 #include <avr/io.h>
 #include <util/delay.h>
 
-
-
+#include "timers.h"
 
 void dht_timeout_error(){
     DDRB |= (1 << PORTB1); //Irteera moduan konfiguratu
@@ -26,16 +26,60 @@ void dht_start(){
     _delay_ms(18);
     //4 Pin-a HIGH jarri
     PORTB |= (1 << PORTB1);
-    //5 itxaron 30 us
-    _delay_us(30);
-    //Lo del while va aqui
-    //6 Pin-a sarrera moduan konfiguratu
-    DDRB &=~ (1 << PORTB1);
 }
 
 void dht_response(){
 
+    dht_timeout = 0;
+    int error = 0;
+    en = 1;
+    //6 Pin-a sarrera moduan konfiguratu
+    DDRB &=~ (1 << PORTB1);
+    PORTB |= (1 << PORTB1);
+    // DHT11-ren erantzuna itxaron
+    while(PINB & (1 << PINB1)){
+	//delay_us(2);
+	//dht_timeout+=2;
+	if(dht_timeout >= 50){
+	    dht_timeout_error();
+	    error++;
+	    en = 0;
+	    break;
+	}
+    }
+    
+    dht_timeout = 0;
+
+    //DHT11-k LOW seinalearekin erantzungo du 80us bitartean
+    while(!(PINB & (1 << PINB1))){
+	//delay_us(2);
+	//dht_timeout+=2;
+	if(dht_timeout >= 100){
+	    dht_timeout_error();
+	    error++;
+	    en = 0;
+	    break;
+	}
+    }
+
+    dht_timeout = 0;
+    //DHT11-k seinalea HIGH egoerara pasako du 80us-z
+    while(PINB & (1 << PINB1)){
+	//delay_us(2);
+	//dht_timeout+=2;
+	if(dht_timeout >= 100){
+	    dht_timeout_error();
+	    error++;
+	    en = 0;
+	    break;
+	}
+    }
+    en = 0;
+
+    if(error == 0)
+	PORTB |= (1 << PORTB5);
 }
+
 
 void dht_data(){
 

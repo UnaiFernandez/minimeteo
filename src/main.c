@@ -18,10 +18,11 @@
 
 #include "USART.h"
 #include "wifi.h"
+#include "timers.h"
+#include "DHT11.h"
 
 
-
-void init_port(){
+void init_LED(){
     //LED gorria
     DDRB |= (1 << PORTB5); 
     PORTB &=~ (1 << PORTB5);
@@ -29,6 +30,13 @@ void init_port(){
     //LED berdea
     DDRB |= (1 << PORTB4);
     PORTB &=~ (1 << PORTB4);
+
+    //LED horia
+    DDRB |= (1 << PORTB3);
+    PORTB &=~ (1 << PORTB3);
+
+    DDRB |= (1 << PORTB0);
+    PORTB &=~ (1 << PORTB0);
 }
 
 
@@ -41,10 +49,11 @@ int main(){
     //etenak gaitu
     sei();
     //LED-ak hasieratu;
-    init_port();
+    init_LED();
 
     _delay_ms(100);
     
+    /*------------------- Wifiaren konfigurazioa ---------------------*/
     int start = 1;
     //Wifi modulua hasieratu
     if(!hello_ESP())
@@ -54,7 +63,7 @@ int main(){
     if(!ESP_mode(AP))
 	start = 0;
     //AP-aren konfigurazioa
-    if(!AP_setup("MINIMETEO_v.2", "12345678", 1, 4))
+    if(!AP_setup("MINIMETEO_v.1", "12345678", 1, 4))
 	start = 0;
     //Konexio anitzak gaitu
     if(!ESP_multiple_conn(1))
@@ -74,7 +83,13 @@ int main(){
         PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
 
-     
+    init_timer0();
+
+    dht_init();
+    dht_start();
+    dht_response();
+    //dht_prueba();
+    /*------------------------------------------------------------------*/ 
 
     while(1){
 	_delay_ms(1);
@@ -82,8 +97,6 @@ int main(){
 	    TCP_response(get_command);
 	    send_msg = 0;
 	}
-
-	
     }
 
 }

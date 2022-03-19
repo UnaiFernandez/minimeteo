@@ -41,7 +41,7 @@ def tcp_send(s):
         if mezua.find('\n') != -1:
             break
     print("[SERVER RESPONSE]\n" + mezua)
-    data_label.configure(text = mezua)
+    tmp_data.configure(text = mezua[:-2])
 
 def tcp_close(s):
     s.close()
@@ -120,7 +120,7 @@ tmp_label1 = Label(main, text='Tenperatura:', font = ("Hack", 20), fg = '#e5e9f0
 tmp_label1.place(relx=.1, rely=.3, anchor = "center")
 tmp_label1.configure(bg = '#434c5e')
 
-tmp_data = Label(main, text = "", font = ("Hack", 15), fg = '#e5e9f0')
+tmp_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
 tmp_data.place(relx=.25, rely=.3, anchor="center")
 tmp_data.configure(bg = '#434c5e')
 
@@ -133,7 +133,7 @@ h_label1 = Label(main, text='Hezetasuna:', font = ("Hack", 20), fg = '#e5e9f0')
 h_label1.place(relx=.1, rely=.4, anchor = "center")
 h_label1.configure(bg = '#434c5e')
 
-h_data = Label(main, text = "", font = ("Hack", 15), fg = '#e5e9f0')
+h_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
 h_data.place(relx=.25, rely=.4, anchor="center")
 h_data.configure(bg = '#434c5e')
 
