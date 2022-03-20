@@ -28,7 +28,8 @@ enum WIFI_MODE{
 };
 
 int response_status;
-
+int hezetasuna[2];
+int tenperatura[2];
 /*FUNTZIOAK*/
 //Bidali komandoa
 int send_command(char * command, char * resp);

@@ -101,6 +101,8 @@ void delay_us(int us){
     TCCR0A |= (1 << WGM01);
     TCCR0B &=~ (1 << WGM02);
 
+    //Etenak desgaitu
+    TIMSK0 &=~ (1 << OCIE0A);
     //zortiziko prescalerra erabili behar da us < 25 
     //64-ko bestela
     
@@ -116,7 +118,7 @@ void delay_us(int us){
     TCNT0 = 0;
 
     //Konparazio balio kalkulatu
-    F = 1/(us*100000); 
+    F = 1/(us/100000); 
     OCR0A = (F_CPU/2/prescaler/F)-1;
 
     //Timerraren flag-aren egoera aldatu arte itxaron
@@ -148,7 +150,7 @@ void delay_ms(int ms){
     TCNT0 = 0;
 
     //Konparazio balio kalkulatu
-    F = 1/(ms*1000); 
+    F = 1/(ms/1000); 
     OCR0A = (F_CPU/2/prescaler/F)-1;
 
     //Timerraren flag-aren egoera aldatu arte itxaron

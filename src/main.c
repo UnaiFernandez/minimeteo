@@ -15,11 +15,15 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "USART.h"
 #include "wifi.h"
 #include "timers.h"
 #include "DHT11.h"
+
+
+int checksum;
 
 
 void init_LED(){
@@ -83,19 +87,34 @@ int main(){
         PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
 
+    /*------------------------------------------------------------------*/ 
+    
+
     init_timer0();
 
-    dht_init();
-    dht_start();
-    dht_response();
-    //dht_prueba();
-    /*------------------------------------------------------------------*/ 
-
+    int t = 0;
     while(1){
-	_delay_ms(1);
+	_delay_ms(2);
 	if(send_msg == 1){
 	    TCP_response(get_command);
 	    send_msg = 0;
+	}
+
+	t+=2;
+	if(t >= 2000){
+	    //._delay_ms(2000);
+	    dht_init();
+	    dht_start();
+	    dht_response();
+
+	    hezetasuna[0] = dht_data();
+	    hezetasuna[1] = dht_data();
+	    tenperatura[0] = dht_data();
+	    tenperatura[1] = dht_data();
+	    checksum = dht_data();
+
+	    dht_checksum(hezetasuna[0], hezetasuna[1], tenperatura[0], tenperatura[1], checksum);
+	    t = 0;
 	}
     }
 

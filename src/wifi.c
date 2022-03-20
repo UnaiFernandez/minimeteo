@@ -17,9 +17,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <avr/io.h>
+#include <stdlib.h>
 
 #include "wifi.h"
 #include "USART.h"
+
 
 /*
  * Funtzio honen bidez, komandoak bidali egingo dira ESP-01 modulura eta honen erantzuna itxarongo du.
@@ -184,7 +186,7 @@ int TCP_send(int id, char* msg){
     sprintf(command, "AT+CIPSEND=%d,%d", id, size);
     _delay_ms(100);
     if(send_command(command, "OK") == RESPONSE_OK){
-	PORTB &=~ (1 << PORTB3); //LED berdea piztu
+	//PORTB &=~ (1 << PORTB3); //LED berdea piztu
 	//_delay_ms(100);
 	USART_string(msg);
 	USART_string("\n\r");
@@ -202,7 +204,21 @@ int TCP_send(int id, char* msg){
 int TCP_response(char * msg){
     //Get hitza badauka mezuak
     if(strstr(msg, "GET") != NULL){
-	TCP_send(0, "OK:1.2:3.1");
+	char m[14] = "\0";
+	char h_1[4];
+	char h_2[4];
+	char t_1[4];
+	char t_2[4];
+
+
+	itoa(hezetasuna[0], h_1, 10);
+	itoa(hezetasuna[1], h_2, 10);
+	itoa(tenperatura[0], t_1, 10);
+	itoa(tenperatura[1], t_2, 10);
+
+	sprintf(m, "OK:%s.%s:%s.%s", h_1, h_2, t_1, t_2);
+	TCP_send(0, m);
+	//TCP_send(0, "OK:3.0:2.0");
 	return 1;
     }
     return 0;
