@@ -19,6 +19,7 @@
 
 
 #include "timers.h"
+#include "defines.h"
 
 
 volatile int dht_timeout = 0;
@@ -72,20 +73,28 @@ int set_prescaler(int prescaler){
     switch(prescaler){
 	case 0:
 	    TCCR0B |= (1 << CS00);
+	    TCCR0B &=~ (1 << CS01);
+	    TCCR0B &=~ (1 << CS02);
 	    break;
 	case 1:
 	    TCCR0B |= (1 << CS01);
+	    TCCR0B &=~ (1 << CS00);
+	    TCCR0B &=~ (1 << CS02);
 	    break;
 	case 2:
 	    TCCR0B |= (1 << CS00);
 	    TCCR0B |= (1 << CS01);
+	    TCCR0B &=~ (1 << CS02);
 	    break;
 	case 3:
 	    TCCR0B |= (1 << CS02);
+	    TCCR0B &=~ (1 << CS00);
+	    TCCR0B &=~ (1 << CS01);
 	    break;
 	case 4:
 	    TCCR0B |= (1 << CS00);
 	    TCCR0B |= (1 << CS02);
+	    TCCR0B &=~ (1 << CS01);
 	    break;
     }
 
@@ -150,8 +159,11 @@ void delay_ms(int ms){
     TCNT0 = 0;
 
     //Konparazio balio kalkulatu
-    F = 1/(ms/1000); 
+    //F = 1/(ms/1000);
+    F = 28;
     OCR0A = (F_CPU/2/prescaler/F)-1;
+    //OCR0A = 234;
+    
 
     //Timerraren flag-aren egoera aldatu arte itxaron
     while(!(TIFR0 & (1 << OCF0A)))

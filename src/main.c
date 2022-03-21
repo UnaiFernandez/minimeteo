@@ -23,9 +23,6 @@
 #include "DHT11.h"
 
 
-int checksum;
-
-
 void init_LED(){
     //LED gorria
     DDRB |= (1 << PORTB5); 
@@ -39,6 +36,7 @@ void init_LED(){
     DDRB |= (1 << PORTB3);
     PORTB &=~ (1 << PORTB3);
 
+    //DHT11 LED
     DDRB |= (1 << PORTB0);
     PORTB &=~ (1 << PORTB0);
 }
@@ -63,7 +61,6 @@ int main(){
     if(!hello_ESP())
 	start = 0;
     //Operazio modua aukeratu
-    start = ESP_mode(AP);
     if(!ESP_mode(AP))
 	start = 0;
     //AP-aren konfigurazioa
@@ -81,10 +78,10 @@ int main(){
 
     if(start == 1){
         PORTB |= (1 << PORTB4); //LED berdea piztu
-        PORTB &=~ (1 << PORTB5); //LED gorria itzali
+        //PORTB &=~ (1 << PORTB5); //LED gorria itzali
     }else{
         PORTB |= (1 << PORTB5); //LED gorria piztu
-        PORTB &=~ (1 << PORTB4); //LED berdea itzali
+        //PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
 
     /*------------------------------------------------------------------*/ 
@@ -94,6 +91,12 @@ int main(){
 
     int t = 0;
     while(1){
+	//delay_ms(30);
+	//t += 30;
+	//if(t >= 1000){
+	//    PORTB ^= (1 << PORTB4);
+	//    t = 0;
+	//}
 	_delay_ms(2);
 	if(send_msg == 1){
 	    TCP_response(get_command);
@@ -102,18 +105,8 @@ int main(){
 
 	t+=2;
 	if(t >= 2000){
+	    get_dht_data();
 	    //._delay_ms(2000);
-	    dht_init();
-	    dht_start();
-	    dht_response();
-
-	    hezetasuna[0] = dht_data();
-	    hezetasuna[1] = dht_data();
-	    tenperatura[0] = dht_data();
-	    tenperatura[1] = dht_data();
-	    checksum = dht_data();
-
-	    dht_checksum(hezetasuna[0], hezetasuna[1], tenperatura[0], tenperatura[1], checksum);
 	    t = 0;
 	}
     }

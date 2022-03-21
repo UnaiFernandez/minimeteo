@@ -11,15 +11,22 @@
  *  Author: Unai Fernandez
  *
  ====================================================================*/
-
-
-
 #define F_CPU 16000000
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdlib.h>
 
 #include "timers.h"
+#include "defines.h"
+
+
+int hezetasuna[2];
+int tenperatura[2];
+int checksum;
+volatile int dht_timeout;
+
+/*------------------------- DHT11 funtzioak ---------------------------*/
+
 
 void dht_timeout_error(){
     DDRB |= (1 << PORTB1); //Irteera moduan konfiguratu
@@ -91,7 +98,7 @@ void dht_response(){
 	    break;
 	}
     }
-    en = 0;
+    //en = 0;
 
     if(error == 0)
 	PORTB &=~ (1 << PORTB0);
@@ -103,7 +110,18 @@ int dht_data(){
 
     for(i = 0; i < 8; i++){
 	while((PINB & (1 << PINB1)) == 0);
+	//en = 1;
+	//dht_timeout = 0;
+	//while(PINB & (1 << PINB1));//1 denean itxaron
+	//if(dht_timeout >= 45){
+	//    data = data << 1;
+	//    data |= 1;
+	//}else{
+	//    data = data << 1;
+	//}
+	
 	_delay_us(35);
+	//delay_ms(35);
 	if(PINB & (1 << PINB1)){
 	    data = data << 1;
 	    data |= 1;
@@ -111,7 +129,7 @@ int dht_data(){
 	    data = data << 1;
 	}
 	while(PINB & (1 << PINB1));
-	//while(PINB & (1 << PINB1));
+	////while(PINB & (1 << PINB1));
     }
     //DDRB |= (1 << PORTB1);
 
@@ -126,3 +144,25 @@ int dht_checksum(int h_osoa, int h_hamar, int t_osoa, int t_hamar, int checksum)
     }
     return 1;
 }
+
+/*---------------------------------------------------------------------*/
+
+/*------------------------- Datuak eskuratu ---------------------------*/
+
+void get_dht_data(){
+    dht_init();
+    dht_start();
+    dht_response();
+
+    hezetasuna[0] = dht_data();
+    hezetasuna[1] = dht_data();
+    tenperatura[0] = dht_data();
+    tenperatura[1] = dht_data();
+    checksum = dht_data();
+
+    dht_checksum(hezetasuna[0], hezetasuna[1], tenperatura[0], tenperatura[1], checksum);
+
+}
+
+/*---------------------------------------------------------------------*/
+

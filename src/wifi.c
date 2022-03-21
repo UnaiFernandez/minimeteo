@@ -21,8 +21,11 @@
 
 #include "wifi.h"
 #include "USART.h"
+#include "defines.h"
 
 
+int hezetasuna[2];
+int tenperatura[2];
 /*
  * Funtzio honen bidez, komandoak bidali egingo dira ESP-01 modulura eta honen erantzuna itxarongo du.
  *
@@ -186,11 +189,12 @@ int TCP_send(int id, char* msg){
     sprintf(command, "AT+CIPSEND=%d,%d", id, size);
     _delay_ms(100);
     if(send_command(command, "OK") == RESPONSE_OK){
-	//PORTB &=~ (1 << PORTB3); //LED berdea piztu
-	//_delay_ms(100);
+	PORTB |= (1 << PORTB4); //LED berdea piztu
 	USART_string(msg);
 	USART_string("\n\r");
 	return 1;
+    }else{
+	PORTB |= (1 << PORTB5); //LED gorria piztu
     }
     return 0;
 }

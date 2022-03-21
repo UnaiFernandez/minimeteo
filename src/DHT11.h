@@ -1,6 +1,6 @@
 
 
-
+void get_dht_data();
 void dht_timeout_error();
 void dht_init();
 void dht_start();
