@@ -21,6 +21,7 @@
 #include "wifi.h"
 #include "timers.h"
 #include "DHT11.h"
+#include "defines.h"
 
 
 void init_LED(){
@@ -86,9 +87,9 @@ int main(){
 
     /*------------------------------------------------------------------*/ 
     
-
+    //Timer0 hasieratu
     init_timer0();
-
+    
     int t = 0;
     while(1){
 	//delay_ms(30);
@@ -97,6 +98,8 @@ int main(){
 	//    PORTB ^= (1 << PORTB4);
 	//    t = 0;
 	//}
+	
+
 	_delay_ms(2);
 	if(send_msg == 1){
 	    TCP_response(get_command);

@@ -17,10 +17,7 @@ extern int hezetasuna [2];
 extern int tenperatura [2];
 extern int checksum;
 extern volatile int dht_timeout;
-extern int en;
-
-
-
-
+extern volatile int timeout_en;
+extern volatile int timeout_init;
 
 #endif //DEFINES_H

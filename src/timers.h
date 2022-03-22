@@ -11,9 +11,6 @@
  *
  ====================================================================*/
 
-extern volatile int dht_timeout;
-extern int en;
-
 void init_timer0();
 int set_prescaler(int prescaler);
 void delay_us(int us);

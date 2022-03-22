@@ -194,7 +194,7 @@ int TCP_send(int id, char* msg){
 	USART_string("\n\r");
 	return 1;
     }else{
-	PORTB |= (1 << PORTB5); //LED gorria piztu
+	PORTB |= (1 << PORTB4); //LED gorria piztu
     }
     return 0;
 }
