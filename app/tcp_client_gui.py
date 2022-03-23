@@ -2,18 +2,16 @@ import tkinter as tk
 from tkinter import *
 import socket
 import sys
+import time
 from PIL import Image, ImageTk
 
 
 #------------------------------ Funtzioak ------------------------------#
 
 
-def proba(ip, port):
-    print("IP:" + ip + "PORT:" + port + "\n")
-
-
 def tcp_connect(ip, port):
     global sock
+    global conn
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     adr = (ip[:-1], int(port))
@@ -29,9 +27,11 @@ def tcp_connect(ip, port):
         print("[!] Konexio errorea")
         debug.configure(text = "Konexio errorea")
     sock = s
+    conn = True
    
 
 def tcp_send(s):
+    global job_id
     mezua = "GET\r"
     s.send(mezua.encode('utf-8'))
     mezua = ""
@@ -41,9 +41,15 @@ def tcp_send(s):
         if mezua.find('\n') != -1:
             break
     print("[SERVER RESPONSE]\n" + mezua)
-    tmp_data.configure(text = mezua[:-2])
+    mezua = mezua[:-2]
+    h_data.configure(text = mezua[3:5] + "%")
+    tmp_data.configure(text = mezua[8:] + "°C")
+    job_id = minimeteo_connect.after(5000, tcp_send, s)
 
 def tcp_close(s):
+    global conn
+    conn = False
+    minimeteo_connect.after_cancel(job_id)
     s.close()
     print("[*] Deskonektatuta!")
     debug.configure(text = "Deskonektatuta!")
@@ -52,6 +58,13 @@ def close():
     print("Agur!")
     debug.configure(text = "Agur!")
     exit()
+
+
+def get_data():
+    global conn
+    conn = 0
+
+    
 #-----------------------------------------------------------------------#
 
 
@@ -59,6 +72,12 @@ def close():
 minimeteo_connect = tk.Tk()
 minimeteo_connect.title('Minimeteo')
 minimeteo_connect.geometry('1200x700')
+
+
+conn = False
+sock = 0
+job_id = 0
+
 
 conf_bar = Frame(minimeteo_connect)
 conf_bar.place(height = 50, width = 1200)
@@ -116,31 +135,25 @@ button2.place(relx=.5, rely=.5, anchor="center")
 button2.configure(bg='#a3be8c')
 
 
-tmp_label1 = Label(main, text='Tenperatura:', font = ("Hack", 20), fg = '#e5e9f0')
-tmp_label1.place(relx=.1, rely=.3, anchor = "center")
-tmp_label1.configure(bg = '#434c5e')
+tmp_label = Label(main, text='Tenperatura:', font = ("Hack", 20), fg = '#e5e9f0')
+tmp_label.place(relx=.1, rely=.3, anchor = "center")
+tmp_label.configure(bg = '#434c5e')
 
 tmp_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
 tmp_data.place(relx=.25, rely=.3, anchor="center")
 tmp_data.configure(bg = '#434c5e')
 
-tmp_label2 = Label(main, text='°C', font = ("Hack", 20), fg = '#e5e9f0')
-tmp_label2.place(relx=.35, rely=.3, anchor = "center")
-tmp_label2.configure(bg = '#434c5e')
 
-
-h_label1 = Label(main, text='Hezetasuna:', font = ("Hack", 20), fg = '#e5e9f0')
-h_label1.place(relx=.1, rely=.4, anchor = "center")
-h_label1.configure(bg = '#434c5e')
+h_label = Label(main, text='Hezetasuna:', font = ("Hack", 20), fg = '#e5e9f0')
+h_label.place(relx=.1, rely=.4, anchor = "center")
+h_label.configure(bg = '#434c5e')
 
 h_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
 h_data.place(relx=.25, rely=.4, anchor="center")
 h_data.configure(bg = '#434c5e')
 
-h_label2 = Label(main, text='%', font = ("Hack", 20), fg = '#e5e9f0')
-h_label2.place(relx=.35, rely=.4, anchor = "center")
-h_label2.configure(bg = '#434c5e')
 
-
+if(conn == True):
+    tcp_send(sock)
 
 minimeteo_connect.mainloop()
