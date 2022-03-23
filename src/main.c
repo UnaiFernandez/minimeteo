@@ -89,6 +89,7 @@ int main(){
     
     //Timer0 hasieratu
     init_timer0();
+    init_timer1();
     
     int t = 0;
     while(1){
@@ -106,12 +107,12 @@ int main(){
 	    send_msg = 0;
 	}
 
-	t+=2;
-	if(t >= 2000){
-	    get_dht_data();
-	    //._delay_ms(2000);
-	    t = 0;
-	}
+	//t+=2;
+	//if(t >= 2000){
+	//    get_dht_data();
+	//    //._delay_ms(2000);
+	//    t = 0;
+	//}
     }
 
 }

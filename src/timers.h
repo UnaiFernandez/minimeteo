@@ -12,6 +12,4 @@
  ====================================================================*/
 
 void init_timer0();
-int set_prescaler(int prescaler);
-void delay_us(int us);
-void delay_ms(int ms);
+void init_timer1();

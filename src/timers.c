@@ -19,6 +19,7 @@
 
 
 #include "timers.h"
+#include "DHT11.h"
 #include "defines.h"
 
 
@@ -67,17 +68,44 @@ void init_timer0(){
  */
 
 ISR(TIMER0_COMPA_vect){
-    if(timeout_en == 1){
+    //if(timeout_en == 1){
+    //    dht_timeout+=10;
+    //}
+    //if(timeout_init == 1){
+    //    dht_timeout = 0;
+    //    timeout_init = 0;
+    //}
+    if(en == 1)
 	dht_timeout+=10;
-    }
-    if(timeout_init == 1){
-	dht_timeout = 0;
-	timeout_init = 0;
-    }
-    //if(en == 1)
-    //dht_timeout+=10;
     //if(dht_timeout > 1000)
     //    PORTB |= (1 << PORTB4);
     //if(dht_timeout == 0)
 	//PORTB &=~ (1 << PORTB4);
+}
+
+/*-------------------- Timer 1 ----------------------*/
+
+void init_timer1(){
+    //CTC moduan hasieratu
+    TCCR1B &=~ (1 << WGM13);
+    TCCR1B |= (1 << WGM12);
+    TCCR1A &=~ (1 << WGM11);
+    TCCR1A &=~ (1 << WGM10);
+
+    //2 segunduro egingo du etena
+    OCR1A = 65535;
+
+    //Etenak gaitu
+    TIMSK1 |= (1 << OCIE1A);
+
+    //Prescalerra
+    TCCR1B |= (1 << CS12);
+    TCCR1B &=~ (1 << CS11);
+    TCCR1B &=~ (1 << CS10);
+    
+}
+
+ISR(TIMER1_COMPA_vect){
+    get_dht_data();
+    //PORTB ^= (1 << PORTB5);
 }

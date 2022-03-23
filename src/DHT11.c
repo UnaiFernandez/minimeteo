@@ -24,9 +24,7 @@ int hezetasuna[2];
 int tenperatura[2];
 int checksum;
 //volatile int dht_timeout = 0;
-volatile int timeout_en = 0;
-volatile int timeout_init = 0;
-volatile int data_init;
+volatile int en = 0;
 
 /*------------------------- DHT11 funtzioak ---------------------------*/
 
@@ -56,14 +54,12 @@ void dht_start(){
 }
 
 void dht_response(){
-
+    dht_timeout = 0;
     int error = 0;
+    en = 1;
     //6 Pin-a sarrera moduan konfiguratu
     DDRB &=~ (1 << PORTB1);
     PORTB |= (1 << PORTB1);
-    
-    timeout_en = 1;
-    timeout_init = 1;
     // DHT11-ren erantzuna itxaron
     while(PINB & (1 << PINB1)){
 	//delay_us(2);
@@ -71,12 +67,13 @@ void dht_response(){
 	if(dht_timeout >= 50){
 	    dht_timeout_error();
 	    error++;
-	    timeout_en = 0;
+	    en = 0;
 	    break;
 	}
     }
     
-    timeout_init = 1;
+    dht_timeout = 0;
+
     //DHT11-k LOW seinalearekin erantzungo du 80us bitartean
     while(!(PINB & (1 << PINB1))){
 	//delay_us(2);
@@ -84,12 +81,12 @@ void dht_response(){
 	if(dht_timeout >= 100){
 	    dht_timeout_error();
 	    error++;
-	    timeout_en = 0;
+	    en = 0;
 	    break;
 	}
     }
 
-    timeout_init = 1;
+    dht_timeout = 0;
     //DHT11-k seinalea HIGH egoerara pasako du 80us-z
     while(PINB & (1 << PINB1)){
 	//delay_us(2);
@@ -97,10 +94,11 @@ void dht_response(){
 	if(dht_timeout >= 100){
 	    dht_timeout_error();
 	    error++;
-	    timeout_en = 0;
+	    en = 0;
 	    break;
 	}
     }
+    en = 0;
 
     if(error == 0)
 	PORTB &=~ (1 << PORTB0);
@@ -111,29 +109,19 @@ int dht_data(){
     int data = 0, i;
 
     for(i = 0; i < 8; i++){
-	timeout_init = 1;
-	while(PINB & (1 << PINB1))//1 denean itxaron
-	if(dht_timeout >= 45){
+	while((PINB & (1 << PINB1)) == 0);
+	_delay_us(35);
+	if(PINB & (1 << PINB1)){
 	    data = data << 1;
 	    data |= 1;
 	}else{
 	    data = data << 1;
 	}
-	
-	if(dht_timeout == 0)
-	    PORTB |= (1 << PORTB4);
-	
-	//_delay_us(35);
-	//if(PINB & (1 << PINB1)){
-	//    data = data << 1;
-	//    data |= 1;
-	//}else{
-	//    data = data << 1;
-	//}
+	while(PINB & (1 << PINB1));
 	//while(PINB & (1 << PINB1));
     }
+    //DDRB |= (1 << PORTB1);
 
-    timeout_en = 0;
     return data;
 }
 
