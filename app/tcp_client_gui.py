@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 import socket
+import select
 import sys
 import time
 from PIL import Image, ImageTk
@@ -31,18 +32,30 @@ def tcp_connect(ip, port):
    
 
 def tcp_send(s):
-    global job_id
-    mezua = "GET\r"
-    s.send(mezua.encode('utf-8'))
+    global job_id 
+    agindua = "GET\r"
+    s.send(agindua.encode('utf-8'))
     mezua = ""
+    s.settimeout(10)
+    start = time.time()
     while True:
-        buf = s.recv(4)
+        try:
+            buf = s.recv(4)
+        except socket.timeout:
+            print("timeout")
+            break
+
         mezua += buf.decode('utf-8')
-        if mezua.find('\n') != -1:
+        end = time.time()
+        elapsed = end - start
+        if(elapsed >= 10):
+            print("Itxarote denbora agortuta")
+            break
+        if(mezua.find('\n') != -1):
             break
     print("[SERVER RESPONSE]\n" + mezua)
     mezua = mezua[:-2]
-    h_data.configure(text = mezua[3:5] + "%")
+    h_data.configure(text = mezua[3:7] + "%")
     tmp_data.configure(text = mezua[8:] + "°C")
     job_id = minimeteo_connect.after(5000, tcp_send, s)
 
