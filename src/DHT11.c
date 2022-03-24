@@ -23,7 +23,6 @@
 int hezetasuna[2];
 int tenperatura[2];
 int checksum;
-//volatile int dht_timeout = 0;
 volatile int en = 0;
 
 /*------------------------- DHT11 funtzioak ---------------------------*/
@@ -33,6 +32,9 @@ void dht_timeout_error(){
     DDRB |= (1 << PORTB1); //Irteera moduan konfiguratu
     PORTB &=~ (1 << PORTB1); //HIGH egoeran jarri
     PORTB |= (1 << PORTB0); //DHT11-ren LED gorria piztu
+
+    _delay_ms(100);
+    get_dht_data();
 }
 
 void dht_init(){

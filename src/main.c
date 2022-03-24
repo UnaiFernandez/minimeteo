@@ -80,10 +80,11 @@ int main(){
     if(start == 1){
         PORTB |= (1 << PORTB4); //LED berdea piztu
         //PORTB &=~ (1 << PORTB5); //LED gorria itzali
-    }else{
-        PORTB |= (1 << PORTB5); //LED gorria piztu
-        //PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
+    //else{
+    //    PORTB |= (1 << PORTB5); //LED gorria piztu
+    //    //PORTB &=~ (1 << PORTB4); //LED berdea itzali
+    //}
 
     /*------------------------------------------------------------------*/ 
     
@@ -91,7 +92,7 @@ int main(){
     init_timer0();
     init_timer1();
     
-    int t = 0;
+    //int t = 0;
     while(1){
 	//delay_ms(30);
 	//t += 30;
@@ -106,13 +107,6 @@ int main(){
 	    TCP_response(get_command);
 	    send_msg = 0;
 	}
-
-	//t+=2;
-	//if(t >= 2000){
-	//    get_dht_data();
-	//    //._delay_ms(2000);
-	//    t = 0;
-	//}
     }
 
 }

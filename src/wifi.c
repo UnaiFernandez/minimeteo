@@ -194,7 +194,7 @@ int TCP_send(int id, char* msg){
 	USART_string("\n\r");
 	return 1;
     }else{
-	PORTB |= (1 << PORTB4); //LED gorria piztu
+	PORTB |= (1 << PORTB5); //LED gorria piztu
     }
     return 0;
 }
@@ -224,6 +224,8 @@ int TCP_response(char * msg){
 	TCP_send(0, m);
 	//TCP_send(0, "OK:3.0:2.0");
 	return 1;
+    }else{
+	TCP_send(0, "ERROR");
     }
     return 0;
 }
