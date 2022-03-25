@@ -50,12 +50,6 @@ void init_timer0(){
 
 
 /*
- * Funtzio hau erabilita prescalerra zehaztu daiteke.
- *
- * Parametroak:
- *  -prescaler: Erabili nahi den preskalerrari dagokion zenbakia
- *
- *
  * +-----------+----------+------+------+------+
  * | Prescaler | Zenbakia | CS02 | CS01 | CS00 |
  * +-----------+----------+------+------+------+

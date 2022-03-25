@@ -10,6 +10,13 @@
  *  Author: Unai Fernandez
  *
  ====================================================================*/
+#ifndef TIMERS_H
+#define TIMERS_H
 
+/*FUNTZIOAK*/
+//Timer0 hasieratu
 void init_timer0();
+//Timer1 hasieratu
 void init_timer1();
+
+#endif //TIMERS_H
