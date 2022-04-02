@@ -44,7 +44,7 @@ void init_LED(){
 
 
 
-
+int get_data = 0;
 
 int main(){
     //UART modulua hasieratu 115200 baud-etara
@@ -55,7 +55,7 @@ int main(){
     init_LED();
 
     _delay_ms(100);
-    
+
     /*------------------- Wifiaren konfigurazioa ---------------------*/
     int start = 1;
     //Wifi modulua hasieratu
@@ -89,7 +89,6 @@ int main(){
     /*------------------------------------------------------------------*/ 
     
     //Timer0 hasieratu
-    init_timer0();
     init_timer1();
     
     //int t = 0;
@@ -106,6 +105,10 @@ int main(){
 	if(send_msg == 1){
 	    TCP_response(get_command);
 	    send_msg = 0;
+	}
+	if(get_data == 1){
+	    get_dht_data();
+	    get_data = 0;
 	}
     }
 

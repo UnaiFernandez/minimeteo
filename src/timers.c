@@ -16,14 +16,16 @@
 #include <avr/io.h>
 #include <avr/cpufunc.h>
 #include <avr/interrupt.h>
+#include <stdio.h>
 
 
 #include "timers.h"
 #include "DHT11.h"
+#include "USART.h"
 #include "defines.h"
 
 
-volatile int dht_timeout = 0;
+int dht_timeout = 0;
 /*
  * Funtzio hau timer0 timerra konfiguratzeko balio du. Timerra CTC moduan 
  * konfiguratuko da, eta 10us-ro eten bat egingo du.
@@ -36,18 +38,20 @@ void init_timer0(){
 
 
     //OCR0A erregistroa 10us-tan etena egiteko
-    OCR0A = 99;
-    //OCR0A = 250;
+    //OCR0A = 99;
+    OCR0A = 200;
 
     //Etenak gaitu
     TIMSK0 |= (1 << OCIE0A);
 
     //Prescalerra konfiguratu (1)
+    TCCR0B &=~ (1 << CS00);
     TCCR0B |= (1 << CS01);
-    //TCCR0B |= (1 << CS00);
-    //TCCR0B |= (1 << CS02);
+    TCCR0B &=~(1 << CS02);
+
 }
 
+//TODO: timerra itzali
 
 /*
  * +-----------+----------+------+------+------+
@@ -69,8 +73,11 @@ ISR(TIMER0_COMPA_vect){
     //    dht_timeout = 0;
     //    timeout_init = 0;
     //}
-    if(en == 1)
-	dht_timeout+=10;
+    //if(en == 1)
+    dht_timeout+=10;
+    //char mezua[10];
+    //sprintf(mezua, "%d\n", dht_timeout);
+    //USART_string(mezua);
     //if(dht_timeout > 1000)
     //    PORTB |= (1 << PORTB4);
     //if(dht_timeout == 0)
@@ -100,6 +107,6 @@ void init_timer1(){
 }
 
 ISR(TIMER1_COMPA_vect){
-    get_dht_data();
+    get_data = 1;
     //PORTB ^= (1 << PORTB5);
 }
