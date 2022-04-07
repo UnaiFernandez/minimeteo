@@ -103,7 +103,8 @@ int main(){
 	//}
 	
 
-	_delay_ms(2);
+	//_delay_ms(2);
+	_delay_ms(20);
 	if(send_msg == 1){
 	    TCP_response(get_command);
 	    send_msg = 0;

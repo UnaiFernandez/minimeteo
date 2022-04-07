@@ -41,7 +41,7 @@ int send_command(char * command, char * resp){
     USART_string(command);
     USART_string("\r\n");
     response_status = RESPONSE_WAITING;
-    _delay_ms(10);  //mezua jasotzeko 1ms itxaron
+    _delay_ms(10);  //mezua jasotzeko 10ms itxaron
 
     //LED berdea pizteko komandoa bidali
     if(strstr(response, resp) != NULL)
@@ -212,6 +212,7 @@ int TCP_send(int id, char* msg){
  */
 int TCP_response(char * msg){
     //Get hitza badauka mezuak
+    _delay_ms(10);//invent
     if(strstr(msg, "GET") != NULL){
 	char m[14] = "\0";
 	char h_1[4];
@@ -251,7 +252,9 @@ int TCP_close(char id){
 }
 
 
-
+int ESP_reset(){
+    send_command("AT+RST", "");
+}
 
 //Timer para el timeout
 //
