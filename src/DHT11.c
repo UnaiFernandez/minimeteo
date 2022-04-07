@@ -24,7 +24,7 @@ int hezetasuna[2];
 int tenperatura[2];
 int checksum;
 //volatile int dht_timeout = 0;
-volatile int en = 0;
+int new_data = 0;
 
 /*------------------------- DHT11 funtzioak ---------------------------*/
 
@@ -54,9 +54,10 @@ void dht_start(){
 }
 
 void dht_response(){
+    //Timer0 hasieratu
+    init_timer0();
     dht_timeout = 0;
     int error = 0;
-    en = 1;
     //6 Pin-a sarrera moduan konfiguratu
     DDRB &=~ (1 << PORTB1);
     PORTB |= (1 << PORTB1);
@@ -67,7 +68,6 @@ void dht_response(){
 	if(dht_timeout >= 50){
 	    dht_timeout_error();
 	    error++;
-	    en = 0;
 	    break;
 	}
     }
@@ -81,7 +81,6 @@ void dht_response(){
 	if(dht_timeout >= 100){
 	    dht_timeout_error();
 	    error++;
-	    en = 0;
 	    break;
 	}
     }
@@ -94,20 +93,23 @@ void dht_response(){
 	if(dht_timeout >= 100){
 	    dht_timeout_error();
 	    error++;
-	    en = 0;
 	    break;
 	}
     }
-    en = 0;
+    stop_timer0();
 
-    if(error == 0)
+    if(error == 0){
+	new_data = 1;
 	PORTB &=~ (1 << PORTB0);
+    }else{
+	new_data = 0;
+	error = 0;
+    }
 }
 
 
 int dht_data(){
     int data = 0, i;
-
     for(i = 0; i < 8; i++){
 	while((PINB & (1 << PINB1)) == 0);
 	_delay_us(35);
@@ -118,7 +120,6 @@ int dht_data(){
 	    data = data << 1;
 	}
 	while(PINB & (1 << PINB1));
-	//while(PINB & (1 << PINB1));
     }
     //DDRB |= (1 << PORTB1);
 
@@ -128,7 +129,7 @@ int dht_data(){
 
 int dht_checksum(int h_osoa, int h_hamar, int t_osoa, int t_hamar, int checksum){
     if(h_osoa + h_hamar + t_osoa + t_hamar != checksum){
-	PORTB |= (1 << PORTB0); // LED gorri txikia piztu
+	PORTB |= (1 << PORTB0);	// LED gorri txikia piztu
 	return 0;
     }
     return 1;
@@ -143,14 +144,16 @@ void get_dht_data(){
     dht_start();
     dht_response();
 
-    hezetasuna[0] = dht_data();
-    hezetasuna[1] = dht_data();
-    tenperatura[0] = dht_data();
-    tenperatura[1] = dht_data();
-    checksum = dht_data();
+    if(new_data == 1){
+	hezetasuna[0] = dht_data();
+    	hezetasuna[1] = dht_data();
+    	tenperatura[0] = dht_data();
+    	tenperatura[1] = dht_data();
+    	checksum = dht_data();
 
-    dht_checksum(hezetasuna[0], hezetasuna[1], tenperatura[0], tenperatura[1], checksum);
-
+    	dht_checksum(hezetasuna[0], hezetasuna[1], tenperatura[0], tenperatura[1], checksum);
+	new_data = 0;
+    }
 }
 
 /*---------------------------------------------------------------------*/

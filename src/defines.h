@@ -18,5 +18,6 @@ extern int tenperatura [2];
 extern int checksum;
 extern volatile int dht_timeout;
 extern volatile int en;
+extern int get_data;
 
 #endif //DEFINES_H

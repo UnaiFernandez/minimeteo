@@ -24,6 +24,7 @@
 
 
 volatile int dht_timeout = 0;
+int get_data = 0;
 /*
  * Funtzio hau timer0 timerra konfiguratzeko balio du. Timerra CTC moduan 
  * konfiguratuko da, eta 10us-ro eten bat egingo du.
@@ -36,8 +37,7 @@ void init_timer0(){
 
 
     //OCR0A erregistroa 10us-tan etena egiteko
-    OCR0A = 99;
-    //OCR0A = 250;
+    OCR0A = 250;
 
     //Etenak gaitu
     TIMSK0 |= (1 << OCIE0A);
@@ -46,6 +46,12 @@ void init_timer0(){
     TCCR0B |= (1 << CS01);
     //TCCR0B |= (1 << CS00);
     //TCCR0B |= (1 << CS02);
+}
+
+void stop_timer0(){
+    TCCR0B &=~ (1 << CS00);
+    TCCR0B &=~ (1 << CS01);
+    TCCR0B &=~ (1 << CS02);
 }
 
 
@@ -68,19 +74,7 @@ void init_timer0(){
  */
 
 ISR(TIMER0_COMPA_vect){
-    //if(timeout_en == 1){
-    //    dht_timeout+=10;
-    //}
-    //if(timeout_init == 1){
-    //    dht_timeout = 0;
-    //    timeout_init = 0;
-    //}
-    if(en == 1)
-	dht_timeout+=10;
-    //if(dht_timeout > 1000)
-    //    PORTB |= (1 << PORTB4);
-    //if(dht_timeout == 0)
-	//PORTB &=~ (1 << PORTB4);
+    dht_timeout+=10;
 }
 
 /*-------------------- Timer 1 ----------------------*/
@@ -106,6 +100,6 @@ void init_timer1(){
 }
 
 ISR(TIMER1_COMPA_vect){
-    get_dht_data();
+    get_data = 1;
     //PORTB ^= (1 << PORTB5);
 }

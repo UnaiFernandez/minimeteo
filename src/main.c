@@ -58,6 +58,9 @@ int main(){
     
     /*------------------- Wifiaren konfigurazioa ---------------------*/
     int start = 1;
+
+    //ESP_RST();
+    //_delay_ms(1000);
     //Wifi modulua hasieratu
     if(!hello_ESP())
 	start = 0;
@@ -87,11 +90,9 @@ int main(){
 
     /*------------------------------------------------------------------*/ 
     
-    //Timer0 hasieratu
-    init_timer0();
+    //Timer1 hasieratu
     init_timer1();
     
-    int t = 0;
     while(1){
 	//delay_ms(30);
 	//t += 30;
@@ -107,12 +108,10 @@ int main(){
 	    send_msg = 0;
 	}
 
-	//t+=2;
-	//if(t >= 2000){
-	//    get_dht_data();
-	//    //._delay_ms(2000);
-	//    t = 0;
-	//}
+	if(get_data == 1){
+	    get_dht_data();
+	    get_data = 0;
+	}
     }
 
 }

@@ -12,4 +12,6 @@
  ====================================================================*/
 
 void init_timer0();
+void stop_timer0();
 void init_timer1();
+void stop_timer1();
