@@ -26,46 +26,86 @@ int checksum;
 //volatile int dht_timeout = 0;
 int new_data = 0;
 
-/*------------------------- DHT11 funtzioak ---------------------------*/
+/*------------------------- DHT11 oinarrizko funtzioak ---------------------------*/
 
-
+/*
+ * Funtzio hau, DHT11 sentsoreak timeout errorea daukanean, LED gorri bat 
+ * piztuko du eta datuak irakurtzeko pin-a berriro prestatuko du irteera 
+ * moduan start seinalea bidaltzeko.  
+ */
 void dht_timeout_error(){
-    DDRB |= (1 << PORTB1); //Irteera moduan konfiguratu
-    PORTB &=~ (1 << PORTB1); //HIGH egoeran jarri
-    PORTB |= (1 << PORTB0); //DHT11-ren LED gorria piztu
+    DDRB |= (1 << PORTB1);	//Irteera moduan konfiguratu
+    PORTB &=~ (1 << PORTB1);	//HIGH egoeran jarri
+    PORTB |= (1 << PORTB0);	//DHT11-ren LED gorria piztu
 }
 
+/*
+ * Funtzio honek LED gorria eta datuak jasotzeko pin-a prestatu egiten du
+ * start seinalea bidaltzeko bidaltzeko.
+ */
 void dht_init(){
-    DDRB |= (1 << PORTB1); //Pin-a irteera moduan konfiguratu
-    PORTB |= (1 << PORTB1); //LOW egoeran jarri
+    DDRB |= (1 << PORTB1);	//Pin-a irteera moduan konfiguratu
+    PORTB |= (1 << PORTB1);	//LOW egoeran jarri
     
     //LED-aren konfigurazioa
-    DDRB |= (1 << PORTB0);
-    PORTB &=~ (1 << PORTB0);
+    DDRB |= (1 << PORTB0);	//Irteera moduan konfiguratu pin-a
+    PORTB &=~ (1 << PORTB0);	//LED-a itzali
 }
 
+
+/*
+ * Funtzio honek start seinalea bidaltzen dio DHT11 sentsoreari
+ */
 void dht_start(){
-    //2 LOW egoeran jarri Pin-a
-    PORTB &=~ (1 << PORTB1);
-    //3 itxaron 18ms
-    _delay_ms(18);
-    //4 Pin-a HIGH jarri
-    PORTB |= (1 << PORTB1);
+
+
+    /*
+     *    <----- Start seinalea ----->
+     *				      |
+     *                       <20-40us>| 
+     * H  _______            _________| 
+     *	         |          |         |
+     * L         |__________|         | 
+     *            <--18ms-->          | 
+     *                                |
+     *
+     */
+
+    PORTB &=~ (1 << PORTB1);	//2 LOW egoeran jarri Pin-a
+    _delay_ms(18);		//3 itxaron 18ms
+    PORTB |= (1 << PORTB1);	//4 Pin-a HIGH jarri
 }
 
+/*
+ * Funtzio honek start seinalea bidali eta gero DHT11 sentsoreak ematen
+ * duen erantzunari itxaroten dion. geroago datuak jasotzeko.
+ */
 void dht_response(){
-    //Timer0 hasieratu
-    init_timer0();
+
+/*
+     *    <--------- DHT11 erantzuna --------->
+     *				                |
+     *                       <--80us-->         | 
+     * H  _______            __________         | 
+     *	         |          |          |        |
+     * L         |__________|          |________|
+     *            <--80us-->            <datuak>| 
+     *                                          |
+     *
+     */
+
+    init_timer0();	//Timer0 hasieratu
     dht_timeout = 0;
     int error = 0;
-    //6 Pin-a sarrera moduan konfiguratu
-    DDRB &=~ (1 << PORTB1);
-    PORTB |= (1 << PORTB1);
+
+    DDRB &=~ (1 << PORTB1);	//6 Pin-a sarrera moduan konfiguratu
+    PORTB |= (1 << PORTB1);	//Pull-up erresistentzia ahalbidetu
+
     // DHT11-ren erantzuna itxaron
-    while(PINB & (1 << PINB1)){
+    while(PINB & (1 << PINB1)){	    //Sarrera 1 den bitartea itxaron
 	//delay_us(2);
 	//dht_timeout+=2;
-	if(dht_timeout >= 50){
+	if(dht_timeout >= 50){	    //50us baino gehiago pasatzen badira, komunikazioan arazoren bat dago
 	    dht_timeout_error();
 	    error++;
 	    break;
@@ -75,10 +115,10 @@ void dht_response(){
     dht_timeout = 0;
 
     //DHT11-k LOW seinalearekin erantzungo du 80us bitartean
-    while(!(PINB & (1 << PINB1))){
+    while(!(PINB & (1 << PINB1))){	//Sarrera LOW den bitartean itxaron
 	//delay_us(2);
 	//dht_timeout+=2;
-	if(dht_timeout >= 100){
+	if(dht_timeout >= 100){		//100us baino gehiago pasatzen bada timeout errorea emango du.
 	    dht_timeout_error();
 	    error++;
 	    break;
@@ -87,17 +127,19 @@ void dht_response(){
 
     dht_timeout = 0;
     //DHT11-k seinalea HIGH egoerara pasako du 80us-z
-    while(PINB & (1 << PINB1)){
+    while(PINB & (1 << PINB1)){	    //Sarrera HIGH den bitartean itxaron.
 	//delay_us(2);
 	//dht_timeout+=2;
-	if(dht_timeout >= 100){
+	if(dht_timeout >= 100){	    //100us baino gehiago pasatzen bada timeout errorea emango du.
 	    dht_timeout_error();
 	    error++;
 	    break;
 	}
     }
-    stop_timer0();
+    stop_timer0();	    //Timer0 itzali
 
+
+    //Ez bada errorerik LED gorria itzalita mantenduko da.
     if(error == 0){
 	new_data = 1;
 	PORTB &=~ (1 << PORTB0);
@@ -108,18 +150,34 @@ void dht_response(){
 }
 
 
+/*
+ * Funtzio honek DHT11 sentsoreak bidaltzen duen seinaletik datuak aterako ditu.
+ */
 int dht_data(){
+
+    /*
+     *    <--------------- Datuen prozesamendua ---------------->
+     *				                                    |
+     *                      <28us>           <-- 70us -->           | 
+     * H  _______            ____            ____________           | 
+     *	         |          |    |          |            |          | 
+     * L         |__________|    |__________|            |__________| 
+     *            <--54us-->      <--54us-->              <--54us-->| 
+     *                                                              |
+     *                      (0)                  (1)
+     */
+
     int data = 0, i;
     for(i = 0; i < 8; i++){
-	while((PINB & (1 << PINB1)) == 0);
+	while((PINB & (1 << PINB1)) == 0);   //Sarrera LOW den bitartean itxaron
 	_delay_us(35);
-	if(PINB & (1 << PINB1)){
+	if(PINB & (1 << PINB1)){	     //35us pasa eta gero, sarrera HIGH bada oraindik, datua 1 dela esan nahi du.
 	    data = data << 1;
 	    data |= 1;
-	}else{
+	}else{				    //35us pasa eta gero sarrera LOW badago datua 0 izango da.
 	    data = data << 1;
 	}
-	while(PINB & (1 << PINB1));
+	while(PINB & (1 << PINB1));	    //Sarrera LOW jarri arte itxaron.
     }
     //DDRB |= (1 << PORTB1);
 
@@ -127,6 +185,9 @@ int dht_data(){
 }
 
 
+/*
+ * Funtzio honen bidez, sentsoreak bidalitako datuak ondo jaso direla egiaztatuko da.
+ */
 int dht_checksum(int h_osoa, int h_hamar, int t_osoa, int t_hamar, int checksum){
     if(h_osoa + h_hamar + t_osoa + t_hamar != checksum){
 	PORTB |= (1 << PORTB0);	// LED gorri txikia piztu
@@ -139,6 +200,10 @@ int dht_checksum(int h_osoa, int h_hamar, int t_osoa, int t_hamar, int checksum)
 
 /*------------------------- Datuak eskuratu ---------------------------*/
 
+
+/*
+ * Funtzio hau aurreko oinarrizko funtzio guztiak elkartzen ditu, datuen jasotze prozesua osatzeko.
+ */
 void get_dht_data(){
     dht_init();
     dht_start();
