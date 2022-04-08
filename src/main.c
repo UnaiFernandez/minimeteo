@@ -59,7 +59,6 @@ int main(){
     /*------------------- Wifiaren konfigurazioa ---------------------*/
     int start = 1;
 
-    //ESP_RST();
     //_delay_ms(1000);
     //Wifi modulua hasieratu
     if(!hello_ESP())
