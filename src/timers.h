@@ -11,7 +11,17 @@
  *
  ====================================================================*/
 
+#ifndef TIMERS_H
+#define TIMERS_H
+
+
+/*FUNTZIOAK*/
+//Timer0 hasieratu
 void init_timer0();
+//Timer0 gelditu
 void stop_timer0();
+//Timer1 hasieratu
 void init_timer1();
+//Timer1 gelditu
 void stop_timer1();
+#endif //TIMERS_H

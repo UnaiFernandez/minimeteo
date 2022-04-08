@@ -37,7 +37,7 @@ void init_timer0(){
 
 
     //OCR0A erregistroa 10us-tan etena egiteko
-    OCR0A = 250;
+    OCR0A = 200;
 
     //Etenak gaitu
     TIMSK0 |= (1 << OCIE0A);
