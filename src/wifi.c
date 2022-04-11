@@ -77,6 +77,11 @@ int hello_ESP(){
 }
 
 
+void ESP_RST(){
+    send_command("AT+RST", "OK");
+}
+
+
 /*
  * Funtzio honen bitartez, Modulua AP moduan dagoenerako ssid-a eta pasahitza bezalako parametroak konfiguratzeko balioko du.
  *

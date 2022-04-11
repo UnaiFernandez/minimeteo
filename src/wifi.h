@@ -33,6 +33,7 @@ int response_status;
 int send_command(char * command, char * resp);
 //Funtzionamendua egiaztatu
 int hello_ESP();
+void ESP_RST();
 //AP konfiguratu
 int AP_setup(char * ssid, char * pwd, int channel, int enc);
 //ESP-aren operazio modua aukeratu
