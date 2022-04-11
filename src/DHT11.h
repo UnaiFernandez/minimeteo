@@ -29,5 +29,3 @@ int dht_checksum(int h_osoa, int h_hamar, int t_osoa, int t_hamar, int checksum)
 //Sentsoreari datu eskaera prozesu osoa
 void get_dht_data();
 #endif //DHT11_H
-
-

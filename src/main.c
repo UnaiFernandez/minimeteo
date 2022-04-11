@@ -44,7 +44,7 @@ void init_LED(){
 
 
 
-
+int get_data = 0;
 
 int main(){
     //UART modulua hasieratu 115200 baud-etara
@@ -55,7 +55,7 @@ int main(){
     init_LED();
 
     _delay_ms(100);
-    
+
     /*------------------- Wifiaren konfigurazioa ---------------------*/
     int start = 1;
 
@@ -82,13 +82,15 @@ int main(){
     if(start == 1){
         PORTB |= (1 << PORTB4); //LED berdea piztu
         //PORTB &=~ (1 << PORTB5); //LED gorria itzali
-    }else{
-        PORTB |= (1 << PORTB5); //LED gorria piztu
-        //PORTB &=~ (1 << PORTB4); //LED berdea itzali
     }
+    //else{
+    //    PORTB |= (1 << PORTB5); //LED gorria piztu
+    //    //PORTB &=~ (1 << PORTB4); //LED berdea itzali
+    //}
 
     /*------------------------------------------------------------------*/ 
     
+
     //Timer1 hasieratu
     init_timer1();
     

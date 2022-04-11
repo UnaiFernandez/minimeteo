@@ -18,11 +18,13 @@
 
 #include "timers.h"
 #include "defines.h"
+#include "DHT11.h"
 
 
 int hezetasuna[2];
 int tenperatura[2];
 int checksum;
+
 //volatile int dht_timeout = 0;
 int new_data = 0;
 
@@ -58,7 +60,6 @@ void dht_init(){
  */
 void dht_start(){
 
-
     /*
      *    <----- Start seinalea ----->
      *				      |
@@ -71,10 +72,12 @@ void dht_start(){
      *
      */
 
+
     PORTB &=~ (1 << PORTB1);	//2 LOW egoeran jarri Pin-a
     _delay_ms(18);		//3 itxaron 18ms
     PORTB |= (1 << PORTB1);	//4 Pin-a HIGH jarri
 }
+
 
 /*
  * Funtzio honek start seinalea bidali eta gero DHT11 sentsoreak ematen
@@ -136,6 +139,7 @@ void dht_response(){
 	    break;
 	}
     }
+
     stop_timer0();	    //Timer0 itzali
 
 
@@ -179,8 +183,6 @@ int dht_data(){
 	}
 	while(PINB & (1 << PINB1));	    //Sarrera LOW jarri arte itxaron.
     }
-    //DDRB |= (1 << PORTB1);
-
     return data;
 }
 
@@ -197,6 +199,8 @@ int dht_checksum(int h_osoa, int h_hamar, int t_osoa, int t_hamar, int checksum)
 }
 
 /*---------------------------------------------------------------------*/
+
+
 
 /*------------------------- Datuak eskuratu ---------------------------*/
 

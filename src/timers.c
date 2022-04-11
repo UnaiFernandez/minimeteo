@@ -16,15 +16,19 @@
 #include <avr/io.h>
 #include <avr/cpufunc.h>
 #include <avr/interrupt.h>
+#include <stdio.h>
 
 
 #include "timers.h"
 #include "DHT11.h"
+#include "USART.h"
 #include "defines.h"
+
 
 
 volatile int dht_timeout = 0;
 int get_data = 0;
+
 /*
  * Funtzio hau timer0 timerra konfiguratzeko balio du. Timerra CTC moduan 
  * konfiguratuko da, eta 10us-ro eten bat egingo du.
@@ -43,9 +47,10 @@ void init_timer0(){
     TIMSK0 |= (1 << OCIE0A);
 
     //Prescalerra konfiguratu (1)
+    TCCR0B &=~ (1 << CS00);
     TCCR0B |= (1 << CS01);
-    //TCCR0B |= (1 << CS00);
-    //TCCR0B |= (1 << CS02);
+    TCCR0B &=~(1 << CS02);
+
 }
 
 void stop_timer0(){
@@ -56,12 +61,6 @@ void stop_timer0(){
 
 
 /*
- * Funtzio hau erabilita prescalerra zehaztu daiteke.
- *
- * Parametroak:
- *  -prescaler: Erabili nahi den preskalerrari dagokion zenbakia
- *
- *
  * +-----------+----------+------+------+------+
  * | Prescaler | Zenbakia | CS02 | CS01 | CS00 |
  * +-----------+----------+------+------+------+
