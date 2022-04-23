@@ -4,6 +4,8 @@ import socket
 import select
 import sys
 import time
+import requests
+import datetime
 from PIL import Image, ImageTk
 
 
@@ -29,8 +31,8 @@ def tcp_connect(ip, port):
         debug.configure(text = "Konexio errorea")
     sock = s
     conn = True
-   
 
+    
 def tcp_send(s):
     global job_id 
     agindua = "GET\r"
@@ -55,8 +57,12 @@ def tcp_send(s):
             break
     print("[SERVER RESPONSE]\n" + mezua)
     mezua = mezua[:-2]
+    current_time = datetime.datetime.now()
+    formated_time = str(current_time.year) + "/" + str(current_time.month) + "/" + str(current_time.day) + "  " + str(current_time.hour) + ":" + str(current_time.minute)
     h_data.configure(text = mezua[3:7] + "%")
-    tmp_data.configure(text = mezua[8:] + "°C")
+    time_label.configure(text = formated_time)
+    fahrenheit = (float(mezua[8:])*1.8) + 32
+    tmp_data.configure(text = mezua[8:] + "°C, " + str(fahrenheit) + "°F")
     job_id = minimeteo_connect.after(5000, tcp_send, s)
 
 def tcp_close(s):
@@ -139,7 +145,7 @@ exit_button.configure(bg='#bf616a')
 
 
 
-title_label = Label(main, text='MINIMETEO', font = ("Hack", 50), fg = '#e5e9f0')
+title_label = Label(main, text='MINIMETEO', font = ("Hack", 80), fg = '#e5e9f0')
 title_label.place(relx=.5, rely=.1, anchor="center")
 title_label.configure(bg = '#434c5e')
 
@@ -147,23 +153,44 @@ button2 = tk.Button(main, text='Send', width=15, command=lambda:tcp_send(sock), 
 button2.place(relx=.5, rely=.5, anchor="center")
 button2.configure(bg='#a3be8c')
 
+info_label = Label(main, text="", font = ("Hack", 25), fg = '#e5e9f0')
+info_label.place(relx=.1, rely=.3, anchor = "center")
+info_label.configure(bg = '#434c5e')
+
+
+
+time_label = Label(main, text="", font = ("Hack", 35), fg = '#e5e9f0')
+time_label.place(relx=.3, rely=.3, anchor = "center")
+time_label.configure(bg = '#434c5e')
+
+
 
 tmp_label = Label(main, text='Tenperatura:', font = ("Hack", 20), fg = '#e5e9f0')
-tmp_label.place(relx=.1, rely=.3, anchor = "center")
+tmp_label.place(relx=.1, rely=.5, anchor = "center")
 tmp_label.configure(bg = '#434c5e')
 
 tmp_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
-tmp_data.place(relx=.25, rely=.3, anchor="center")
+tmp_data.place(relx=.30, rely=.5, anchor="center")
 tmp_data.configure(bg = '#434c5e')
 
 
 h_label = Label(main, text='Hezetasuna:', font = ("Hack", 20), fg = '#e5e9f0')
-h_label.place(relx=.1, rely=.4, anchor = "center")
+h_label.place(relx=.1, rely=.6, anchor = "center")
 h_label.configure(bg = '#434c5e')
 
 h_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
-h_data.place(relx=.25, rely=.4, anchor="center")
+h_data.place(relx=.25, rely=.6, anchor="center")
 h_data.configure(bg = '#434c5e')
+
+#ip = requests.get("https://api.ipify.org").text
+
+#ip = "83.213.146.232"
+#url = "http://ip-api.com/json/" + ip
+#
+#resp = requests.get(url).json()
+#
+#info = resp['city'] + ", " + resp['country']
+#info_label.configure(text = info)
 
 
 if(conn == True):
