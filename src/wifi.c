@@ -252,7 +252,7 @@ int TCP_close(char id){
 }
 
 
-int ESP_reset(){
+void ESP_reset(){
     send_command("AT+RST", "");
 }
 

@@ -27,7 +27,7 @@
 
 
 volatile int dht_timeout = 0;
-int get_data = 0;
+//int get_data = 0;
 
 /*
  * Funtzio hau timer0 timerra konfiguratzeko balio du. Timerra CTC moduan 
