@@ -213,6 +213,7 @@ int TCP_send(int id, char* msg){
 int TCP_response(char * msg){
     //Get hitza badauka mezuak
     _delay_ms(10);//invent
+    int conn_id = msg[5]-'0';
     if(strstr(msg, "GET") != NULL){
 	char m[14] = "\0";
 	char h_1[4];
@@ -227,11 +228,11 @@ int TCP_response(char * msg){
 	itoa(tenperatura[1], t_2, 10);
 
 	sprintf(m, "OK:%s.%s:%s.%s", h_1, h_2, t_1, t_2);
-	TCP_send(0, m);
+	TCP_send(conn_id, m);
 	//TCP_send(0, "OK:3.0:2.0");
 	return 1;
     }else{
-	TCP_send(0, "ERROR");
+	TCP_send(conn_id, "ERROR");
     }
     return 0;
 }

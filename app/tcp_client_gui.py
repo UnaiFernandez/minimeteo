@@ -58,11 +58,16 @@ def tcp_send(s):
     print("[SERVER RESPONSE]\n" + mezua)
     mezua = mezua[:-2]
     current_time = datetime.datetime.now()
-    formated_time = str(current_time.year) + "/" + str(current_time.month) + "/" + str(current_time.day) + "  " + str(current_time.hour) + ":" + str(current_time.minute)
-    h_data.configure(text = mezua[3:7] + "%")
-    time_label.configure(text = formated_time)
+    formated_date = str(current_time.year) + "/" + str(current_time.month) + "/" + str(current_time.day)
+    formated_hour = str(current_time.hour) + ":" + str(current_time.minute)
+    h_data.configure(text = mezua[3:7] )
+    h_data2.configure(text = "%")
+    time_label.configure(text = formated_hour)
+    time_label2.configure(text = formated_date)
     fahrenheit = (float(mezua[8:])*1.8) + 32
-    tmp_data.configure(text = mezua[8:] + "°C, " + str(fahrenheit) + "°F")
+    #tmp_data.configure(text = mezua[8:] + "°C, " + str(fahrenheit) + "°F")
+    tmp_data.configure(text = mezua[8:])
+    tmp_data2.configure(text = "°C")
     job_id = minimeteo_connect.after(5000, tcp_send, s)
 
 def tcp_close(s):
@@ -72,12 +77,9 @@ def tcp_close(s):
     s.close()
     print("[*] Deskonektatuta!")
     debug.configure(text = "Deskonektatuta!")
-
-def close():
     print("Agur!")
     debug.configure(text = "Agur!")
     exit()
-
 
 def get_data():
     global conn
@@ -104,7 +106,7 @@ conf_bar.configure(bg='#5e81ac')
 
 main = Frame(minimeteo_connect)
 main.place(x = 0, y = 50, height = 650, width = 1200)
-main.configure(bg='#434c5e')
+main.configure(bg='#b0c4de')
 
 
 ip_label = Label(conf_bar, text='IP:', font = ("Hack", 15))
@@ -135,52 +137,64 @@ debug = Label(conf_bar, text = "", font = ("Hack", 15))
 debug.place(relx=.6, rely=.5, anchor="center")
 debug.configure(bg='#5e81ac')
 
-disconnect = tk.Button(conf_bar, text='Disconnect', width=10, command= lambda: tcp_close(sock), font = ("Hack", 15))
-disconnect.place(relx=.8, rely=.5, anchor="center")
-disconnect.configure(bg='#d08770')
+getdatab = tk.Button(conf_bar, text='Get data', width=10, command= lambda: tcp_send(sock), font = ("Hack", 15))
+getdatab.place(relx=.8, rely=.5, anchor="center")
+getdatab.configure(bg='#d08770')
 
-exit_button = tk.Button(conf_bar, text='Exit', width=6, command= close, font = ("Hack", 15))
+exit_button = tk.Button(conf_bar, text='Exit', width=6, command= lambda: tcp_close(sock), font = ("Hack", 15))
 exit_button.place(relx=.95, rely=.5, anchor="center")
 exit_button.configure(bg='#bf616a')
 
 
 
-title_label = Label(main, text='MINIMETEO', font = ("Hack", 80), fg = '#e5e9f0')
-title_label.place(relx=.5, rely=.1, anchor="center")
-title_label.configure(bg = '#434c5e')
+#title_label = Label(main, text='MINIMETEO', font = ("Hack", 150), fg = '#8ca9cf')
+#title_label.place(relx=.5, rely=.5, anchor="center")
+#title_label.configure(bg = '#b0c4de')
 
-button2 = tk.Button(main, text='Send', width=15, command=lambda:tcp_send(sock), font = ("Hack", 15))
-button2.place(relx=.5, rely=.5, anchor="center")
-button2.configure(bg='#a3be8c')
+#button2 = tk.Button(main, text='Send', width=15, command=lambda:tcp_send(sock), font = ("Hack", 15))
+#button2.place(relx=.5, rely=.5, anchor="center")
+#button2.configure(bg='#a3be8c')
 
-info_label = Label(main, text="", font = ("Hack", 25), fg = '#e5e9f0')
-info_label.place(relx=.1, rely=.3, anchor = "center")
-info_label.configure(bg = '#434c5e')
-
-
-
-time_label = Label(main, text="", font = ("Hack", 35), fg = '#e5e9f0')
-time_label.place(relx=.3, rely=.3, anchor = "center")
-time_label.configure(bg = '#434c5e')
+#info_label = Label(main, text="", font = ("Hack", 25), fg = '#e5e9f0')
+#info_label.place(relx=.1, rely=.3, anchor = "center")
+#info_label.configure(bg = '#434c5e')
 
 
 
-tmp_label = Label(main, text='Tenperatura:', font = ("Hack", 20), fg = '#e5e9f0')
-tmp_label.place(relx=.1, rely=.5, anchor = "center")
-tmp_label.configure(bg = '#434c5e')
+time_label = Label(main, text="", font = ("Hack", 80), fg = '#1b2b40')
+time_label.place(relx=.3, rely=.8, anchor = "center")
+time_label.configure(bg = '#b0c4de')
 
-tmp_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
-tmp_data.place(relx=.30, rely=.5, anchor="center")
-tmp_data.configure(bg = '#434c5e')
+time_label2 = Label(main, text="", font = ("Hack", 40), fg = '#1b2b40')
+time_label2.place(relx=.6, rely=.83, anchor = "center")
+time_label2.configure(bg = '#b0c4de')
 
 
-h_label = Label(main, text='Hezetasuna:', font = ("Hack", 20), fg = '#e5e9f0')
-h_label.place(relx=.1, rely=.6, anchor = "center")
-h_label.configure(bg = '#434c5e')
 
-h_data = Label(main, text = "", font = ("Hack", 20), fg = '#e5e9f0')
-h_data.place(relx=.25, rely=.6, anchor="center")
-h_data.configure(bg = '#434c5e')
+tmp_label = Label(main, text='                              MOMENTUKO EGURALDIA                             ', font = ("Hack", 18), fg = '#e5e9f0')
+tmp_label.place(relx=.5, rely=.1, anchor = "center")
+tmp_label.configure(bg = '#4874ac')
+
+tmp_data = Label(main, text = "", font = ("Hack", 80), fg = '#1b2b40')
+tmp_data.place(relx=.2, rely=.3, anchor="center")
+tmp_data.configure(bg = '#b0c4de')
+
+tmp_data2 = Label(main, text = "", font = ("Hack", 40), fg = '#1b2b40')
+tmp_data2.place(relx=.33, rely=.33, anchor="center")
+tmp_data2.configure(bg = '#b0c4de')
+
+h_data = Label(main, text = "", font = ("Hack", 80), fg = '#1b2b40')
+h_data.place(relx=.5, rely=.3, anchor="center")
+h_data.configure(bg = '#b0c4de')
+
+h_data2 = Label(main, text = "", font = ("Hack", 40), fg = '#1b2b40')
+h_data2.place(relx=.63, rely=.33, anchor="center")
+h_data2.configure(bg = '#b0c4de')
+
+h_label = Label(main, text='                                ORDUA ETA DATA                                ', font = ("Hack", 18), fg = '#e5e9f0')
+h_label.place(relx=.5, rely=.6, anchor = "center")
+h_label.configure(bg = '#4874ac')
+
 
 #ip = requests.get("https://api.ipify.org").text
 
