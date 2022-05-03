@@ -15,6 +15,7 @@
 #define USART_H
 
 #define BUFF_SIZE 15
+#define BUFF_SIZE2 19
 extern char tmp_buff;
 extern char response [BUFF_SIZE];
 extern char get_command [BUFF_SIZE];

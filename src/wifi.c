@@ -24,8 +24,9 @@
 #include "defines.h"
 
 
-int hezetasuna[2];
-int tenperatura[2];
+//int hezetasuna[2];
+//int tenperatura[2];
+int response_status;
 /*
  * Funtzio honen bidez, komandoak bidali egingo dira ESP-01 modulura eta honen erantzuna itxarongo du.
  *
@@ -187,7 +188,7 @@ int ESP_server_timeout(char * time){
  *	   karakterearekin bukatu behar duela.
  */
 int TCP_send(int id, char* msg){
-    char command [15] = "\0";
+    char command [24] = "\0";
     int size = strlen(msg)+2;
 
 

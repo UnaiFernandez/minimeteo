@@ -27,7 +27,7 @@ enum WIFI_MODE{
     BOTH,
 };
 
-int response_status;
+extern int response_status;
 /*FUNTZIOAK*/
 //Bidali komandoa
 int send_command(char * command, char * resp);

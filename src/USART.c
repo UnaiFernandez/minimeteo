@@ -17,8 +17,9 @@
 #include <util/delay.h>
 #include <string.h>
 
+//#include "wifi.h"
 #include "USART.h"
-#include "wifi.h"
+
 
 int resp_index = 0;
 int resp_first = 0;
