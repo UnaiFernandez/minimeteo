@@ -195,7 +195,7 @@ int TCP_send(int id, char* msg){
     sprintf(command, "AT+CIPSEND=%d,%d", id, size);
     _delay_ms(100);
     if(send_command(command, "OK") == RESPONSE_OK){
-	PORTB |= (1 << PORTB4); //LED berdea piztu
+	PORTB &=~ (1 << PORTB3); //LED horia itzali
 	USART_string(msg);
 	USART_string("\n\r");
 	return 1;
