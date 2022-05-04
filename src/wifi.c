@@ -262,4 +262,4 @@ void ESP_reset(){
 //
 //Estara parado durante 10ms. Si no ha habido respuesta del ESP mandara la señal para volver a mandar el mensaje otra vez
 //Si el mensaje se manda 5 veces sin tener una respuesta termina el programa, entra en un bucle infinito indicando que no va bien
-//por los tanto se tendra que reiniciar 
+//por lo tanto se tendra que reiniciar 
