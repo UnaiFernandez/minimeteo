@@ -21,14 +21,30 @@ void init_i2c(){
     TWCR |= (1 << TWEN);
 }
 
-void i2c_Start(){
+int i2c_Start(){
     TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-    while(!(TWCR0 & (1 << TWINT)));
+    while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaron
+    
+    if((TWSR & 0xF8) == TW_START)
+	return 0;
+    return 1;
+}
+
+int i2c_RStart(){
+    TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+    while(!(TWCR & (1 << TWINT)));
+
+    if((TWSR & 0xF8) == TW_RESTART)
+	return 0;
+    return 1;
 }
 
 void i2c_Stop(){
     TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
 }
+
+
+
 void i2c_Write(unsigned char data){
     TWDR = data;
     TWCR = (1 << TWINT) | (1 << TWEN);

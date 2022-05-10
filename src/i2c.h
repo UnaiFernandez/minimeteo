@@ -14,7 +14,8 @@
 #define I2C_H
 
 void init_i2c();
-void i2c_Start();
+int i2c_Start();
+int i2c_RStart();
 void i2c_Stop();
 void i2c_Write(unsigned char data);
 int i2c_ACK();
