@@ -3,6 +3,7 @@ FILENAME2  = src/USART
 FILENAME3  = src/wifi
 FILENAME4  = src/timers
 FILENAME5  = src/DHT11
+FILENAME6  = src/i2c
 PORT       = /dev/ttyACM0
 DEVICE     = atmega328
 PROGRAMMER = arduino
@@ -10,9 +11,9 @@ BAUD       = 115200
 COMPILE    = avr-gcc -Wall -Os -mmcu=$(DEVICE)
 
 
-default: compile upload clean
+default: build upload clean
 
-compile:
+build:
 	@echo "====== MINIMETEO ======"
 	@echo "[!] Compiling..."
 	@echo "--------------------------"
@@ -26,9 +27,11 @@ compile:
 	@echo "[+] $(FILENAME4)"
 	@ $(COMPILE) -c $(FILENAME5).c -o $(FILENAME5).o
 	@echo "[+] $(FILENAME5)"
+	@ $(COMPILE) -c $(FILENAME6).c -o $(FILENAME6).o
+	@echo "[+] $(FILENAME6)"
 	@echo "--------------------------"
 	@echo ""
-	@ $(COMPILE) -o $(FILENAME).elf $(FILENAME).o $(FILENAME2).o $(FILENAME3).o $(FILENAME4).o $(FILENAME5).o
+	@ $(COMPILE) -o $(FILENAME).elf $(FILENAME).o $(FILENAME2).o $(FILENAME3).o $(FILENAME4).o $(FILENAME5).o $(FILENAME6).o
 	@ avr-objcopy -j .text -j .data -O ihex $(FILENAME).elf $(FILENAME).hex
 	@ avr-size --format=avr --mcu=$(DEVICE) $(FILENAME).elf
 
