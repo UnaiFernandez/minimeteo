@@ -113,6 +113,17 @@ int i2c_Write(unsigned char data){
     return 0;
 }
 
+
+/*
+ * Funtzio honen bidez nagusiak esklabuak bidaltzen dituen mezuak jasoko ditu
+ *
+ * Parametroak:
+ *  - en_ACK: Nagusiak mezua jasotzean ACK bidaltzen badu, beste mezu bat
+ *            jasotzeko prestatuta dagoela esan nahi du. NACK bidaltzean
+ *            komunikazioa bukatu egingo da.
+ *
+ * Funtzioak jasotako mezua buektatuko du.
+ */
 int i2c_Read(int en_ACK){
     TWCR = (1 << TWINT) | (1 << TWEN) | (en_ACK << TWEA);
     while(!(TWCR & (1 << TWINT)));
