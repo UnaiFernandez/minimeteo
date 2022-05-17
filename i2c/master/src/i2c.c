@@ -2,9 +2,9 @@
  *
  *  Filename: i2c.c
  *
- *  Description: Fitxategi honen bidez bi Atmega328p mikroen artean 
- *		 komunikazioa i2c-ren bidez egon dadin beharrezkoak 
- *		 diren funtzioak sortuko dira. 
+ *  Description: Fitxategi honen bidez bi Atmega328p mikroen artean
+ *		 komunikazioa i2c-ren bidez egon dadin beharrezkoak
+ *		 diren funtzioak sortuko dira.
  *
  *  Version: 1.0
  *  Created: 2022-05-03
@@ -22,7 +22,7 @@
 /*
  * Funtzio honen bidez, i2c modulua hasieratu egingo da.
  */
-void init_i2c(){
+void init_i2c_master(){
 
     /*
     SCL = 16000000/(16+2(TWBR))
@@ -42,7 +42,7 @@ void init_i2c(){
 int i2c_Start(){
     TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
     while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaron
-    
+
     if((TWSR & 0xF8) == TW_START)
 	    return 1;
     return 0;
@@ -80,7 +80,7 @@ void i2c_Stop(){
  *
  * Erantzuna zuzena bada, 1 bueltatuko du, bestela 0
  */
-int i2c_addr(int addr, int r_w){
+int i2c_slave_addr(int addr, int r_w){
     int s_code = 0;
 
     addr = (addr << 1);
@@ -103,7 +103,7 @@ int i2c_addr(int addr, int r_w){
  * Parametroak:
  *  - data: bidali nahi den datua.s
  */
-int i2c_Write(unsigned char data){
+int i2c_master_transmit(unsigned char data){
     TWDR = data;
     TWCR = (1 << TWINT) | (1 << TWEN);
     while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaron
@@ -124,9 +124,8 @@ int i2c_Write(unsigned char data){
  *
  * Funtzioak jasotako mezua buektatuko du.
  */
-int i2c_Read(int en_ACK){
+int i2c_master_receive(int en_ACK){
     TWCR = (1 << TWINT) | (1 << TWEN) | (en_ACK << TWEA);
     while(!(TWCR & (1 << TWINT)));
     return TWDR;
 }
-
