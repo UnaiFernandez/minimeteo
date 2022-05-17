@@ -86,9 +86,9 @@ int i2c_slave_addr(int addr, int r_w){
     addr = (addr << 1);
 
     if(r_w == 0){    //Write
-        s_code = TW_SLAVE_W_ACK;
+        s_code = TW_MT_SLA_ACK;
     }else if (r_w == 1){
-        s_code = TW_SLAVE_R_ACK;
+        s_code = TW_MR_SLA_ACK;
     }
     while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaro
     if((TWSR & 0xF8) == s_code)
@@ -108,7 +108,7 @@ int i2c_master_transmit(unsigned char data){
     TWCR = (1 << TWINT) | (1 << TWEN);
     while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaron
 
-    if((TWCR & 0xF8) == TW_DATA_ACK)
+    if((TWCR & 0xF8) == TW_MT_DATA_ACK)
         return 1;
     return 0;
 }

@@ -29,7 +29,7 @@ void i2c_slave_transmit(unsigned char data){
 ISR(TWI_vect){
     switch (TW_STATUS)
         {
-        case TW_ST_ADR_ACK:     // SLA+R jaso da, eta ACK bidali
+        case TW_ST_SLA_ACK:     // SLA+R jaso da, eta ACK bidali
             i2c_slave_transmit(msg[msg_kont]);
             TWCR = (0 << TWSTO) | (1 << TWINT) | (1 << TWEA);
             break;

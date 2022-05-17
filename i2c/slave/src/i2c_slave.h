@@ -2,9 +2,7 @@
 #define I2C_H
 
 //Egoera kodeak
-#define TW_START 0x08
-#define TW_RESTART 0x10
-#define TW_ST_ADR_ACK 0xA8
+#define TW_ST_SLA_ACK 0xA8
 #define TW_ST_DATA_ACK 0xB8
 
 // I2C modulua hasieratzeko funtzioa

@@ -16,9 +16,9 @@
 //Egoera kodeak
 #define TW_START 0x08
 #define TW_RESTART 0x10
-#define TW_SLAVE_W_ACK 0x18
-#define TW_SLAVE_R_ACK 0x40
-#define TW_DATA_ACK 0x28
+#define TW_MT_SLA_ACK 0x18
+#define TW_MR_SLA_ACK 0x40
+#define TW_MT_DATA_ACK 0x28
 
 // I2C modulua hasieratzeko funtzioa
 void init_i2c_master();
