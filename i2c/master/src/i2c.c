@@ -17,6 +17,7 @@
 #include <stdlib.h>
 
 #include "i2c.h"
+#include "USART.h"
 
 
 /*
@@ -28,9 +29,9 @@ void init_i2c_master(){
     SCL = 16000000/(16+2(TWBR))
     */
 
-
-    TWBR = 32;               // Bit Rate erregistroko balioa
-    TWCR |= (1 << TWEN);    // Piztu TWI
+    TWBR = 72;// Bit Rate erregistroko balioa
+    //TWSR = (1 << TWPS1) | (1 << TWPS0);
+    //TWCR |= (1 << TWEN);    // Piztu TWI
 }
 
 
@@ -39,13 +40,17 @@ void init_i2c_master(){
  *
  * Dena ondo badoa, funtzioak 1 balioa bueltatuko du.
  */
-int i2c_Start(){
+void i2c_Start(){
+    USART_string("Start hasiera\n\r");
     TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+    USART_string("Start bitak eta gero\n\r");
     while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaron
-
-    if((TWSR & 0xF8) == TW_START)
-	    return 1;
-    return 0;
+    USART_string("Transmititu eta gero\n\r");
+    while(!((TWSR & 0xF8) == TW_START));
+    //if((TWSR & 0xF8) == TW_START)
+	//    return 1;
+    //return 0;
+    //return 1;
 }
 
 
@@ -54,13 +59,11 @@ int i2c_Start(){
  *
  * Dena ondo baldin badoa funtzioak 1 balioa bueltatzen du.
  */
-int i2c_RStart(){
+void i2c_RStart(){
     TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
     while(!(TWCR & (1 << TWINT)));  //Transmititu arte itxaron
 
-    if((TWSR & 0xF8) == TW_RESTART)
-	    return 1;
-    return 0;
+    while(!((TWSR & 0xF8) == TW_RESTART));
 }
 
 
@@ -80,20 +83,22 @@ void i2c_Stop(){
  *
  * Erantzuna zuzena bada, 1 bueltatuko du, bestela 0
  */
-int i2c_slave_addr(int addr, int r_w){
+void i2c_slave_addr(int addr, int r_w){
     int s_code = 0;
 
     addr = (addr << 1);
 
     if(r_w == 0){    //Write
+        addr &=~ 1;
         s_code = TW_MT_SLA_ACK;
     }else if (r_w == 1){
+        addr |= 1;
         s_code = TW_MR_SLA_ACK;
     }
+    TWDR=addr;
+    TWCR = (1 << TWINT) | (1 << TWEN);
     while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaro
-    if((TWSR & 0xF8) == s_code)
-        return 1;
-    return 0;
+    while(!((TWSR & 0xF8) == s_code));
 }
 
 
@@ -103,14 +108,12 @@ int i2c_slave_addr(int addr, int r_w){
  * Parametroak:
  *  - data: bidali nahi den datua.s
  */
-int i2c_master_transmit(unsigned char data){
+void i2c_master_transmit(unsigned char data){
     TWDR = data;
     TWCR = (1 << TWINT) | (1 << TWEN);
     while(!(TWCR & (1 << TWINT))); //Transmititu arte itxaron
 
-    if((TWCR & 0xF8) == TW_MT_DATA_ACK)
-        return 1;
-    return 0;
+    while(!((TWCR & 0xF8) == TW_MT_DATA_ACK));
 }
 
 
@@ -124,7 +127,7 @@ int i2c_master_transmit(unsigned char data){
  *
  * Funtzioak jasotako mezua buektatuko du.
  */
-int i2c_master_receive(int en_ACK){
+char i2c_master_receive(int en_ACK){
     TWCR = (1 << TWINT) | (1 << TWEN) | (en_ACK << TWEA);
     while(!(TWCR & (1 << TWINT)));
     return TWDR;

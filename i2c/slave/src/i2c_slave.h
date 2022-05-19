@@ -6,11 +6,11 @@
 #define TW_ST_DATA_ACK 0xB8
 
 // I2C modulua hasieratzeko funtzioa
-void init_i2c_slave(int addr);
+void init_i2c_slave();
 // Nagusiari mezua bidali
-int i2c_slave_trasmit(unsigned char data);
+void i2c_slave_transmit_match();
 // Nagusitik mezua jaso
-int i2c_slave_reslave_read(int en_ACK);
+void i2c_slave_write(char data);
 
 #endif //I2C_H
 

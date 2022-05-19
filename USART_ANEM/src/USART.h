@@ -16,9 +16,9 @@
 
 #define BUFF_SIZE 8
 #define BUFF_SIZE2 19
-extern char tmp_buff;
-extern char response [BUFF_SIZE];
-extern char get_command [BUFF_SIZE];
+extern uint8_t tmp_buff;
+extern uint8_t response [BUFF_SIZE];
+extern uint8_t get_command [BUFF_SIZE];
 extern int resp_index;
 extern int send_msg;
 
@@ -27,12 +27,14 @@ extern int send_msg;
 void init_USART(long int baud);
 
 /*---- USART transmititu ----*/
-void USART_tx(unsigned char d);
+void USART_tx( uint8_t d);
 
 /*---- USART datua jaso ----*/
-char USART_rx();
+uint8_t USART_rx();
 
 /*---- USART bidali string ----*/
-void USART_request(unsigned char * req, int tam);
+void USART_request( uint8_t * req, int tam);
+
+void USART_flush();
 
 #endif //USART_H

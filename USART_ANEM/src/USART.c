@@ -23,9 +23,9 @@
 
 int resp_index = 0;
 int resp_first = 0;
-char tmp_buff = '\0';
-char response[BUFF_SIZE];
-char get_command[BUFF_SIZE];
+uint8_t tmp_buff = '\0';
+uint8_t response[BUFF_SIZE];
+uint8_t get_command[BUFF_SIZE];
 int send_msg = 0;
 
 void init_USART(long int baud){
@@ -57,21 +57,22 @@ void init_USART(long int baud){
 
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
-    UCSR0B |= (1 << RXCIE0);
+    //UCSR0B |= (1 << RXCIE0);
 }
 
 
-void USART_tx(unsigned char d){
+void USART_tx(uint8_t d){
     UDR0 = d;
     while(!(UCSR0A & (1 << UDRE0)));
 }
 
-char USART_rx(){
+uint8_t USART_rx(){
     while(!(UCSR0A & (1 << RXC0)));
+    PORTB |= (1 << PORTB5);
     return UDR0;
 }
 
-void USART_request(unsigned char * req, int tam){
+void USART_request(uint8_t * req, int tam){
     //while(*req != 0x00){
 	//USART_tx(*req);
 	//req++;
@@ -83,19 +84,26 @@ void USART_request(unsigned char * req, int tam){
     }
 }
 
+void USART_flush(){
+    unsigned char buff;
+    while(UCSR0A & (1 << RXC0))
+        buff = UDR0;
+}
 
+/*
 //Eten zerbitzu errutina
 ISR(USART_RX_vect){
     tmp_buff = UDR0;
-    response[resp_index] = tmp_buff;
-    resp_index++;
-
+    //response[resp_index] = tmp_buff;
+    //resp_index++;
+    _delay_ms(100);
+    PORTB ^= (1 << PORTB5);
 
     //Iritsitako mezuaren bukaera detektatu
-    if(resp_index == BUFF_SIZE){
-    	    resp_index = 0;
-    	    resp_first = 0;
-    }
+    //if(resp_index == BUFF_SIZE){
+    //	    resp_index = 0;
+    //}
+    //for(int i = 0; i < BUFF_SIZE; i++)
+    //    get_command[i] = response[i];
 
-    strcpy(get_command, response);
-}
+}*/

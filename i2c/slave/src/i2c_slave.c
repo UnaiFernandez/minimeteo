@@ -6,32 +6,42 @@
 
 #include "i2c_slave.h"
 
-#define TW_STATUS (TWSR & 0xF8)
 
 
 
-char * msg = "kaixo";
-int msg_len = sizeof(msg);
-int msg_kont = 0;
+//char * msg = "kaixo";
+//int msg_len = sizeof(msg);
+//int msg_kont = 0;
 
 
-void init_i2c_slave(int addr){
-    TWAR = addr << 1;
-    TWCR = (1 << TWEN) | (1 << TWIE) | (1 << TWINT) | (1 << TWEA);
+void init_i2c_slave(){
+    TWAR = 0x05;
 }
 
 
-void i2c_slave_transmit(unsigned char data){
+void i2c_slave_transmit_match(){
+    while((TWSR & 0xF8) != TW_ST_SLA_ACK){
+        PORTB |= (1 << PORT5);
+        TWCR = (1 << TWEN)| (1 << TWINT) | (1 << TWEA);
+        while(!(TWCR & (1 << TWINT)));
+    }
+}
+
+void i2c_slave_write(char data){
     TWDR = data;
+    TWCR = (1 << TWEN) | (1 << TWINT);
+    while(!((TWSR & 0xF8) == TW_ST_DATA_ACK));
 }
 
 
-ISR(TWI_vect){
+/*ISR(TWI_vect){
     switch (TW_STATUS)
         {
         case TW_ST_SLA_ACK:     // SLA+R jaso da, eta ACK bidali
             i2c_slave_transmit(msg[msg_kont]);
             TWCR = (0 << TWSTO) | (1 << TWINT) | (1 << TWEA);
+            DDRB |= (1 << PORTB3);
+            PORTB |= (1 << PORTB3);
             break;
         case TW_ST_DATA_ACK:    // transmitituta eta ACK jasota
             i2c_slave_transmit(msg[msg_kont]);
@@ -44,4 +54,4 @@ ISR(TWI_vect){
 
             break;
         }
-}
+}*/

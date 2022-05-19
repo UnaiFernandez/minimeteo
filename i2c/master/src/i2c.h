@@ -23,17 +23,17 @@
 // I2C modulua hasieratzeko funtzioa
 void init_i2c_master();
 // START egoera bidaltzeko funtzioa
-int i2c_Start();
+void i2c_Start();
 // RESTART egoera bidatzeko funztioa
-int i2c_RStart();
+void i2c_RStart();
 // STOP egoera bidaltzeko funtzioa
 void i2c_Stop();
 // Esklabuari egin nahi den akzioa bidali
-int i2c_slave_addr(int addr, int r_w);
+void i2c_slave_addr(int addr, int r_w);
 // Esklabuari mezua bidali
-int i2c_master_transmit(unsigned char data);
+void i2c_master_transmit(unsigned char data);
 // Esklabutik mezua jaso
-int i2c_master_receive(int en_ACK);
+char i2c_master_receive(int en_ACK);
 
 #endif //I2C_H
 

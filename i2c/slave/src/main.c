@@ -19,15 +19,23 @@
 
 #include "i2c_slave.h"
 
+char * msg = "kaixo";
+int msg_len = sizeof(msg);
+int msg_kont = 0;
 
 int main(){
-    cli();
-    init_i2c_slave(0x01);
-    sei();
+    init_i2c_slave();
 
+    int i = 0;
 
+    DDRB |= (1 << PORTB5);
     while(1){
-
+        i2c_slave_transmit_match();
+        i2c_slave_write(msg[i]);
+        if(i < 5)
+            i++;
+        else
+            i = 0;
     }
 
 }
