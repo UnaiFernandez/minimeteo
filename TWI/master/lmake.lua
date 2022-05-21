@@ -38,6 +38,6 @@ function upload()
 end
 
 function clean()
-    local files_to_remove = "src/main.c.o  src/main.hex src/USART.c.o src/main src/wifi.c.o src/main.o src/USART.o src/wifi.o src/main.elf src/i2c_slave.c.o"
+    local files_to_remove = "src/main.c.o  src/main.hex src/USART.c.o src/main src/wifi.c.o src/main.o src/USART.o src/wifi.o src/main.elf src/timers.c.o src/DHT11.c.o src/i2c.c.o"
     lmake_exec("rm -f " .. files_to_remove)
 end
