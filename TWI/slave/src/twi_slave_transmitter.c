@@ -19,7 +19,7 @@
 #include "twi_slave_transmitter.h"
 
 void init_TWI_slave(){
-    TWAR = 6;
+    TWAR = 0x06 << 1;
     TWCR  |= (1 << TWEN);
 }
 

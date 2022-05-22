@@ -17,7 +17,7 @@
 //definizioak
 #define TW_START 0x08
 #define TW_MR_SLA_ACK 0x40
-#define TW_MR_DATA_ACK 0x50
+#define TW_MR_DATA_ACK 0x58
 
 //Funtzioak
 void init_TWI();

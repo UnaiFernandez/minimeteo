@@ -33,10 +33,13 @@ void TWI_master_start(){
      *
      */
     TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+    USART_string("start1\n\r");
     //Transmititu arte itxaron
     while(!(TWCR & (1 << TWINT)));
+    USART_string("start2\n\r");
     //Jasotako erantzuna egiaztatu
-    while((TWSR & 0xF8) != TW_START);
+    while((TWSR & 0xF8) != 0x08);
+    USART_string("start3\n\r");
 }
 
 
@@ -85,12 +88,12 @@ unsigned char TWI_master_read_data(){
      *
      */
     //USART_string("data1\n\r");
-    TWCR = (1 << TWINT) | (1 << TWEN);
+    //TWCR = (1 << TWINT) | (1 << TWEN);
     //USART_string("data2\n\r");
     while(!(TWCR & (1 << TWINT)));
     //USART_string("data3\n\r");
     //while((TWSR & 0xF8) != TW_MR_DATA_ACK);
-    while((TWSR & 0xF8) != 0x58);
+    //while((TWSR & 0xF8) != 0x58);
     //USART_string("data4\n\r");
     data = TWDR;
     //USART_string("data5\n\r");

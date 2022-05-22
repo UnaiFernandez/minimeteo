@@ -1,6 +1,7 @@
 #define F_CPU 16000000
 #include <avr/io.h>
 #include <util/delay.h>
+#include "Arduino.h"
 
 #include "twi_slave_transmitter.h"
 
@@ -13,6 +14,7 @@ int main(){
     while(1){
         TWI_slave_write_match();
         TWI_slabe_write_data('a');
+        _delay_ms(100);
     }
 }
 

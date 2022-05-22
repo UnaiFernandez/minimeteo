@@ -5,7 +5,6 @@
 #include "twi_master_receiver.h"
 #include "USART.h"
 
-unsigned char val;
 
 int main(){
     _delay_ms(2000);
@@ -18,27 +17,30 @@ int main(){
     DDRB |= (1 << PORTB4);
     PORTB &=~ (1 << PORTB4);
 
+    char val[2];
+
     while(1){
         USART_string("Comunication:\n\r");
+
         TWI_master_start();
         USART_string("  1.-START cond sent.\n\r");
+
         TWI_master_read_addr(0x06);
         USART_string("  2.-SLA+R sent.\n\r");
-        //PORTB &=~ (1 << PORTB5);
-        val = TWI_master_read_data();
+
+        TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
+        val[0] = TWI_master_read_data();
+        TWCR = (1 << TWINT) | (1 << TWEN) | (0 << TWEA);
+        val[1] = TWI_master_read_data();
         USART_string("  3.-Data read.\n\r");
+
         TWI_master_stop();
         USART_string("  4.-STOP cond sent.\n\r");
-        //PORTB &=~ (1 << PORTB4);
 
         USART_string("Received value: ");
-        USART_tx(val);
+        USART_string(val);
         USART_string("\n\r");
-        if(val == 'a')
-            PORTB &=~ (1 << PORTB5);
-        else
-            PORTB &=~ (1 << PORTB4);
-        _delay_ms(1000);
+        _delay_ms(4000);
         //toggle val
     }
 }
