@@ -17,7 +17,8 @@
 //definizioak
 #define TW_START 0x08
 #define TW_ST_SLA_ACK 0xA8
-#define TW_ST_DATA_ACK 0xC0
+#define TW_ST_DATA_ACK 0xB8
+#define TW_ST_DATA_NACK 0xC0
 
 //Funtzioak
 void init_TWI_slave();

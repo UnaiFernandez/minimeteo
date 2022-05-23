@@ -17,14 +17,15 @@
 //definizioak
 #define TW_START 0x08
 #define TW_MR_SLA_ACK 0x40
-#define TW_MR_DATA_ACK 0x58
+#define TW_MR_DATA_ACK 0x50
+#define TW_MR_DATA_NACK 0x58
 
 //Funtzioak
 void init_TWI();
 void TWI_master_start();
 void TWI_master_stop();
 void TWI_master_read_addr(unsigned char addr);
-unsigned char TWI_master_read_data();
+unsigned char TWI_master_read_data(int ack);
 
 
 #endif //TWI_MASTER_RECEIVER_H

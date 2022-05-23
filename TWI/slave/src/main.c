@@ -1,7 +1,6 @@
 #define F_CPU 16000000
 #include <avr/io.h>
 #include <util/delay.h>
-#include "Arduino.h"
 
 #include "twi_slave_transmitter.h"
 
@@ -17,4 +16,3 @@ int main(){
         _delay_ms(100);
     }
 }
-

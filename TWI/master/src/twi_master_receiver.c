@@ -19,6 +19,8 @@
 #include "twi_master_receiver.h"
 #include "USART.h"
 
+int kont = 0;
+
 void init_TWI(){
     TWBR = 72;
     TWCR |= (1 << TWEN);
@@ -33,13 +35,13 @@ void TWI_master_start(){
      *
      */
     TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-    USART_string("start1\n\r");
+    //USART_string("start1\n\r");
     //Transmititu arte itxaron
     while(!(TWCR & (1 << TWINT)));
-    USART_string("start2\n\r");
+    //USART_string("start2\n\r");
     //Jasotako erantzuna egiaztatu
     while((TWSR & 0xF8) != 0x08);
-    USART_string("start3\n\r");
+    //USART_string("start3\n\r");
 }
 
 
@@ -57,9 +59,9 @@ void TWI_master_stop(){
 
 void TWI_master_read_addr(unsigned char addr){
     //Helbidea eta read instrukzioa TWDR erregistroan jarri
-    addr = (addr << 1);
-    addr |= 1;
-    TWDR = addr;
+    int read_addr = 1;
+    read_addr |= addr << 1;
+    TWDR = read_addr;
     //USART_string("Pusimos el addr:");
     //USART_tx(TWDR);
     //USART_string("\n\r");
@@ -79,7 +81,7 @@ void TWI_master_read_addr(unsigned char addr){
 }
 
 
-unsigned char TWI_master_read_data(){
+unsigned char TWI_master_read_data(int ack){
     unsigned char data;
     /*
      *
@@ -87,16 +89,15 @@ unsigned char TWI_master_read_data(){
      * TWEN, TWI gaitzeko
      *
      */
-    //USART_string("data1\n\r");
-    //TWCR = (1 << TWINT) | (1 << TWEN);
-    //USART_string("data2\n\r");
-    while(!(TWCR & (1 << TWINT)));
-    //USART_string("data3\n\r");
+    if(ack == 0){
+        TWCR = (1 << TWINT) | (1 << TWEN) | (0 << TWEA);
+        while(!(TWCR & (1 << TWINT)));
+    }else{
+        TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
+        while(!(TWCR & (1 << TWINT)));
+    }
     //while((TWSR & 0xF8) != TW_MR_DATA_ACK);
     //while((TWSR & 0xF8) != 0x58);
-    //USART_string("data4\n\r");
     data = TWDR;
-    //USART_string("data5\n\r");
     return data;
 }
-
