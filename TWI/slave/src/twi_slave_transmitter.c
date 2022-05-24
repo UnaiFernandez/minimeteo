@@ -15,14 +15,12 @@
 #define F_CPU 16000000
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 #include "twi_slave_transmitter.h"
 
-//int kont = 0;
-int i = 0;
 int ind = 0;
-unsigned char msg[5] = "hello";
-//unsigned char msg = 'u';
+extern char msg[6];
 
 void init_TWI_slave(){
     DDRC &=~ (1 << PORTC5);
@@ -42,18 +40,11 @@ void TWI_slave_write_match(){
 
 
 void TWI_slabe_write_data(unsigned char data){
-    TWDR = msg[ind];
+    TWDR = data;
 
-    if(i == 0){
+    if((TWSR & 0xF8) == TW_ST_DATA_NACK){
         TWCR = (1 << TWEN) | (1 << TWINT);
-        while((TWSR & 0xF8) != TW_ST_DATA_NACK);
     }else{
         TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
-        while((TWSR & 0xF8) != TW_ST_DATA_ACK);
     }
-    if(ind < 5)
-        ind++;
-    else
-        ind = 0;
 }
-

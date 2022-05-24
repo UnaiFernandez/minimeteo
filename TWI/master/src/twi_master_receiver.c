@@ -96,8 +96,6 @@ unsigned char TWI_master_read_data(int ack){
         TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
         while(!(TWCR & (1 << TWINT)));
     }
-    //while((TWSR & 0xF8) != TW_MR_DATA_ACK);
-    //while((TWSR & 0xF8) != 0x58);
     data = TWDR;
     return data;
 }
