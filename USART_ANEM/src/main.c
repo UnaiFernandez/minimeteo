@@ -38,7 +38,7 @@ int main(){
     init_USART(9600);
     init_LED();
 
-    //sei();
+    sei();
     _delay_ms(100);
 
     while(1){
@@ -48,12 +48,12 @@ int main(){
         uint8_t Anemometer_request[] = { 0x02, 0x03, 0x00, 0x00, 0x00, 0x01, 0x84, 0x39 };
         //uint8_t Anemometer_request[] = { 0x4B, 0x41, 0x49, 0x58, 0x4F, 0x4F, 0x4F, 0x0D };
         USART_request(Anemometer_request, sizeof(Anemometer_request));
-        USART_flush();
+        //USART_flush();
         //_delay_ms(100);
         PORTB &=~ (1 << PORTB1); //LOW jarri mezua jasotzeko
         //_delay_ms(100); // 10ms itxaron mezua jaso arte
 
-        uint8_t nirechar = USART_rx();
+        //uint8_t nirechar = USART_rx();
         //int abiadura = get_command[4] - '0';
         //int abiadura = get_command[0] - '0';
 

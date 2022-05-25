@@ -17,7 +17,6 @@
 #include <util/delay.h>
 #include <string.h>
 
-//#include "wifi.h"
 #include "USART.h"
 
 
@@ -57,7 +56,7 @@ void init_USART(long int baud){
 
 
     /*---- Etenak gaitu datuak jasotzeko ----*/
-    //UCSR0B |= (1 << RXCIE0);
+    UCSR0B |= (1 << RXCIE0);
 }
 
 
@@ -84,19 +83,18 @@ void USART_request(uint8_t * req, int tam){
     }
 }
 
-void USART_flush(){
+/*void USART_flush(){
     unsigned char buff;
     while(UCSR0A & (1 << RXC0))
         buff = UDR0;
-}
+}*/
 
-/*
+
 //Eten zerbitzu errutina
 ISR(USART_RX_vect){
     tmp_buff = UDR0;
     //response[resp_index] = tmp_buff;
     //resp_index++;
-    _delay_ms(100);
     PORTB ^= (1 << PORTB5);
 
     //Iritsitako mezuaren bukaera detektatu
@@ -106,4 +104,4 @@ ISR(USART_RX_vect){
     //for(int i = 0; i < BUFF_SIZE; i++)
     //    get_command[i] = response[i];
 
-}*/
+}
