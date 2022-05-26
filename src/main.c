@@ -21,6 +21,7 @@
 #include "wifi.h"
 #include "timers.h"
 #include "DHT11.h"
+#include "twi_master_receiver.h"
 #include "defines.h"
 
 
@@ -45,10 +46,15 @@ void init_LED(){
 
 
 int get_data = 0;
+char anem[3] = "";
+int get_anem = 0;
+int i = 0;
 
 int main(){
     //UART modulua hasieratu 115200 baud-etara
     init_USART(115200);
+    //TWI hasieratu
+    init_TWI();
     //etenak gaitu
     sei();
     //LED-ak hasieratu;
@@ -112,9 +118,23 @@ int main(){
 	}
 
 	if(get_data == 1){
-	    get_dht_data();
+	    //Tenperatura eta hezetasuna lortu
+        get_dht_data();
 	    get_data = 0;
 	}
+    if(get_anem == 1){
+        //Anemometroaren datuak lortu
+        TWI_master_start();
+        TWI_master_read_addr(0x06);
+        anem[i] = TWI_master_read_data(0);
+        TWI_master_stop();
+
+        i++;
+        if(i > 3){
+            get_anem = 0;
+            i = 0;
+        }
+    }
     }
 
 }

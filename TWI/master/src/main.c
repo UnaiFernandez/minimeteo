@@ -17,7 +17,7 @@ int main(){
     DDRB |= (1 << PORTB4);
     PORTB &=~ (1 << PORTB4);
 
-    char mezua[6];
+    char mezua[3];
     int i = 0;
 
     while(1){
@@ -38,9 +38,10 @@ int main(){
         //USART_string("  4.-STOP cond sent.\n\r");
 
         i++;
-        if(i > 6){
+        if(i > 3){
             USART_string("Wind speed ---->  ");
             USART_string(mezua);
+            USART_string("m/s");
             USART_string("\n\r");
             i = 0;
         }
@@ -48,4 +49,3 @@ int main(){
         //toggle val
     }
 }
-

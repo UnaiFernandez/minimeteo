@@ -20,4 +20,7 @@ extern volatile int dht_timeout;
 extern volatile int en;
 extern int get_data;
 
+//Anemometroa
+extern char anem[3];
+extern int get_anem;
 #endif //DEFINES_H

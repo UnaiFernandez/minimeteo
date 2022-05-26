@@ -28,6 +28,7 @@
 
 volatile int dht_timeout = 0;
 //int get_data = 0;
+int j = 0;
 
 /*
  * Funtzio hau timer0 timerra konfiguratzeko balio du. Timerra CTC moduan 
@@ -85,20 +86,25 @@ void init_timer1(){
     TCCR1A &=~ (1 << WGM11);
     TCCR1A &=~ (1 << WGM10);
 
-    //2 segunduro egingo du etena
+    //1 segunduro egingo du etena
     OCR1A = 65535;
 
     //Etenak gaitu
     TIMSK1 |= (1 << OCIE1A);
 
     //Prescalerra
-    TCCR1B |= (1 << CS12);
-    TCCR1B &=~ (1 << CS11);
-    TCCR1B &=~ (1 << CS10);
+    TCCR1B &=~ (1 << CS12);
+    TCCR1B |= (1 << CS11);
+    TCCR1B |= (1 << CS10);
     
 }
 
 ISR(TIMER1_COMPA_vect){
-    get_data = 1;
-    //PORTB ^= (1 << PORTB5);
+    if(j == 5){
+        get_data = 1;
+        PORTB ^= (1 << PORTB5);
+        j = 0;
+    }
+    j++;
+    get_anem = 1;
 }

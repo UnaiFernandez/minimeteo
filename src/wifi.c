@@ -216,7 +216,7 @@ int TCP_response(char * msg){
     _delay_ms(10);//invent
     int conn_id = msg[5]-'0';
     if(strstr(msg, "GET") != NULL){
-	char m[19] = "\0";
+	char m[17] = "\0";
 	char h_1[4];
 	char h_2[4];
 	char t_1[4];
@@ -228,7 +228,7 @@ int TCP_response(char * msg){
 	itoa(tenperatura[0], t_1, 10);
 	itoa(tenperatura[1], t_2, 10);
 
-	sprintf(m, "OK:%s.%s:%s.%s", h_1, h_2, t_1, t_2);
+	sprintf(m, "OK:%s.%s:%s.%s:%s", h_1, h_2, t_1, t_2, anem);
 	TCP_send(conn_id, m);
 	//TCP_send(0, "OK:3.0:2.0");
 	return 1;

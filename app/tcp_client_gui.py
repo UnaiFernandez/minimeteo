@@ -56,7 +56,8 @@ def tcp_send(s):
         if(mezua.find('\n') != -1):
             break
     print("[SERVER RESPONSE]\n" + mezua)
-    mezua = mezua[:-2]
+    mezua = mezua.strip()
+    print(mezua)
     current_time = datetime.datetime.now()
     formated_date = str(current_time.year) + "/" + str(current_time.month) + "/" + str(current_time.day)
     formated_hour = str(current_time.hour) + ":" + str(current_time.minute)
@@ -64,11 +65,14 @@ def tcp_send(s):
     h_data2.configure(text = "%")
     time_label.configure(text = formated_hour)
     time_label2.configure(text = formated_date)
-    fahrenheit = (float(mezua[8:])*1.8) + 32
+    #fahrenheit = (float(mezua[8:10])*1.8) + 32
     #tmp_data.configure(text = mezua[8:] + "°C, " + str(fahrenheit) + "°F")
-    tmp_data.configure(text = mezua[8:])
+    tmp_data.configure(text = mezua[8:12])
     tmp_data2.configure(text = "°C")
-    job_id = minimeteo_connect.after(5000, tcp_send, s)
+    anem = int(mezua[13:], 16)
+    a_data.configure(text = str(anem) + ".0")
+    a_data2.configure(text = "m/s")
+    job_id = minimeteo_connect.after(3000, tcp_send, s)
 
 def tcp_close(s):
     global conn
@@ -190,6 +194,15 @@ h_data.configure(bg = '#b0c4de')
 h_data2 = Label(main, text = "", font = ("Hack", 40), fg = '#1b2b40')
 h_data2.place(relx=.63, rely=.33, anchor="center")
 h_data2.configure(bg = '#b0c4de')
+
+
+a_data = Label(main, text = "", font = ("Hack", 80), fg = '#1b2b40')
+a_data.place(relx=.8, rely=.3, anchor="center")
+a_data.configure(bg = '#b0c4de')
+
+a_data2 = Label(main, text = "", font = ("Hack", 40), fg = '#1b2b40')
+a_data2.place(relx=.93, rely=.33, anchor="center")
+a_data2.configure(bg = '#b0c4de')
 
 h_label = Label(main, text='                                ORDUA ETA DATA                                ', font = ("Hack", 18), fg = '#e5e9f0')
 h_label.place(relx=.5, rely=.6, anchor = "center")
