@@ -14,12 +14,46 @@
 #include <SoftwareSerial.h>
 #include <stdio.h>
 
+
 #define RTS_pin 9
+//definizioak
+#define TW_START 0x08
+#define TW_ST_SLA_ACK 0xA8
+#define TW_ST_DATA_ACK 0xB8
+#define TW_ST_DATA_NACK 0xC0
 
 SoftwareSerial Anem(10, 11);
 
 char msg [3] = ""; 
 int data;
+int req = 1;
+
+void init_TWI_slave(){
+    DDRC &=~ (1 << PORTC5);
+    DDRC &=~ (1 << PORTC4);
+    PORTC = (1 << PORTC4) | (1 << PORTC5);
+    TWBR = 72;
+    TWCR  = (1 << TWEN) | (1 << TWEA);
+    TWAR = 0x06 << 1;
+}
+
+
+void TWI_slave_write_match(){
+    TWCR = (1 << TWEA) | (1 << TWEN) | (1 << TWINT);
+    while(!(TWCR & (1 << TWINT)));
+    while((TWSR & 0xF8) != TW_ST_SLA_ACK);
+}
+
+
+void TWI_slabe_write_data(unsigned char data){
+    TWDR = data;
+
+    if((TWSR & 0xF8) == TW_ST_DATA_NACK){
+        TWCR = (1 << TWEN) | (1 << TWINT);
+    }else{
+        TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
+    }
+}
 
 void setup() {
   pinMode(RTS_pin, OUTPUT);
@@ -29,12 +63,16 @@ void setup() {
   Anem.begin(9600);
   Serial.begin(9600);
   delay(1000);
-  
-  Wire.begin(6);                // join i2c bus with address #8
-  Wire.onRequest(requestEvent); // register event
+
+  init_TWI_slave();
+  //Wire.begin(6);                // join i2c bus with address #6
+  //Wire.onRequest(requestEvent); // register event
 }
 
 void loop() {
+    static int i = 0;
+    if(req == 1){
+    req = 0;
     digitalWrite(RTS_pin, HIGH);
     
     uint8_t Anemometer_request[] = {0x02, 0x03, 0x00, 0x00, 0x00, 0x01, 0x84, 0x39};
@@ -48,26 +86,36 @@ void loop() {
 
     data = (int)Anemometer_buff[4];
 
-    for(int j = 0; j < 7; j++){
-      Serial.print(Anemometer_buff[j], HEX);
-      Serial.print(" ");
-    }
-    Serial.print("  =====>  ");
+    //for(int j = 0; j < 7; j++){
+    //  Serial.print(Anemometer_buff[j], HEX);
+    //  Serial.print(" ");
+    //}
+    //Serial.print("  =====>  ");
     
     sprintf(msg, "%X", Anemometer_buff[4]);
+    }
+    TWI_slave_write_match();
+    TWI_slabe_write_data(msg[i]);
+    if(i < 3){
+      i++;
+    }else{
+      i = 0;
+      req = 1;
+      delay(300);
+    }
     Serial.print(msg);
     Serial.println();
-    delay(1000);
+    delay(100);
 }
 
 // function that executes whenever data is requested by master
 // this function is registered as an event, see setup()
-void requestEvent() {
-  static int i = 0;
-  Wire.write(msg[i]); // respond with message of 6 bytes
-  if(i < 3)
-    i++;
-  else
-    i = 0;
+//void requestEvent() {
+//  static int i = 0;
+//  Wire.write(msg[i]); // respond with message of 6 bytes
+//  if(i < 3)
+//    i++;
+//  else
+//    i = 0;
   // as expected by master
-}
+//}

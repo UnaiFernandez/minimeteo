@@ -110,9 +110,10 @@ int main(){
 	
 
 	//_delay_ms(2);
-	_delay_ms(20);
+	_delay_ms(200);
 	if(send_msg == 1){
 	    USART_string(get_command);
+        PORTB ^= (1 << PORTB5);
 	    TCP_response(get_command);
 	    send_msg = 0;
 	}
@@ -123,16 +124,25 @@ int main(){
 	    get_data = 0;
 	}
     if(get_anem == 1){
+        _delay_ms(20);
         //Anemometroaren datuak lortu
+        //USART_string("1");
         TWI_master_start();
+        //USART_string("2");
         TWI_master_read_addr(0x06);
+        //USART_string("3");
         anem[i] = TWI_master_read_data(0);
+        //USART_string("4");
         TWI_master_stop();
 
         i++;
         if(i > 3){
             get_anem = 0;
             i = 0;
+            _delay_ms(100);
+            //USART_string("received data: ");
+            //USART_string(anem);
+            //USART_string("\n\r");
         }
     }
     }

@@ -102,7 +102,6 @@ void init_timer1(){
 ISR(TIMER1_COMPA_vect){
     if(j == 5){
         get_data = 1;
-        PORTB ^= (1 << PORTB5);
         j = 0;
     }
     j++;
