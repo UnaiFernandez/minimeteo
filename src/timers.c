@@ -104,6 +104,6 @@ ISR(TIMER1_COMPA_vect){
         get_data = 1;
         j = 0;
     }
-    j++;
     get_anem = 1;
+    j++;
 }
