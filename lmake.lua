@@ -12,7 +12,7 @@ COMPILE    = "avr-gcc -Wall -Os -mmcu=$(DEVICE)"
 function build()
     -- Configure the compiler
     lmake_set_compiler("avr-gcc")
-    lmake_set_compiler_flags("-Wall -Os -mmcu=atmega328p")
+    lmake_set_compiler_flags("-Wall -Wpedantic -Wextra -Os -mmcu=atmega328p")
     lmake_set_compiler_out("./src/%.o")
 
     -- Gather all the source files and compile them
@@ -21,7 +21,7 @@ function build()
 
     -- Configure the linker
     lmake_set_linker("avr-gcc")
-    lmake_set_linker_flags("-Wall -Os -mmcu=atmega328p")
+    lmake_set_linker_flags("-Wall -Wpedantic -Wextra -Os -mmcu=atmega328p")
     lmake_set_linker_out(FILENAME)
 
     -- Gather all the object files and link them
