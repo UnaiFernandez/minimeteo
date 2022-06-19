@@ -67,6 +67,7 @@ void setup() {
   delay(100);
 
   init_TWI_slave();
+  delay(2000);
   //Wire.begin(6);                // join i2c bus with address #8
   //Wire.onRequest(requestEvent); // register event
 }
@@ -74,9 +75,9 @@ void setup() {
 void loop() {
     static int i = 0;
     static int req = 1;
-    static char msg [3] = "";
+    static char msg [3] = "2A";
     static int data;
-    if(req==1){
+    /*if(req==1){
       req = 0;
     digitalWrite(RTS_pin, HIGH);
     
@@ -89,7 +90,7 @@ void loop() {
     uint8_t Anemometer_buff[8];
     Anem.readBytes(Anemometer_buff, 8);
     
-    data = (int)Anemometer_buff[4];
+    data = (int)Anemometer_buff[4];*/
     
     /*for(int j = 0; j < 7; j++){
       Serial.print(Anemometer_buff[j], HEX);
@@ -97,8 +98,8 @@ void loop() {
     }
     Serial.print("  =====>  ");*/
     
-    sprintf(msg, "%X", Anemometer_buff[4]);
-    }
+    //sprintf(msg, "%X", Anemometer_buff[4]);
+    //}
     TWI_slave_write_match();
     TWI_slabe_write_data(msg[i]);
 

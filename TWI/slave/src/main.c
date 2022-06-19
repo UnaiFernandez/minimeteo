@@ -13,6 +13,7 @@ int main(){
     int val = 90;
     DDRB |= (1 << PORTB5);
     PORTB &=~ (1 << PORTB5);
+    _delay_ms(2000);
     init_TWI_slave();
     while(1){
         //sprintf(msg, "%dm/s", val);
