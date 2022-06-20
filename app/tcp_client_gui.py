@@ -71,14 +71,16 @@ def tcp_send(s):
     formated_hour = str(current_time.hour) + ":" + str(current_time.minute)
     h_data.configure(text = mezua[3:7] )
     h_data2.configure(text = "%")
-    time_label.configure(text = formated_date + ", " + formated_hour)
+    time_label.configure(text = formated_date + " - " + formated_hour)
     #time_label2.configure(text = formated_date)
     #fahrenheit = (float(mezua[8:10])*1.8) + 32
     #tmp_data.configure(text = mezua[8:] + "°C, " + str(fahrenheit) + "°F")
     tmp_data.configure(text = mezua[8:12])
     tmp_data2.configure(text = "°C")
     anem = int(mezua[13:], 16)
-    a_data.configure(text = str(anem) + ".0")
+    anem = anem /10
+    #a_data.configure(text = str(anem) + ".0")
+    a_data.configure(text = str(anem))
     a_data2.configure(text = "m/s")
     job_id = minimeteo_connect.after(3000, tcp_send, s)
 
