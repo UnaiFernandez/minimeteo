@@ -1,32 +1,36 @@
-// Wire Slave Sender
-// by Nicholas Zambetti <http://www.zambetti.com>
-
-// Demonstrates use of the Wire library
-// Sends data as an I2C/TWI slave device
-// Refer to the "Wire Master Reader" example for use with this
-
-// Created 29 March 2006
-
-// This example code is in the public domain.
-
+/*====================================================================
+ *
+ *  Filename: slave_sender.ino
+ *
+ *  Description: Fitxategi honen bidez morroiaren i2c modulua
+ *               konfiguratu eta funtzio nagusiak definitzen dira.
+ *
+ *  Version: 1.0
+ *  Created: 2022-06-19
+ *  Author: Unai Fernandez
+ *
+ ====================================================================*/
 
 #include <Wire.h>
 #include <SoftwareSerial.h>
 #include <stdio.h>
 
+//MAX485-reko kontrol hankatxoa
 #define RTS_pin 9
-//definizioak
+
+//I2C definizioak
 #define TW_START 0x08
 #define TW_ST_SLA_ACK 0xA8
 #define TW_ST_DATA_ACK 0xB8
 #define TW_ST_DATA_NACK 0xC0
 
+//Anemometroarekin komunikazioa hasieratu
 SoftwareSerial Anem(10, 11);
 
-//char msg [3] = ""; 
-//int data;
-//int req = 1;
 
+/*
+ * Funtzio honen bidez, I2C modulua hasieratuko da.
+ */
 void init_TWI_slave(){
     DDRC &=~ (1 << PORTC5);
     DDRC &=~ (1 << PORTC4);
@@ -37,6 +41,9 @@ void init_TWI_slave(){
 }
 
 
+/*
+ * Funtzio honen bidez I2C moduluak datu eskaera bat detektatuko du.
+ */
 void TWI_slave_write_match(){
     TWCR = (1 << TWEA) | (1 << TWEN) | (1 << TWINT);
     while(!(TWCR & (1 << TWINT)));
@@ -44,6 +51,9 @@ void TWI_slave_write_match(){
 }
 
 
+/*
+ * Funtzio honen bitartez, I2C moduluak datu bat bidaliko dio nagusiari
+ */
 void TWI_slabe_write_data(unsigned char data){
     TWDR = data;
 
@@ -55,6 +65,9 @@ void TWI_slabe_write_data(unsigned char data){
 }
 
 
+/*
+ * Funtzio honek anemometrotik datuak eskuratuko ditu.
+ */
 void get_anem(char* msg){
    
    digitalWrite(RTS_pin, Anem);
@@ -69,41 +82,41 @@ void get_anem(char* msg){
 
    sprintf(msg, "%X", Anemometer_buff[4]);
 }
-//char msg [3] = "2A"; 
-//int data;
-//char msg[3] = "1A";
-//int i = 0;
 
+
+/*
+ * Funtzio honen barruan erabiliko diren modulu guztiak hasieratuko dira.
+ */
 void setup() {
-  pinMode(RTS_pin, OUTPUT);
-  Anem.begin(9600);
-  delay(2000);
-  init_TWI_slave();
+    //Anemometroa hasieratu
+    pinMode(RTS_pin, OUTPUT);
+    Anem.begin(9600);
+    delay(2000);
+    //I2C modulua hasieratu
+    init_TWI_slave();
 }
 
+
+/*
+ * Funtzio hau begizta infinitu baten barruan exekutatzen da, beraz barruko
+ * kodea etengabe exekutatuko da.
+ */
 void loop() {
     static int i = 0;
-    //static int req = 1;
     static char msg [3] = "00";
-    //static int data;
-    
+
+    //Eskaera topatu
     TWI_slave_write_match();
+    //Datua bidali
     TWI_slabe_write_data(msg[i]);
 
     if(i < 3){
-      i++;
+        i++;
     }else{
-      i = 0;
-      //msg[0] = msg[0] + 1;
-      //if(msg[0] == '9')
-        //msg[0] = '1';
-      get_anem(msg);
-      //digitalWrite(13, HIGH);
-      //req = 1;
-      //delay(100);
+        i = 0;
+        //Datu osoa bidali denez, berri bat eskatzen zaio anemometroari
+        get_anem(msg);
     }
     
-    //Serial.print(msg);
-    //Serial.println();
     delay(100);
 }
