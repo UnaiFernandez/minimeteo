@@ -25,7 +25,6 @@ int hezetasuna[2];
 int tenperatura[2];
 int checksum;
 
-//volatile int dht_timeout = 0;
 int new_data = 0;
 
 /*------------------------- DHT11 oinarrizko funtzioak ---------------------------*/
@@ -106,8 +105,6 @@ void dht_response(){
 
     // DHT11-ren erantzuna itxaron
     while(PINB & (1 << PINB1)){	    //Sarrera 1 den bitartea itxaron
-	//delay_us(2);
-	//dht_timeout+=2;
 	if(dht_timeout >= 50){	    //50us baino gehiago pasatzen badira, komunikazioan arazoren bat dago
 	    dht_timeout_error();
 	    error++;
@@ -119,8 +116,6 @@ void dht_response(){
 
     //DHT11-k LOW seinalearekin erantzungo du 80us bitartean
     while(!(PINB & (1 << PINB1))){	//Sarrera LOW den bitartean itxaron
-	//delay_us(2);
-	//dht_timeout+=2;
 	if(dht_timeout >= 100){		//100us baino gehiago pasatzen bada timeout errorea emango du.
 	    dht_timeout_error();
 	    error++;
@@ -131,8 +126,6 @@ void dht_response(){
     dht_timeout = 0;
     //DHT11-k seinalea HIGH egoerara pasako du 80us-z
     while(PINB & (1 << PINB1)){	    //Sarrera HIGH den bitartean itxaron.
-	//delay_us(2);
-	//dht_timeout+=2;
 	if(dht_timeout >= 100){	    //100us baino gehiago pasatzen bada timeout errorea emango du.
 	    dht_timeout_error();
 	    error++;

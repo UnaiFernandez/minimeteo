@@ -17,7 +17,6 @@
 #include <util/delay.h>
 #include <string.h>
 
-//#include "wifi.h"
 #include "USART.h"
 
 
@@ -99,7 +98,6 @@ ISR(USART_RX_vect){
 
 	    //Jasotako mezua "+IPD" karaktereekin hasten bada, TCP mezu bat dela esan nahi du.
 	    if(strstr(response, "+IPD") != NULL){
-	        //PORTB &=~ (1 << PORTB4); //LED berdea itzali
 	        PORTB |= (1 << PORTB3); //LED horia piztu
 		send_msg = 1;
 		
@@ -110,3 +108,4 @@ ISR(USART_RX_vect){
 
     }
 }
+/*---------------------------------------------------------------------*/

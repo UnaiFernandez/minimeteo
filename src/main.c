@@ -87,13 +87,7 @@ int main(){
 
     if(start == 1){
         PORTB |= (1 << PORTB4); //LED berdea piztu
-        //PORTB &=~ (1 << PORTB5); //LED gorria itzali
     }
-    //else{
-    //    PORTB |= (1 << PORTB5); //LED gorria piztu
-    //    //PORTB &=~ (1 << PORTB4); //LED berdea itzali
-    //}
-
     /*------------------------------------------------------------------*/ 
     
 
@@ -101,13 +95,6 @@ int main(){
     init_timer1();
     
     while(1){
-	//delay_ms(30);
-	//t += 30;
-	//if(t >= 1000){
-	//    PORTB ^= (1 << PORTB4);
-	//    t = 0;
-	//}
-    	//_delay_ms(2);
 	_delay_ms(20);
 	if(send_msg == 1){
 	    USART_string(get_command);
@@ -117,24 +104,23 @@ int main(){
 
 	if(get_data == 1){
 	    //Tenperatura eta hezetasuna lortu
-        get_dht_data();
+            get_dht_data();
 	    get_data = 0;
 	}
-    if(get_anem == 1){
-        //Anemometroaren datuak lortu
-        TWI_master_start();
-        TWI_master_read_addr(0x06);
-        anem[i] = TWI_master_read_data(0);
-        TWI_master_stop();
+	if(get_anem == 1){
+	    //Anemometroaren datuak lortu
+	    TWI_master_start();
+	    TWI_master_read_addr(0x06);
+	    anem[i] = TWI_master_read_data(0);
+	    TWI_master_stop();
 
-        i++;
-        if(i > 3){
-            get_anem = 0;
-            i = 0;
-        }
-    }
+	    i++;
+	    if(i > 3){
+		get_anem = 0;
+		i = 0;
+	    }
+	}
     }	
-
 }
 
-
+/*---------------------------------------------------------------------*/

@@ -27,7 +27,6 @@
 
 
 volatile int dht_timeout = 0;
-//int get_data = 0;
 int j = 0;
 
 /*
@@ -107,3 +106,4 @@ ISR(TIMER1_COMPA_vect){
     get_anem = 1;
     j++;
 }
+/*---------------------------------------------------------------------*/

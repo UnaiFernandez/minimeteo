@@ -2,7 +2,7 @@
  *
  *  Filename: wifi.c
  *
- *  Description: Fitxategi honen bidez Atmega328p mikroa eta ESP-01 wifi
+ *  Description: Fitxategi honen bidez Atmega328p mikroa eta ESP8266 wifi
  *		 modulua elkarkomunikatzeko beharrezkoak dauden funtzioak
  *		 aurkituko dira.
  *
@@ -24,11 +24,9 @@
 #include "defines.h"
 
 
-//int hezetasuna[2];
-//int tenperatura[2];
 int response_status;
 /*
- * Funtzio honen bidez, komandoak bidali egingo dira ESP-01 modulura eta honen erantzuna itxarongo du.
+ * Funtzio honen bidez, komandoak bidali egingo dira ESP8266 modulura eta honen erantzuna itxarongo du.
  *
  * Parametroak:
  *  - command: Bidali nahi den komadoa
@@ -230,7 +228,6 @@ int TCP_response(char * msg){
 
 	sprintf(m, "OK:%s.%s:%s.%s:%s", h_1, h_2, t_1, t_2, anem);
 	TCP_send(conn_id, m);
-	//TCP_send(0, "OK:3.0:2.0");
 	return 1;
     }else{
 	TCP_send(conn_id, "ERROR");
@@ -254,12 +251,4 @@ int TCP_close(char id){
 }
 
 
-void ESP_reset(){
-    send_command("AT+RST", "");
-}
-
-//Timer para el timeout
-//
-//Estara parado durante 10ms. Si no ha habido respuesta del ESP mandara la señal para volver a mandar el mensaje otra vez
-//Si el mensaje se manda 5 veces sin tener una respuesta termina el programa, entra en un bucle infinito indicando que no va bien
-//por lo tanto se tendra que reiniciar 
+/*---------------------------------------------------------------------*/
