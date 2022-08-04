@@ -24,4 +24,10 @@ void stop_timer0();
 void init_timer1();
 //Timer1 gelditu
 void stop_timer1();
+//Timer2 hasieratu
+void init_timer2();
+//Timer2 gelditu
+void stop_timer2();
+void delay_ms(int time);
+
 #endif //TIMERS_H

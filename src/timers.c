@@ -27,7 +27,9 @@
 
 
 volatile int dht_timeout = 0;
+volatile int t2_count = 0;
 int j = 0;
+int a = 0;
 
 /*
  * Funtzio hau timer0 timerra konfiguratzeko balio du. Timerra CTC moduan 
@@ -105,5 +107,41 @@ ISR(TIMER1_COMPA_vect){
     }
     get_anem = 1;
     j++;
+}
+
+
+/*-------------------- Timer 2 ----------------------*/
+
+void init_timer2(){
+    //CTC moduan hasieratu
+    TCCR2B &=~ (1 << WGM22);
+    TCCR2A |= (1 << WGM21);
+    TCCR2A &=~ (1 << WGM20);
+
+    //1 segunduro egingo du etena
+    OCR2A = 156;
+
+    //Etenak gaitu
+    TIMSK2 |= (1 << OCIE2A);
+
+    //Prescalerra
+    TCCR2B |= (1 << CS22);
+    TCCR2B |= (1 << CS21);
+    TCCR2B &=~ (1 << CS20);
+    
+}
+
+void delay_ms(int time){
+    time = time *2;
+    while(t2_count < time);
+}
+
+void stop_timer2(){
+    TCCR2B &=~ (1 << CS20);
+    TCCR2B &=~ (1 << CS21);
+    TCCR2B &=~ (1 << CS22);
+}
+ISR(TIMER2_COMPA_vect){
+    t2_count = t2_count + 5;
 }
 /*---------------------------------------------------------------------*/

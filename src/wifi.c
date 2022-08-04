@@ -22,6 +22,7 @@
 #include "wifi.h"
 #include "USART.h"
 #include "defines.h"
+#include "timers.h"
 
 
 int response_status;
@@ -40,7 +41,8 @@ int send_command(char * command, char * resp){
     USART_string(command);
     USART_string("\r\n");
     response_status = RESPONSE_WAITING;
-    _delay_ms(10);  //mezua jasotzeko 10ms itxaron
+    t2_count = 0;
+    delay_ms(10);  //mezua jasotzeko 10ms itxaron
 
     //LED berdea pizteko komandoa bidali
     if(strstr(response, resp) != NULL)
@@ -191,7 +193,8 @@ int TCP_send(int id, char* msg){
 
 
     sprintf(command, "AT+CIPSEND=%d,%d", id, size);
-    _delay_ms(100);
+    t2_count = 0;
+    delay_ms(100);
     if(send_command(command, "OK") == RESPONSE_OK){
 	PORTB &=~ (1 << PORTB3); //LED horia itzali
 	USART_string(msg);
@@ -211,7 +214,8 @@ int TCP_send(int id, char* msg){
  */
 int TCP_response(char * msg){
     //Get hitza badauka mezuak
-    _delay_ms(10);//invent
+    t2_count = 0;
+    delay_ms(10);//invent
     int conn_id = msg[5]-'0';
     if(strstr(msg, "GET") != NULL){
 	char m[22] = "\0";
@@ -252,3 +256,4 @@ int TCP_close(char id){
 
 
 /*---------------------------------------------------------------------*/
+

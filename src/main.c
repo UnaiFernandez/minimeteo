@@ -48,6 +48,7 @@ void init_LED(){
 int get_data = 0;
 char anem[3] = "";
 int get_anem = 0;
+int times_up = 0;
 int i = 0;
 
 int main(){
@@ -60,7 +61,9 @@ int main(){
     //LED-ak hasieratu;
     init_LED();
 
-    _delay_ms(100);
+	    
+    init_timer2();
+    delay_ms(100);
 
     /*------------------- Wifiaren konfigurazioa ---------------------*/
     int start = 1;
@@ -95,7 +98,8 @@ int main(){
     init_timer1();
     
     while(1){
-	_delay_ms(20);
+	t2_count = 0;  
+	delay_ms(20);
 	if(send_msg == 1){
 	    USART_string(get_command);
 	    TCP_response(get_command);

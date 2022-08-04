@@ -23,4 +23,9 @@ extern int get_data;
 //Anemometroa
 extern char anem[3];
 extern int get_anem;
+
+
+//Timer 2
+extern volatile int t2_count;
+extern int times_up;
 #endif //DEFINES_H

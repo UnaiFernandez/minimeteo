@@ -73,7 +73,8 @@ void dht_start(){
 
 
     PORTB &=~ (1 << PORTB1);	//2 LOW egoeran jarri Pin-a
-    _delay_ms(18);		//3 itxaron 18ms
+    t2_count = 0;
+    delay_ms(18);		//3 itxaron 18ms
     PORTB |= (1 << PORTB1);	//4 Pin-a HIGH jarri
 }
 
