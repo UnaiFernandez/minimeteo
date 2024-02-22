@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "../Inc/wifi.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -97,15 +98,11 @@ int main(void)
   HAL_Delay(3000);
 
   uint8_t command[] = "AT\r\n";
-  HAL_UART_Transmit(&huart1, command, sizeof(command), 10);
-  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-
-
-  HAL_UART_Receive_IT(&huart1, rx_buff, 10);
-
-
-  HAL_UART_Transmit(&huart2, "Hola buenas!", 12, 10);
-  HAL_UART_Transmit(&huart2, rx_buff, sizeof(rx_buff), 10);
+  
+  if(send_command(&huart1, command)){
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+    HAL_UART_Transmit(&huart2, (uint8_t*) "[+] Wifi Initialized.", 22, 10);
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
