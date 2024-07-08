@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc1trNAh.s 			page 1
+ARM GAS  /tmp/ccSYOF9I.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc1trNAh.s 			page 1
    9:Core/Src/wifi.c ****     char ack [10] = "";
   48              		.loc 1 9 5 is_stmt 1 view .LVU2
   49              		.loc 1 9 10 is_stmt 0 view .LVU3
-ARM GAS  /tmp/cc1trNAh.s 			page 2
+ARM GAS  /tmp/ccSYOF9I.s 			page 2
 
 
   50 0006 0023     		movs	r3, #0
@@ -91,15 +91,15 @@ ARM GAS  /tmp/cc1trNAh.s 			page 1
   69 0026 01A8     		add	r0, sp, #4
   70 0028 FFF7FEFF 		bl	strstr
   71              	.LVL3:
-  72              		.loc 1 17 7 discriminator 1 view .LVU8
+  72              		.loc 1 17 7 view .LVU8
   73 002c 10B1     		cbz	r0, .L3
-  18:Core/Src/wifi.c ****         return 0;
+  18:Core/Src/wifi.c ****         return 1;
   19:Core/Src/wifi.c ****     
-  20:Core/Src/wifi.c ****     return 1;
+  20:Core/Src/wifi.c ****     return 0;
   74              		.loc 1 20 12 view .LVU9
-  75 002e 0120     		movs	r0, #1
+  75 002e 0020     		movs	r0, #0
   76              	.L1:
-  21:Core/Src/wifi.c **** }...
+  21:Core/Src/wifi.c **** }
   77              		.loc 1 21 1 view .LVU10
   78 0030 04B0     		add	sp, sp, #16
   79              	.LCFI2:
@@ -111,37 +111,113 @@ ARM GAS  /tmp/cc1trNAh.s 			page 1
   85              	.L3:
   86              	.LCFI3:
   87              		.cfi_restore_state
-  18:Core/Src/wifi.c ****         return 0;
+  18:Core/Src/wifi.c ****         return 1;
   88              		.loc 1 18 16 view .LVU11
-  89 0034 0020     		movs	r0, #0
+  89 0034 0120     		movs	r0, #1
   90 0036 FBE7     		b	.L1
   91              	.L6:
   92              		.align	2
   93              	.L5:
-ARM GAS  /tmp/cc1trNAh.s 			page 3
+ARM GAS  /tmp/ccSYOF9I.s 			page 3
 
 
   94 0038 00000000 		.word	.LC0
   95              		.cfi_endproc
   96              	.LFE137:
-  98              		.text
-  99              	.Letext0:
- 100              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
- 101              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
- 102              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
- 103              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
- 104              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
- 105              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
- 106              		.file 8 "/usr/arm-none-eabi/include/string.h"
-ARM GAS  /tmp/cc1trNAh.s 			page 4
+  98              		.section	.rodata.AT_hello.str1.4,"aMS",%progbits,1
+  99              		.align	2
+ 100              	.LC1:
+ 101 0000 41544530 		.ascii	"ATE0\000"
+ 101      00
+ 102 0005 000000   		.align	2
+ 103              	.LC2:
+ 104 0008 415400   		.ascii	"AT\000"
+ 105              		.section	.text.AT_hello,"ax",%progbits
+ 106              		.align	1
+ 107              		.global	AT_hello
+ 108              		.syntax unified
+ 109              		.thumb
+ 110              		.thumb_func
+ 112              	AT_hello:
+ 113              	.LFB138:
+  22:Core/Src/wifi.c **** 
+  23:Core/Src/wifi.c **** 
+  24:Core/Src/wifi.c **** 
+  25:Core/Src/wifi.c **** int AT_hello(){
+ 114              		.loc 1 25 15 is_stmt 1 view -0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+ 118 0000 38B5     		push	{r3, r4, r5, lr}
+ 119              	.LCFI4:
+ 120              		.cfi_def_cfa_offset 16
+ 121              		.cfi_offset 3, -16
+ 122              		.cfi_offset 4, -12
+ 123              		.cfi_offset 5, -8
+ 124              		.cfi_offset 14, -4
+  26:Core/Src/wifi.c ****     int r = 0;
+ 125              		.loc 1 26 5 view .LVU13
+ 126              	.LVL5:
+  27:Core/Src/wifi.c ****     r = send_command("ATE0", "OK");
+ 127              		.loc 1 27 5 view .LVU14
+ 128              		.loc 1 27 9 is_stmt 0 view .LVU15
+ 129 0002 064D     		ldr	r5, .L9
+ 130 0004 2946     		mov	r1, r5
+ 131 0006 0648     		ldr	r0, .L9+4
+ 132 0008 FFF7FEFF 		bl	send_command
+ 133              	.LVL6:
+ 134 000c 0446     		mov	r4, r0
+ 135              	.LVL7:
+  28:Core/Src/wifi.c ****     r += send_command("AT", "OK");
+ 136              		.loc 1 28 5 is_stmt 1 view .LVU16
+ 137              		.loc 1 28 10 is_stmt 0 view .LVU17
+ 138 000e 2946     		mov	r1, r5
+ 139 0010 0448     		ldr	r0, .L9+8
+ 140              	.LVL8:
+ 141              		.loc 1 28 10 view .LVU18
+ 142 0012 FFF7FEFF 		bl	send_command
+ 143              	.LVL9:
+  29:Core/Src/wifi.c ****     return r;
+ARM GAS  /tmp/ccSYOF9I.s 			page 4
+
+
+ 144              		.loc 1 29 5 is_stmt 1 view .LVU19
+  30:Core/Src/wifi.c **** }
+ 145              		.loc 1 30 1 is_stmt 0 view .LVU20
+ 146 0016 2044     		add	r0, r0, r4
+ 147              	.LVL10:
+ 148              		.loc 1 30 1 view .LVU21
+ 149 0018 38BD     		pop	{r3, r4, r5, pc}
+ 150              	.L10:
+ 151 001a 00BF     		.align	2
+ 152              	.L9:
+ 153 001c 00000000 		.word	.LC0
+ 154 0020 00000000 		.word	.LC1
+ 155 0024 08000000 		.word	.LC2
+ 156              		.cfi_endproc
+ 157              	.LFE138:
+ 159              		.text
+ 160              	.Letext0:
+ 161              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 162              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 163              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
+ 164              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 165              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 166              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 167              		.file 8 "/usr/include/newlib/string.h"
+ARM GAS  /tmp/ccSYOF9I.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 wifi.c
-     /tmp/cc1trNAh.s:21     .rodata.send_command.str1.4:00000000 $d
-     /tmp/cc1trNAh.s:25     .text.send_command:00000000 $t
-     /tmp/cc1trNAh.s:31     .text.send_command:00000000 send_command
-     /tmp/cc1trNAh.s:94     .text.send_command:00000038 $d
+     /tmp/ccSYOF9I.s:21     .rodata.send_command.str1.4:00000000 $d
+     /tmp/ccSYOF9I.s:25     .text.send_command:00000000 $t
+     /tmp/ccSYOF9I.s:31     .text.send_command:00000000 send_command
+     /tmp/ccSYOF9I.s:94     .text.send_command:00000038 $d
+     /tmp/ccSYOF9I.s:99     .rodata.AT_hello.str1.4:00000000 $d
+     /tmp/ccSYOF9I.s:106    .text.AT_hello:00000000 $t
+     /tmp/ccSYOF9I.s:112    .text.AT_hello:00000000 AT_hello
+     /tmp/ccSYOF9I.s:153    .text.AT_hello:0000001c $d
 
 UNDEFINED SYMBOLS
 HAL_UART_Transmit
