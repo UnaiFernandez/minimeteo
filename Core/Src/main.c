@@ -71,7 +71,6 @@ uint8_t rx_buff[80];
 int main(void)
 {
     /* USER CODE BEGIN 1 */
-
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -97,13 +96,16 @@ int main(void)
     /* USER CODE BEGIN 2 */
     HAL_Delay(3000);
 
-    uint8_t command[] = "AT\r\n";
+    char buff[7];
+    int at_h = 0;
 
-
-    if(AT_hello()){
+    if(at_h = AT_hello(&huart1)){
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	HAL_UART_Transmit(&huart2, (uint8_t*) "[+] Wifi Initialized.", 22, 10);
+	sprintf(buff, "AT h: %d", at_h);
+	HAL_UART_Transmit(&huart2, (uint8_t*) buff, 7, 10);
+	HAL_UART_Transmit(&huart2, (uint8_t*) "[+] AT hello.", 13, 10);
     }
+
     /* USER CODE END 2 */
 
     /* Infinite loop */

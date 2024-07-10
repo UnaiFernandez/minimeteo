@@ -6,14 +6,16 @@
 
 
 int send_command(UART_HandleTypeDef *uart, uint8_t * command){
-    char ack [10] = "";
+    char ack [40] = "";
 
     //Send command
     HAL_UART_Transmit(uart, command, sizeof(command), 10);
 
     //Receive command
     HAL_UART_Receive(uart, ack, sizeof(ack), 10);
-
+    //sprintf(buff, "AT h: %d", at_h);
+    ////HAL_UART_Transmit(uart2, (uint8_t*) ack, 20, 10);
+    
     if(strstr(ack, "OK") == NULL)
         return 1;
     
@@ -22,9 +24,9 @@ int send_command(UART_HandleTypeDef *uart, uint8_t * command){
 
 
 
-int AT_hello(){
+int AT_hello(UART_HandleTypeDef *uart){
     int r = 0;
-    r = send_command("ATE0", "OK");
-    r += send_command("AT", "OK");
+    r = send_command(uart, (uint8_t *) "ATE0\r\n");
+    r += send_command(uart, (uint8_t *) "AT\r\n");
     return r;
 }
