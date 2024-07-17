@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccPnxV0V.s 			page 1
+ARM GAS  /tmp/ccByFrai.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -20,19 +20,24 @@ ARM GAS  /tmp/ccPnxV0V.s 			page 1
   17              	.Ltext0:
   18              		.cfi_sections	.debug_frame
   19              		.file 1 "Core/Src/wifi.c"
-  20              		.section	.rodata.send_command.str1.4,"aMS",%progbits,1
+  20              		.section	.rodata.send_command_debug.str1.4,"aMS",%progbits,1
   21              		.align	2
   22              	.LC0:
-  23 0000 4F4B00   		.ascii	"OK\000"
-  24              		.section	.text.send_command,"ax",%progbits
-  25              		.align	1
-  26              		.global	send_command
-  27              		.syntax unified
-  28              		.thumb
-  29              		.thumb_func
-  31              	send_command:
-  32              	.LVL0:
-  33              	.LFB137:
+  23 0000 4D494E49 		.ascii	"MINIMETEO\012\015\000"
+  23      4D455445 
+  23      4F0A0D00 
+  24              		.align	2
+  25              	.LC1:
+  26 000c 4F4B00   		.ascii	"OK\000"
+  27              		.section	.text.send_command_debug,"ax",%progbits
+  28              		.align	1
+  29              		.global	send_command_debug
+  30              		.syntax unified
+  31              		.thumb
+  32              		.thumb_func
+  34              	send_command_debug:
+  35              	.LVL0:
+  36              	.LFB137:
    1:Core/Src/wifi.c **** #include <stdio.h>
    2:Core/Src/wifi.c **** #include <stdlib.h>
    3:Core/Src/wifi.c **** #include <string.h>
@@ -42,132 +47,279 @@ ARM GAS  /tmp/ccPnxV0V.s 			page 1
    7:Core/Src/wifi.c **** #include "defines.h"
    8:Core/Src/wifi.c **** 
    9:Core/Src/wifi.c **** 
-  10:Core/Src/wifi.c **** int send_command(UART_HandleTypeDef *uart, uint8_t * command){
-  34              		.loc 1 10 62 view -0
-  35              		.cfi_startproc
-  36              		@ args = 0, pretend = 0, frame = 0
-  37              		@ frame_needed = 0, uses_anonymous_args = 0
-  38              		.loc 1 10 62 is_stmt 0 view .LVU1
-  39 0000 38B5     		push	{r3, r4, r5, lr}
-  40              	.LCFI0:
-  41              		.cfi_def_cfa_offset 16
-  42              		.cfi_offset 3, -16
-  43              		.cfi_offset 4, -12
-  44              		.cfi_offset 5, -8
-  45              		.cfi_offset 14, -4
-  46 0002 0446     		mov	r4, r0
+  10:Core/Src/wifi.c **** int send_command_debug(UART_HandleTypeDef *uart, UART_HandleTypeDef *uart2, uint8_t * command){
+  37              		.loc 1 10 95 view -0
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 0
+  40              		@ frame_needed = 0, uses_anonymous_args = 0
+  41              		.loc 1 10 95 is_stmt 0 view .LVU1
+  42 0000 70B5     		push	{r4, r5, r6, lr}
+  43              	.LCFI0:
+  44              		.cfi_def_cfa_offset 16
+  45              		.cfi_offset 4, -16
+  46              		.cfi_offset 5, -12
+ARM GAS  /tmp/ccByFrai.s 			page 2
+
+
+  47              		.cfi_offset 6, -8
+  48              		.cfi_offset 14, -4
+  49 0002 0646     		mov	r6, r0
+  50 0004 0C46     		mov	r4, r1
+  51 0006 1146     		mov	r1, r2
+  52              	.LVL1:
   11:Core/Src/wifi.c ****     //Send command
   12:Core/Src/wifi.c ****     HAL_UART_Transmit(uart, command, sizeof(command), 10);
-ARM GAS  /tmp/ccPnxV0V.s 			page 2
-
-
-  47              		.loc 1 12 5 is_stmt 1 view .LVU2
-  48 0004 0A23     		movs	r3, #10
-  49 0006 0422     		movs	r2, #4
-  50 0008 FFF7FEFF 		bl	HAL_UART_Transmit
-  51              	.LVL1:
+  53              		.loc 1 12 5 is_stmt 1 view .LVU2
+  54 0008 0A23     		movs	r3, #10
+  55 000a 0422     		movs	r2, #4
+  56              	.LVL2:
+  57              		.loc 1 12 5 is_stmt 0 view .LVU3
+  58 000c FFF7FEFF 		bl	HAL_UART_Transmit
+  59              	.LVL3:
   13:Core/Src/wifi.c **** 
   14:Core/Src/wifi.c ****     //Receive command
   15:Core/Src/wifi.c ****     HAL_UART_Receive(uart, rx_buff, sizeof(rx_buff), 10);
-  52              		.loc 1 15 5 view .LVU3
-  53 000c 074D     		ldr	r5, .L5
-  54 000e 0A23     		movs	r3, #10
-  55 0010 5022     		movs	r2, #80
-  56 0012 2946     		mov	r1, r5
-  57 0014 2046     		mov	r0, r4
-  58 0016 FFF7FEFF 		bl	HAL_UART_Receive
-  59              	.LVL2:
+  60              		.loc 1 15 5 is_stmt 1 view .LVU4
+  61 0010 0D4D     		ldr	r5, .L5
+  62 0012 0A23     		movs	r3, #10
+  63 0014 5022     		movs	r2, #80
+  64 0016 2946     		mov	r1, r5
+  65 0018 3046     		mov	r0, r6
+  66 001a FFF7FEFF 		bl	HAL_UART_Receive
+  67              	.LVL4:
   16:Core/Src/wifi.c ****     //sprintf(buff, "AT h: %d", at_h);
-  17:Core/Src/wifi.c ****     //HAL_UART_Transmit(uart2, "MINIMETEO\n\r", 11, 10);
-  18:Core/Src/wifi.c ****     //HAL_UART_Transmit(uart2, (uint8_t*) rx_buff, 20, 10);
+  17:Core/Src/wifi.c ****     HAL_UART_Transmit(uart2, "MINIMETEO\n\r", 11, 10);
+  68              		.loc 1 17 5 view .LVU5
+  69 001e 0A23     		movs	r3, #10
+  70 0020 0B22     		movs	r2, #11
+  71 0022 0A49     		ldr	r1, .L5+4
+  72 0024 2046     		mov	r0, r4
+  73 0026 FFF7FEFF 		bl	HAL_UART_Transmit
+  74              	.LVL5:
+  18:Core/Src/wifi.c ****     HAL_UART_Transmit(uart2, (uint8_t*) rx_buff, 20, 10);
+  75              		.loc 1 18 5 view .LVU6
+  76 002a 0A23     		movs	r3, #10
+  77 002c 1422     		movs	r2, #20
+  78 002e 2946     		mov	r1, r5
+  79 0030 2046     		mov	r0, r4
+  80 0032 FFF7FEFF 		bl	HAL_UART_Transmit
+  81              	.LVL6:
   19:Core/Src/wifi.c ****     
   20:Core/Src/wifi.c ****     if(strstr(rx_buff, "OK") == NULL)
-  60              		.loc 1 20 5 view .LVU4
-  61              		.loc 1 20 8 is_stmt 0 view .LVU5
-  62 001a 0549     		ldr	r1, .L5+4
-  63 001c 2846     		mov	r0, r5
-  64 001e FFF7FEFF 		bl	strstr
-  65              	.LVL3:
-  66              		.loc 1 20 7 view .LVU6
-  67 0022 08B1     		cbz	r0, .L3
+  82              		.loc 1 20 5 view .LVU7
+  83              		.loc 1 20 8 is_stmt 0 view .LVU8
+  84 0036 0649     		ldr	r1, .L5+8
+  85 0038 2846     		mov	r0, r5
+  86 003a FFF7FEFF 		bl	strstr
+  87              	.LVL7:
+  88              		.loc 1 20 7 view .LVU9
+  89 003e 08B1     		cbz	r0, .L3
   21:Core/Src/wifi.c ****         return 1;
   22:Core/Src/wifi.c ****     
   23:Core/Src/wifi.c ****     return 0;
-  68              		.loc 1 23 12 view .LVU7
-  69 0024 0020     		movs	r0, #0
-  70              	.L1:
+  90              		.loc 1 23 12 view .LVU10
+ARM GAS  /tmp/ccByFrai.s 			page 3
+
+
+  91 0040 0020     		movs	r0, #0
+  92              	.L1:
   24:Core/Src/wifi.c **** }
-  71              		.loc 1 24 1 view .LVU8
-  72 0026 38BD     		pop	{r3, r4, r5, pc}
-  73              	.LVL4:
-  74              	.L3:
+  93              		.loc 1 24 1 view .LVU11
+  94 0042 70BD     		pop	{r4, r5, r6, pc}
+  95              	.LVL8:
+  96              	.L3:
   21:Core/Src/wifi.c ****         return 1;
-  75              		.loc 1 21 16 view .LVU9
-  76 0028 0120     		movs	r0, #1
-  77 002a FCE7     		b	.L1
-  78              	.L6:
-  79              		.align	2
-  80              	.L5:
-  81 002c 00000000 		.word	rx_buff
-  82 0030 00000000 		.word	.LC0
-  83              		.cfi_endproc
-  84              	.LFE137:
-  86              		.section	.text.AT_hello,"ax",%progbits
-  87              		.align	1
-  88              		.global	AT_hello
-  89              		.syntax unified
-  90              		.thumb
-  91              		.thumb_func
-ARM GAS  /tmp/ccPnxV0V.s 			page 3
-
-
-  93              	AT_hello:
-  94              	.LVL5:
-  95              	.LFB138:
+  97              		.loc 1 21 16 view .LVU12
+  98 0044 0120     		movs	r0, #1
+  99 0046 FCE7     		b	.L1
+ 100              	.L6:
+ 101              		.align	2
+ 102              	.L5:
+ 103 0048 00000000 		.word	rx_buff
+ 104 004c 00000000 		.word	.LC0
+ 105 0050 0C000000 		.word	.LC1
+ 106              		.cfi_endproc
+ 107              	.LFE137:
+ 109              		.section	.text.send_command,"ax",%progbits
+ 110              		.align	1
+ 111              		.global	send_command
+ 112              		.syntax unified
+ 113              		.thumb
+ 114              		.thumb_func
+ 116              	send_command:
+ 117              	.LVL9:
+ 118              	.LFB138:
   25:Core/Src/wifi.c **** 
-  26:Core/Src/wifi.c **** 
-  27:Core/Src/wifi.c **** 
-  28:Core/Src/wifi.c **** int AT_hello(UART_HandleTypeDef *uart){
-  96              		.loc 1 28 39 is_stmt 1 view -0
-  97              		.cfi_startproc
-  98              		@ args = 0, pretend = 0, frame = 0
-  99              		@ frame_needed = 0, uses_anonymous_args = 0
- 100              		@ link register save eliminated.
-  29:Core/Src/wifi.c ****     int r = 0;
- 101              		.loc 1 29 5 view .LVU11
-  30:Core/Src/wifi.c **** //    r = send_command(uart, (uint8_t *) "ATE0\r\n");
-  31:Core/Src/wifi.c **** //    r += send_command(uart, (uint8_t *) "AT\r\n");
-  32:Core/Src/wifi.c ****     return r;
- 102              		.loc 1 32 5 view .LVU12
-  33:Core/Src/wifi.c **** }
- 103              		.loc 1 33 1 is_stmt 0 view .LVU13
- 104 0000 0020     		movs	r0, #0
- 105              	.LVL6:
- 106              		.loc 1 33 1 view .LVU14
- 107 0002 7047     		bx	lr
- 108              		.cfi_endproc
- 109              	.LFE138:
- 111              		.text
- 112              	.Letext0:
- 113              		.file 2 "/usr/include/newlib/machine/_default_types.h"
- 114              		.file 3 "/usr/include/newlib/sys/_stdint.h"
- 115              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
- 116              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
- 117              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
- 118              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
- 119              		.file 8 "/usr/include/newlib/string.h"
- 120              		.file 9 "Core/Inc/defines.h"
-ARM GAS  /tmp/ccPnxV0V.s 			page 4
+  26:Core/Src/wifi.c **** int send_command(UART_HandleTypeDef *uart, uint8_t * command){
+ 119              		.loc 1 26 62 is_stmt 1 view -0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123              		.loc 1 26 62 is_stmt 0 view .LVU14
+ 124 0000 38B5     		push	{r3, r4, r5, lr}
+ 125              	.LCFI1:
+ 126              		.cfi_def_cfa_offset 16
+ 127              		.cfi_offset 3, -16
+ 128              		.cfi_offset 4, -12
+ 129              		.cfi_offset 5, -8
+ 130              		.cfi_offset 14, -4
+ 131 0002 0446     		mov	r4, r0
+  27:Core/Src/wifi.c ****     //Send command
+  28:Core/Src/wifi.c ****     HAL_UART_Transmit(uart, command, sizeof(command), 10);
+ 132              		.loc 1 28 5 is_stmt 1 view .LVU15
+ 133 0004 0A23     		movs	r3, #10
+ 134 0006 0422     		movs	r2, #4
+ 135 0008 FFF7FEFF 		bl	HAL_UART_Transmit
+ 136              	.LVL10:
+  29:Core/Src/wifi.c **** 
+  30:Core/Src/wifi.c ****     //Receive command
+  31:Core/Src/wifi.c ****     HAL_UART_Receive(uart, rx_buff, sizeof(rx_buff), 10);
+ 137              		.loc 1 31 5 view .LVU16
+ 138 000c 074D     		ldr	r5, .L11
+ 139 000e 0A23     		movs	r3, #10
+ 140 0010 5022     		movs	r2, #80
+ARM GAS  /tmp/ccByFrai.s 			page 4
+
+
+ 141 0012 2946     		mov	r1, r5
+ 142 0014 2046     		mov	r0, r4
+ 143 0016 FFF7FEFF 		bl	HAL_UART_Receive
+ 144              	.LVL11:
+  32:Core/Src/wifi.c ****     
+  33:Core/Src/wifi.c ****     if(strstr((char *)rx_buff, "OK") == NULL)
+ 145              		.loc 1 33 5 view .LVU17
+ 146              		.loc 1 33 8 is_stmt 0 view .LVU18
+ 147 001a 0549     		ldr	r1, .L11+4
+ 148 001c 2846     		mov	r0, r5
+ 149 001e FFF7FEFF 		bl	strstr
+ 150              	.LVL12:
+ 151              		.loc 1 33 7 view .LVU19
+ 152 0022 08B1     		cbz	r0, .L9
+  34:Core/Src/wifi.c ****         return 1;
+  35:Core/Src/wifi.c ****     
+  36:Core/Src/wifi.c ****     return 0;
+ 153              		.loc 1 36 12 view .LVU20
+ 154 0024 0020     		movs	r0, #0
+ 155              	.L7:
+  37:Core/Src/wifi.c **** }
+ 156              		.loc 1 37 1 view .LVU21
+ 157 0026 38BD     		pop	{r3, r4, r5, pc}
+ 158              	.LVL13:
+ 159              	.L9:
+  34:Core/Src/wifi.c ****         return 1;
+ 160              		.loc 1 34 16 view .LVU22
+ 161 0028 0120     		movs	r0, #1
+ 162 002a FCE7     		b	.L7
+ 163              	.L12:
+ 164              		.align	2
+ 165              	.L11:
+ 166 002c 00000000 		.word	rx_buff
+ 167 0030 0C000000 		.word	.LC1
+ 168              		.cfi_endproc
+ 169              	.LFE138:
+ 171              		.section	.rodata.AT_hello.str1.4,"aMS",%progbits,1
+ 172              		.align	2
+ 173              	.LC2:
+ 174 0000 41544530 		.ascii	"ATE0\015\012\000"
+ 174      0D0A00
+ 175 0007 00       		.align	2
+ 176              	.LC3:
+ 177 0008 41540D0A 		.ascii	"AT\015\012\000"
+ 177      00
+ 178              		.section	.text.AT_hello,"ax",%progbits
+ 179              		.align	1
+ 180              		.global	AT_hello
+ 181              		.syntax unified
+ 182              		.thumb
+ 183              		.thumb_func
+ 185              	AT_hello:
+ 186              	.LVL14:
+ 187              	.LFB139:
+  38:Core/Src/wifi.c **** 
+  39:Core/Src/wifi.c **** int AT_hello(UART_HandleTypeDef *uart){
+ 188              		.loc 1 39 39 is_stmt 1 view -0
+ARM GAS  /tmp/ccByFrai.s 			page 5
+
+
+ 189              		.cfi_startproc
+ 190              		@ args = 0, pretend = 0, frame = 0
+ 191              		@ frame_needed = 0, uses_anonymous_args = 0
+ 192              		.loc 1 39 39 is_stmt 0 view .LVU24
+ 193 0000 38B5     		push	{r3, r4, r5, lr}
+ 194              	.LCFI2:
+ 195              		.cfi_def_cfa_offset 16
+ 196              		.cfi_offset 3, -16
+ 197              		.cfi_offset 4, -12
+ 198              		.cfi_offset 5, -8
+ 199              		.cfi_offset 14, -4
+ 200 0002 0546     		mov	r5, r0
+  40:Core/Src/wifi.c ****     int r = 0;
+ 201              		.loc 1 40 5 is_stmt 1 view .LVU25
+ 202              	.LVL15:
+  41:Core/Src/wifi.c ****     r = send_command(uart, (uint8_t *) "ATE0\r\n");
+ 203              		.loc 1 41 5 view .LVU26
+ 204              		.loc 1 41 9 is_stmt 0 view .LVU27
+ 205 0004 0449     		ldr	r1, .L15
+ 206 0006 FFF7FEFF 		bl	send_command
+ 207              	.LVL16:
+ 208              		.loc 1 41 9 view .LVU28
+ 209 000a 0446     		mov	r4, r0
+ 210              	.LVL17:
+  42:Core/Src/wifi.c ****     r += send_command(uart, (uint8_t *) "AT\r\n");
+ 211              		.loc 1 42 5 is_stmt 1 view .LVU29
+ 212              		.loc 1 42 10 is_stmt 0 view .LVU30
+ 213 000c 0349     		ldr	r1, .L15+4
+ 214 000e 2846     		mov	r0, r5
+ 215              	.LVL18:
+ 216              		.loc 1 42 10 view .LVU31
+ 217 0010 FFF7FEFF 		bl	send_command
+ 218              	.LVL19:
+  43:Core/Src/wifi.c ****     return r;
+ 219              		.loc 1 43 5 is_stmt 1 view .LVU32
+  44:Core/Src/wifi.c **** }
+ 220              		.loc 1 44 1 is_stmt 0 view .LVU33
+ 221 0014 2044     		add	r0, r0, r4
+ 222              	.LVL20:
+ 223              		.loc 1 44 1 view .LVU34
+ 224 0016 38BD     		pop	{r3, r4, r5, pc}
+ 225              	.LVL21:
+ 226              	.L16:
+ 227              		.loc 1 44 1 view .LVU35
+ 228              		.align	2
+ 229              	.L15:
+ 230 0018 00000000 		.word	.LC2
+ 231 001c 08000000 		.word	.LC3
+ 232              		.cfi_endproc
+ 233              	.LFE139:
+ 235              		.text
+ 236              	.Letext0:
+ 237              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 238              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 239              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
+ 240              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 241              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ARM GAS  /tmp/ccByFrai.s 			page 6
+
+
+ 242              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 243              		.file 8 "/usr/include/newlib/string.h"
+ 244              		.file 9 "Core/Inc/defines.h"
+ARM GAS  /tmp/ccByFrai.s 			page 7
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 wifi.c
-     /tmp/ccPnxV0V.s:21     .rodata.send_command.str1.4:00000000 $d
-     /tmp/ccPnxV0V.s:25     .text.send_command:00000000 $t
-     /tmp/ccPnxV0V.s:31     .text.send_command:00000000 send_command
-     /tmp/ccPnxV0V.s:81     .text.send_command:0000002c $d
-     /tmp/ccPnxV0V.s:87     .text.AT_hello:00000000 $t
-     /tmp/ccPnxV0V.s:93     .text.AT_hello:00000000 AT_hello
+     /tmp/ccByFrai.s:21     .rodata.send_command_debug.str1.4:00000000 $d
+     /tmp/ccByFrai.s:28     .text.send_command_debug:00000000 $t
+     /tmp/ccByFrai.s:34     .text.send_command_debug:00000000 send_command_debug
+     /tmp/ccByFrai.s:103    .text.send_command_debug:00000048 $d
+     /tmp/ccByFrai.s:110    .text.send_command:00000000 $t
+     /tmp/ccByFrai.s:116    .text.send_command:00000000 send_command
+     /tmp/ccByFrai.s:166    .text.send_command:0000002c $d
+     /tmp/ccByFrai.s:172    .rodata.AT_hello.str1.4:00000000 $d
+     /tmp/ccByFrai.s:179    .text.AT_hello:00000000 $t
+     /tmp/ccByFrai.s:185    .text.AT_hello:00000000 AT_hello
+     /tmp/ccByFrai.s:230    .text.AT_hello:00000018 $d
 
 UNDEFINED SYMBOLS
 HAL_UART_Transmit

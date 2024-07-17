@@ -97,21 +97,27 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_Delay(3000);
 
-  uint8_t command[] = "AT\r\n";
-  //HAL_UART_Transmit(&huart1, command, sizeof(command), 10);
-  //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+  uint8_t command[] = "AT+RST\r\n";
+  HAL_UART_Transmit(&huart1, command, sizeof(command), 10);
+  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 
 
-  //HAL_UART_Receive_IT(&huart1, rx_buff, 10);
+  HAL_UART_Receive_IT(&huart1, rx_buff, 20);
 
-  ////HAL_UART_Transmit(&huart2, "Hola buenas!\n\r", 14, 10);
-  //HAL_UART_Transmit(&huart2, "MINIMETEO\n\r", 11, 10);
-  //HAL_UART_Transmit(&huart2, rx_buff, sizeof(rx_buff), 10);
+  //HAL_UART_Transmit(&huart2, "Hola buenas!\n\r", 14, 10);
+  HAL_UART_Transmit(&huart2, "MINIMETEO\n\r", 11, 100);
+  HAL_UART_Transmit(&huart2, rx_buff, sizeof(rx_buff), 100);
 
-  int r = send_command(&huart1, command);
+  //int r = send_command(&huart1,&huart2, command);
+
+  int r = AT_hello(&huart1);
     if (r == 0)
-	HAL_UART_Transmit(&huart2, "OK\n\r", 4, 10);
+	HAL_UART_Transmit(&huart2, "-->OK\n\r", 7, 100);
+    else
+	HAL_UART_Transmit(&huart2, "-->ERR\n\r", 8, 100);
 
+
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */

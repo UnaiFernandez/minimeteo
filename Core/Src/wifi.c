@@ -7,15 +7,15 @@
 #include "defines.h"
 
 
-int send_command(UART_HandleTypeDef *uart, uint8_t * command){
+int send_command_debug(UART_HandleTypeDef *uart, UART_HandleTypeDef *uart2, uint8_t * command){
     //Send command
     HAL_UART_Transmit(uart, command, sizeof(command), 10);
 
     //Receive command
     HAL_UART_Receive(uart, rx_buff, sizeof(rx_buff), 10);
     //sprintf(buff, "AT h: %d", at_h);
-    //HAL_UART_Transmit(uart2, "MINIMETEO\n\r", 11, 10);
-    //HAL_UART_Transmit(uart2, (uint8_t*) rx_buff, 20, 10);
+    HAL_UART_Transmit(uart2, "MINIMETEO\n\r", 11, 10);
+    HAL_UART_Transmit(uart2, (uint8_t*) rx_buff, 20, 10);
     
     if(strstr(rx_buff, "OK") == NULL)
         return 1;
@@ -23,7 +23,18 @@ int send_command(UART_HandleTypeDef *uart, uint8_t * command){
     return 0;
 }
 
+int send_command(UART_HandleTypeDef *uart, uint8_t * command){
+    //Send command
+    HAL_UART_Transmit(uart, command, sizeof(command), 10);
 
+    //Receive command
+    HAL_UART_Receive(uart, rx_buff, sizeof(rx_buff), 10);
+    
+    if(strstr((char *)rx_buff, "OK") == NULL)
+        return 1;
+    
+    return 0;
+}
 
 int AT_hello(UART_HandleTypeDef *uart){
     int r = 0;
