@@ -3,20 +3,21 @@
 #include <string.h>
 #include <stdint.h>
 #include "stm32f4xx_hal.h"
+#include "main.h"
+#include "defines.h"
 
 
 int send_command(UART_HandleTypeDef *uart, uint8_t * command){
-    char ack [40] = "";
-
     //Send command
     HAL_UART_Transmit(uart, command, sizeof(command), 10);
 
     //Receive command
-    HAL_UART_Receive(uart, ack, sizeof(ack), 10);
+    HAL_UART_Receive(uart, rx_buff, sizeof(rx_buff), 10);
     //sprintf(buff, "AT h: %d", at_h);
-    ////HAL_UART_Transmit(uart2, (uint8_t*) ack, 20, 10);
+    //HAL_UART_Transmit(uart2, "MINIMETEO\n\r", 11, 10);
+    //HAL_UART_Transmit(uart2, (uint8_t*) rx_buff, 20, 10);
     
-    if(strstr(ack, "OK") == NULL)
+    if(strstr(rx_buff, "OK") == NULL)
         return 1;
     
     return 0;
